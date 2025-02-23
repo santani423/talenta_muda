@@ -1,0 +1,77 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class GuruSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        DB::table('guru')->insert([
+            [
+                'nama_guru' => 'samsudin',
+                'gender' => 'Laki-laki',
+                'email' => 'samsudin@gmail.com',
+                'password' => bcrypt('123'),
+                'avatar' => 'default.jpg',
+                'role' => 2,
+                'is_active' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nama_guru' => 'Siti Aminah',
+                'gender' => 'Perempuan',
+                'email' => 'siti.aminah@example.com',
+                'password' => bcrypt('password123'),
+                'avatar' => 'default.jpg',
+                'role' => 2,
+                'is_active' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nama_guru' => 'Agus Wijaya',
+                'gender' => 'Laki-laki',
+                'email' => 'agus.wijaya@example.com',
+                'password' => bcrypt('password123'),
+                'avatar' => 'default.jpg',
+                'role' => 2,
+                'is_active' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nama_guru' => 'Dewi Lestari',
+                'gender' => 'Perempuan',
+                'email' => 'dewi.lestari@example.com',
+                'password' => bcrypt('password123'),
+                'avatar' => 'default.jpg',
+                'role' => 2,
+                'is_active' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+        DB::table('admins')->insert([
+            [
+                'nama_admin' => 'admin', 
+                'email' => 'admin@gmail.com',
+                'password' => bcrypt('123'),
+                'avatar' => 'default.jpg',
+                'role' => 1,
+                'is_active' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ], 
+        ]);
+    }
+}
+// php artisan db:seed --class=GuruSeeder
