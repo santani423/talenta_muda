@@ -129,6 +129,14 @@
                                                         S class="btn btn-primary btn-sm">
                                                         Print PDF
                                                     </a>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"  onclick="printPDF(
+                                                        '{{ $bs->id_siswa_pg ?? ($bs->id_siswa_visual ?? ($bs->id_siswa_essay ?? ($bs->id_siswa_kuesioner ?? ''))) }}',
+                                                        '{{ $bs->nama_siswa_pg ?? 'Nama siswa tidak tersedia' }}',
+                                                        '{{ $bs->tempat_lahir_pg ?? 'Tempat lahir siswa tidak tersedia' }}',
+                                                        '{{ $bs->tanggal_lahir_pg ?? 'Tanggal Lahir siswa tidak tersedia' }}',
+                                                        '{{ $bs->gender_pg ?? 'Tanggal Lahir siswa tidak tersedia' }}')">
+                                                        Launch demo modal
+                                                      </button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -142,6 +150,34 @@
             </div>
         </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="pdf-content-review">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content" id="pdf-content-review">
+        ...
+      </div>
+    </div>
+  </div>
         <div class="layout-px-spacing">
             @include('template.footer')
         </div>
@@ -220,7 +256,7 @@
                 }
             });
 
-            htmlContent = `<table border="1" style="width:100%; color: black;">`;
+            htmlContent = `<div class="table-responsive"><table border="1" style="width:100%; color: black;">`;
 
             htmlContent += `<tr>`;
             results.forEach((data) => {
@@ -260,7 +296,7 @@
             });
             htmlContent += `</tr>`;
 
-            htmlContent += `</table>`;
+            htmlContent += `</table></div>`;
             // ---------------------------------------------------------------------------------------------------------------
 
             results.forEach((data) => {
@@ -273,7 +309,7 @@
                 <p class="mt-4" style="color: black;">${data?.ujian?.nama}</p></p>`;
 
                 let noKusoner = 0;
-                htmlContent += `<table border="1" style="width:100%; color: black;">`;
+                htmlContent += `<div class="table-responsive"><table border="1" style="width:100%; color: black;">`;
                 for (let index = 0; index < 20; index++) {
                     htmlContent += `<tr>`;
                     noKusoner = index + 1;
@@ -286,7 +322,7 @@
                     htmlContent += `</tr>`;
                 }
 
-                htmlContent += `</table>`;
+                htmlContent += `</table></div>`;
                 htmlContent += `   <div class="row mt-3">`;
                 console.log('data.facet', data);
 
@@ -338,13 +374,19 @@
             });
 
             element.querySelector('#pdf-content').innerHTML = htmlContent;
-
             html2pdf().from(element).save(`Hasil_Test_${studentName}.pdf`);
+            modalReview(htmlContent);
             }).catch(error => {
             console.error('Error fetching student data:', error);
             element.querySelector('#pdf-content').innerHTML = '<p style="color: red;">Failed to load data.</p>';
             html2pdf().from(element).save(`Hasil_Test_${studentName}.pdf`);
             });
+
+        }
+
+        function modalReview(htmlContent) {
+            const element = document.getElementById('pdf-content-review');
+            element.innerHTML = htmlContent; 
         }
 
         function fetchStudentData(studentId, kdUjian, typeUjian) {
