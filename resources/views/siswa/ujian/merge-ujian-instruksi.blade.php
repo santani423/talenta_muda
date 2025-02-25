@@ -115,7 +115,7 @@
                                                     style="border-bottom: 1px solid #e0e6ed;">
                                                     <div class="">
                                                         <h6 class="" style="font-weight: bold">Demo Soal
-                                                            soalDemoSoal{{ $keySG }}
+                                                            
                                                         </h6>
                                                     </div>
                                                 </div>
