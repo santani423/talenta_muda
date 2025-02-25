@@ -36,6 +36,6 @@ class GuruKelasSeeder extends Seeder
             'updated_at' => Carbon::now()
         ];
 
-        DB::table('guruKelas')->insert($data);
+        DB::table('gurukelas')->insert($data);
     }
 }
