@@ -84,7 +84,7 @@ class Part1_3Seeder extends Seeder
             ]
         ]);
 
-       
+
 
         foreach ($part1_3 as $number => $answer) {
             $no = $number++;
@@ -133,7 +133,7 @@ class Part1_3Seeder extends Seeder
                 'pg_4' => 'ujian_seeder/Part1_3/contoh' . $no . '/d.png',
                 'pg_5' => 'ujian_seeder/Part1_3/contoh' . $no . '/e.png',
                 'pg_6' => 'ujian_seeder/Part1_3/contoh' . $no . '/f.png',
-                'jawaban' => 'A',
+                'jawaban' => $value,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
@@ -146,7 +146,7 @@ class Part1_3Seeder extends Seeder
                 'pg_4' => 'ujian_seeder/Part1_3/contoh' . $no . '/d.png',
                 'pg_5' => 'ujian_seeder/Part1_3/contoh' . $no . '/e.png',
                 'pg_6' => 'ujian_seeder/Part1_3/contoh' . $no . '/f.png',
-                'jawaban' => 'A',
+                'jawaban' => $value,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);

@@ -265,7 +265,8 @@
 
             results.forEach((data) => {
                 if (data.typeUjian == 2) {
-                console.log('dataforEach', data?.ujian?.nama);
+                    console.log('data.jenis_jawaban_kuesioner_id', data?.ujian?.jenis_jawaban_kuesioner_id);
+                    
 
                 htmlContent += `
                 <div class="mt-4"  style="page-break-before: always;"> 
@@ -299,10 +300,12 @@
                 }
                 htmlContent += `   </div>`;
                 htmlContent += `   <div class="row mt-3">`;
+                    console.log('data.sekaladata?.sekala?.total_average_score', data?.skorNilai);
+                    
                 if (data?.sekala?.average_scores?.some(sekala => sekala?.average_score != 0)) {
                     
            
-                    if (data?.kuisonersBenarSalah?.totalNilai != 0) {
+                    if (data?.skorNilai) {
                      
                     htmlContent +=
                         `<div class="col-md-12 mt-5" style="color: black; text-align: center; font-weight: bold;">Skor  : ${data?.kuisonersBenarSalah?.totalNilai}</div>`;
@@ -320,7 +323,7 @@
 
                     }
                 }else{
-                    if (data?.kuisonersBenarSalah?.totalNilai != 0) {
+                    if (data?.skorNilai) {
                       
                     htmlContent +=
                         `<div class="col-md-12 mt-5" style="color: black; text-align: center; font-weight: bold;">Skor  : ${data?.kuisonersBenarSalah?.totalNilai}</div>`;
@@ -408,6 +411,7 @@
                 sekala: [],
                 ujian: [],
                 nilai: 0,
+                skorNilai: false,
                 typeUjian: typeUjian,
                 niaiTambah: 0,
             };
@@ -423,6 +427,7 @@
                             let sekala = data?.data?.sekala;
                             let kuisonersBenarSalah = data?.data?.kuisonersBenarSalah;
                             let ujian = data?.data?.ujian;
+                            let skorNilai = data?.data?.skorNilai;
                             console.log('ujianujianujian', ujian);
 
                             kuisoner.forEach(element => {
@@ -436,6 +441,7 @@
 
                             });
                             nilaiSiswa.facet = facet;
+                            nilaiSiswa.skorNilai = skorNilai;
                             nilaiSiswa.sekala = sekala;
                             nilaiSiswa.ujian = ujian;
                             nilaiSiswa.kuisonersBenarSalah = kuisonersBenarSalah;

@@ -70,12 +70,13 @@ class PenilaianSiswaController extends Controller
                 'detail_jawaban_kuesioner.kode as jawaban',
                 'detail_kuisoner.item as kuisoner_item',
                 'detail_jawaban_kuesioner.pilihan_kuesioner'
-            ) 
+            )
             ->get();
 
-           
 
-        $totalNilai = 0; 
+
+        $totalNilai = 0;
+        $skorNilai = false;
         $kuisonersBenarSalah = [];
         foreach ($kuisoners as $kuisonersBenarSalah) {
             // dd($kuisonersBenarSalah->detailKuisoner[0]->jawaban);
@@ -85,6 +86,10 @@ class PenilaianSiswaController extends Controller
                 // dd($kuisonersBenarSalah);
             } else {
                 $kuisonersBenarSalah->nilai = 0;
+            }
+            if ($kuisonersBenarSalah->detailKuisoner[0]->jawaban != null && $kuisonersBenarSalah->detailKuisoner[0]->jawaban != '') {
+                # code...
+                $skorNilai = true;
             }
             $totalNilai += $kuisonersBenarSalah->nilai;
         }
@@ -98,11 +103,13 @@ class PenilaianSiswaController extends Controller
                 ->rightJoin('detail_kuisoner', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner.id')
                 ->leftJoin('detail_jawaban_kuesioner', 'kuesioner_siswa.detail_jawaban_kuesioner_id', '=', 'detail_jawaban_kuesioner.id')
                 ->where('kuesioner_siswa.kode', $kode)
-                ->select('kuesioner_siswa.*', 'detail_jawaban_kuesioner.kode as jawaban')
+                ->select('kuesioner_siswa.*', 'detail_jawaban_kuesioner.kode as jawaban', 'detail_kuisoner.jenis_jawaban_kuesioner_id as jenis_jawaban_kuesioner_id')
                 ->get()
                 ->chunk(20)
                 ->toArray();
-            $ujian = Ujian::where('kode', $kode)->first();
+            $ujian = Ujian::where('ujian.kode', $kode)
+                ->leftJoin('detail_kuisoner', 'detail_kuisoner.kode', '=', 'ujian.kode')
+                ->first();
             $response = [
                 'status' => 'success',
                 'data' => [
@@ -110,6 +117,7 @@ class PenilaianSiswaController extends Controller
                     'kuisoner' => $kuisonerItem,
                     'sekala' => $sekala,
                     'facet' => $facet,
+                    'skorNilai' => $skorNilai,
                     'kuisonersBenarSalah' => [
                         'totalNilai' => $totalNilai,
                         'kuisoner' =>  $kuisonersBenarSalah,
@@ -175,21 +183,21 @@ class PenilaianSiswaController extends Controller
             $ujian = Ujian::where('kode', $kode)->first();
             foreach ($essay as $key => $value) {
                 if (!$value->nilai || $value->nilai == 0 || $value->nilai == null) {
-                // dd($value->detailessay->type_kunci_jawaban);
-                if ($value->detailessay->type_kunci_jawaban == 'text') {
-                    if (empty($value->jawaban)) {
-                        $kuciJawaban = null;
+                    // dd($value->detailessay->type_kunci_jawaban);
+                    if ($value->detailessay->type_kunci_jawaban == 'text') {
+                        if (empty($value->jawaban)) {
+                            $kuciJawaban = null;
+                        } else {
+                            $kuciJawaban = JawabanEssay::where('detail_essay_id', $value->detailessay->id)
+                                ->where('jawaban', 'LIKE', '%' . $value->jawaban . '%')
+                                ->orderBy('nilai', 'desc')
+                                ->first();
+                        }
                     } else {
                         $kuciJawaban = JawabanEssay::where('detail_essay_id', $value->detailessay->id)
-                            ->where('jawaban', 'LIKE', '%' . $value->jawaban . '%')
-                            ->orderBy('nilai', 'desc')
+                            ->where('jawaban', $value->jawaban)
                             ->first();
                     }
-                } else {
-                    $kuciJawaban = JawabanEssay::where('detail_essay_id', $value->detailessay->id)
-                        ->where('jawaban', $value->jawaban)
-                        ->first();
-                }
                     if ($kuciJawaban) {
                         // echo "Jawaban: " . $value->jawaban . " | Kunci Jawaban: " . $kuciJawaban->jawaban . " | Nilai: " . $kuciJawaban->nilai . "<br>\n";
                         $value->nilai = $kuciJawaban->nilai;
@@ -202,7 +210,7 @@ class PenilaianSiswaController extends Controller
                 }
             }
             $essay = EssaySiswa::where('siswa_id', $id)->where('kode', $kode)->get();
-// return false;
+            // return false;
             // dd($essay);
             $response = [
                 'status' => 'success',
