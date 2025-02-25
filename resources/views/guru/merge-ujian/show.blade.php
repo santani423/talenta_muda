@@ -119,7 +119,7 @@
                                                         class="btn btn-primary btn-sm">
                                                         <span data-feather="eye"></span>
                                                     </a>
-                                                    
+
                                                     <button type="button" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#exampleModal"
                                                         onclick="printPDF(
@@ -158,11 +158,11 @@
                         <div id="pdf-content-review"></div>
 
                         <div class="form-group mt-4">
-                            <textarea class="form-control" cols="30" rows="10"></textarea> 
+                            <textarea class="form-control" cols="30" rows="10"></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Print</button>
+                            <button type="button" class="btn btn-primary" onclick="printNilaiSiswa()">Print</button>
                         </div>
                     </div>
                 </div>
@@ -177,6 +177,8 @@
         <!--  END CONTENT AREA  -->
 
         <script>
+            let itemPrint = '';
+
             function usia(tanggal_lahir) {
                 const today = new Date();
                 const birthDate = new Date(tanggal_lahir);
@@ -370,9 +372,8 @@
 
                     });
 
-                    element.querySelector('#pdf-content').innerHTML = htmlContent;
-                    html2pdf().from(element).save(`Hasil_Test_${studentName}.pdf`);
-                    modalReview(htmlContent);
+                    itemPrint = element.innerHTML + htmlContent;
+                    modalReview(element.innerHTML + htmlContent);
                 }).catch(error => {
                     console.error('Error fetching student data:', error);
                     element.querySelector('#pdf-content').innerHTML = '<p style="color: red;">Failed to load data.</p>';
@@ -565,6 +566,23 @@
                         }
                     });
                 });
+            }
+
+
+            function printNilaiSiswa() {
+                // Ambil komentar dari textarea
+                var komentar = document.querySelector('.form-control').value;
+                const element = document.createElement('div');
+                element.innerHTML = itemPrint;
+                 element.style.padding = '20px';
+                element.innerHTML += `
+            <div style="margin-top: 20px; color: black;">
+                <strong>Komentar:</strong>
+                <p>${komentar || 'Tidak ada komentar'}</p>
+            </div>
+        `;
+               
+                html2pdf().from(element).save(`Hasil_Test_.pdf`);
             }
         </script>
 
