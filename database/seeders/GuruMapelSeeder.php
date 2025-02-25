@@ -37,6 +37,6 @@ class GuruMapelSeeder extends Seeder
             'updated_at' => Carbon::now()
         ];
 
-        DB::table('guruMapel')->insert($data);
+        DB::table('gurumapel')->insert($data);
     }
 }
