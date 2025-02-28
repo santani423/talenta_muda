@@ -7,6 +7,7 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BanksoalController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TugasGuruController;
 use App\Http\Controllers\UjianGuruController;
@@ -187,6 +188,8 @@ Route::get('/guru/hasil_ujian_siswa/{kode}/{id}', [UjianGuruController::class, '
 
 // ==>Merge Ujian
 Route::resource('/guru/merge_ujian', MergeUjianController::class)->middleware('is_guru');
+// ==>Merge Ujian
+Route::get('/guru/laporan_ujian_siswa', [LaporanController::class,'laporan_ujian_siswa'])->name('guru.laporan_ujian_siswa')->middleware('is_guru');
 
 //  ==> BANK SOAL
 

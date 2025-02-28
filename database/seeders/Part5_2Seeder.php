@@ -130,6 +130,29 @@ class Part5_2Seeder extends Seeder
             'updated_at' => now()
         ]);
 
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode,
+            'label' => 'part 5.2.',
+            'urutan' => '1',
+            'intruksi' => 'PETUNJUK<br>
+Bacalah semua instruksi ini dengan teliti. Persoalan berikut ini terdiri atas 70 pernyataan. Bacalah masing-masing pernyataan dengan hati-hati dan pilihlah satu jawaban yang paling tepat untuk menyatakan persetujuan Anda. Anda diminta untuk menentukan satu jawaban dari lima alternatif berikut: Sangat Tidak Setuju (STS), Tidak Setuju (TS), Netral (N), Setuju (S), dan Sangat Setuju (SS)<br>. 
+
+Tidak ada jawaban benar atau salah. Deskripsikan diri anda secara jujur dan nyatakan pendapat anda seakurat mungkin. Anda harus menjawab semua persoalan yang ada tanpa terlewatkan. Waktu yang disediakan 13 menit.<br>',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $tespart5_2,
+            'label' => 'part 5.2.',
+            'urutan' => '1',
+            'intruksi' => 'PETUNJUK<br>
+Bacalah semua instruksi ini dengan teliti. Persoalan berikut ini terdiri atas 70 pernyataan. Bacalah masing-masing pernyataan dengan hati-hati dan pilihlah satu jawaban yang paling tepat untuk menyatakan persetujuan Anda. Anda diminta untuk menentukan satu jawaban dari lima alternatif berikut: Sangat Tidak Setuju (STS), Tidak Setuju (TS), Netral (N), Setuju (S), dan Sangat Setuju (SS)<br>. 
+
+Tidak ada jawaban benar atau salah. Deskripsikan diri anda secara jujur dan nyatakan pendapat anda seakurat mungkin. Anda harus menjawab semua persoalan yang ada tanpa terlewatkan. Waktu yang disediakan 13 menit.<br>',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        
         
         DB::table('relasi_ujian_merge')->insert([
             [

@@ -62,6 +62,24 @@ class Part1_2Seeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode_test,
+            'label' => 'part 1.2.',
+            'urutan' => '1',
+            'intruksi' => 'Pilih dua jawaban yang 
+paling sepadan',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode,
+            'label' => 'part 1.2.',
+            'urutan' => '3',
+            'intruksi' => 'Pilih dua jawaban yang 
+paling sepadan',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
 
         DB::table('relasi_ujian_merge')->insert([
             [

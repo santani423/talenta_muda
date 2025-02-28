@@ -66,7 +66,7 @@ class Part3Seeder extends Seeder
             'updated_at' => now()
         ]);
 
-        
+
         DB::table('relasi_ujian_merge')->insert([
             [
                 'kode_ujian' => $kode,
@@ -88,15 +88,26 @@ class Part3Seeder extends Seeder
             ]
         ]);
 
-        foreach ($part3 as $number => $answer) { 
+
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode,
+            'label' => 'part 3.',
+            'urutan' => '1',
+            'intruksi' => 'Jawablah soal-soal berikut ini dengan teliti dan benar!
+Tuliskan jawaban Anda pada kolom yang tersedia. Waktu pengerjaan terbatas tapi tidak kami beritahukan batas waktunya. Oleh karena itu kerjakan soal-soal yang Anda anggap paling mudah terlebih dahulu.',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        foreach ($part3 as $number => $answer) {
             $detailEssy = DetailEssay::create([
                 'kode' => $kode,
-                'soal' => $answer['soal'], 
+                'soal' => $answer['soal'],
                 'type_kunci_jawaban' => "number",
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
- 
+
             JawabanEssay::create([
                 'detail_essay_id' => $detailEssy->id,
                 'jawaban' => $answer['jawaban'],
@@ -106,17 +117,17 @@ class Part3Seeder extends Seeder
             ]);
         }
         $counter = 0;
-        foreach ($part3 as $number => $answer) { 
+        foreach ($part3 as $number => $answer) {
             if ($counter >= 3) break;
             $counter++;
             $detailEssy = DetailEssay::create([
                 'kode' => $tespart3,
-                'soal' => $answer['soal'], 
+                'soal' => $answer['soal'],
                 'type_kunci_jawaban' => "number",
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
- 
+
             JawabanEssay::create([
                 'detail_essay_id' => $detailEssy->id,
                 'jawaban' => $answer['jawaban'],

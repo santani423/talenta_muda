@@ -161,6 +161,22 @@ class Part4Seeder extends Seeder
         ]);
 
         
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode,
+            'label' => 'part 4.',
+            'urutan' => '1',
+            'intruksi' => 'Berikut ini terdapat dua kata dan Anda diminta untuk menjelaskan kesamaan antara kedua kata tersebut. ',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $tespart4,
+            'label' => 'part 4.',
+            'urutan' => '1',
+            'intruksi' => 'Berikut ini terdapat dua kata dan Anda diminta untuk menjelaskan kesamaan antara kedua kata tersebut. ',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
         DB::table('relasi_ujian_merge')->insert([
             [
                 'kode_ujian' => $kode,

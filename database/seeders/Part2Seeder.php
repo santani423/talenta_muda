@@ -77,6 +77,64 @@ class Part2Seeder extends Seeder
         ]);
 
 
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode,
+            'label' => 'part 2.',
+            'urutan' => '1',
+            'intruksi' => 'Pilih satu jawaban yang 
+dianggap paling tepat
+',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode,
+            'label' => 'Petunjuk',
+            'urutan' => '2',
+            'intruksi' => 'Berikut ini terdapat matriks 2x2, tugas Anda adalah memilih salah satu dari lima pilihan (a, b, c, d, e) yang di Bawah matriks tersebut.<br>
+
+Jawaban yang tepat akan cocok untuk semua gambar secara mendatar maupun menurun. Anda hanya perlu melihat mendatar dan menurun untuk menemukan jawabannya. Jangan melihat secara diagonal. <br>
+
+Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan Anda pada kotak yang Anda rasa paling benar atau pada huruf di Bawah kotak tersebut.<br>',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $tespart2,
+            'label' => 'part 2.',
+            'urutan' => '1',
+            'intruksi' => 'Pilih satu jawaban yang 
+dianggap paling tepat
+',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $tespart2,
+            'label' => 'Petunjuk',
+            'urutan' => '2',
+            'intruksi' => 'Berikut ini terdapat matriks 2x2, tugas Anda adalah memilih salah satu dari lima pilihan (a, b, c, d, e) yang di Bawah matriks tersebut.<br>
+
+Jawaban yang tepat akan cocok untuk semua gambar secara mendatar maupun menurun. Anda hanya perlu melihat mendatar dan menurun untuk menemukan jawabannya. Jangan melihat secara diagonal. <br>
+
+Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan Anda pada kotak yang Anda rasa paling benar atau pada huruf di Bawah kotak tersebut.<br>',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $tespart2,
+            'label' => 'part 1.4.',
+            'urutan' => '1',
+            'intruksi' => 'Pilih satu jawaban yang 
+dianggap paling tepat
+',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
         DB::table('relasi_ujian_merge')->insert([
             [
                 'kode_ujian' => $kode,

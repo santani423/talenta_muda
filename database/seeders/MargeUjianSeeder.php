@@ -18,7 +18,7 @@ class MargeUjianSeeder extends Seeder
         DB::table('merge_ujian')->insert([
             [
                 'kode' => 'merge_ujian_1',
-                'nama' => 'Ujian Matematika',
+                'nama' => 'Tes Kepribadian',
                 'jenis' => 1,
                 'kelas_id' => 1,
                 'jam' => 1,
@@ -29,7 +29,7 @@ class MargeUjianSeeder extends Seeder
             ],
             [
                 'kode' => 'tes_merge_ujian_2',
-                'nama' => 'Ujian Fisika',
+                'nama' => 'Ujian Contoh',
                 'jenis' => 2,
                 'kelas_id' => 2,
                 'jam' => 2,

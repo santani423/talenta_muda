@@ -58,6 +58,14 @@
                     </div>
                 </a>
             </li>
+            <li class="menu {{ ($menu['menu'] == 'laporan_ujian_siswa') ? 'active' : ''; }}">
+                <a href="{{ url("/guru/laporan_ujian_siswa") }}" aria-expanded="{{ ($menu['expanded'] == 'laporan_ujian_siswa') ? 'true' : 'false'; }}" class="dropdown-toggle">
+                    <div class="">
+                        <span data-feather="cast"></span>
+                        <span>Laporan</span>
+                    </div>
+                </a>
+            </li>
             <!-- <li class="menu {{ ($menu['menu'] == 'bank_soal') ? 'active' : ''; }}">
                 <a href="{{ url("/guru/bank_soal") }}" aria-expanded="{{ ($menu['expanded'] == 'bank_soal') ? 'true' : 'false'; }}" class="dropdown-toggle">
                     <div class="">

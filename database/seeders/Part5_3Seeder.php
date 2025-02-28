@@ -129,7 +129,31 @@ class Part5_3Seeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $kode,
+            'label' => 'part 5.3.',
+            'urutan' => '1',
+            'intruksi' => 'PETUNJUK <br>
 
+Bacalah semua instruksi ini dengan teliti. Persoalan berikut ini terdiri atas 81 pernyataan. Bacalah masing-masing pernyataan dengan hati-hati dan pilihlah satu jawaban benar (B) atau salah (S). <br>
+
+Semua jawaban Anda adalah benar, jadi deskripsikan diri anda secara jujur dan nyatakan pendapat anda seakurat mungkin. Anda harus menjawab semua persoalan yang ada tanpa terlewatkan dan jangan dipikirkan terlalu lama. Waktu yang disediakan 10 menit. <br>  ',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $tespart5_3,
+            'label' => 'part 5.3.',
+            'urutan' => '1',
+            'intruksi' => 'PETUNJUK <br>
+
+Bacalah semua instruksi ini dengan teliti. Persoalan berikut ini terdiri atas 81 pernyataan. Bacalah masing-masing pernyataan dengan hati-hati dan pilihlah satu jawaban benar (B) atau salah (S). <br>
+
+Semua jawaban Anda adalah benar, jadi deskripsikan diri anda secara jujur dan nyatakan pendapat anda seakurat mungkin. Anda harus menjawab semua persoalan yang ada tanpa terlewatkan dan jangan dipikirkan terlalu lama. Waktu yang disediakan 10 menit. <br>  ',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
         
         DB::table('relasi_ujian_merge')->insert([
             [

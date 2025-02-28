@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode'); // Kolom untuk label
             $table->string('label'); // Kolom untuk label
+            $table->string('urutan')->nullable(); // Kolom untuk label
             $table->text('intruksi'); // Kolom untuk instruksi
             $table->timestamps(); // Kolom created_at dan updated_at
         });

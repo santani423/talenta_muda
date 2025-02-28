@@ -114,7 +114,7 @@
                                                 <div class="widget-heading pl-2 pt-2"
                                                     style="border-bottom: 1px solid #e0e6ed;">
                                                     <div class="">
-                                                        <h6 class="" style="font-weight: bold">Demo Soal
+                                                        <h6 class="" style="font-weight: bold">Contoh Soal
                                                             
                                                         </h6>
                                                     </div>
@@ -332,7 +332,7 @@
                                 <div class="widget p-3 mt-3">
                                     <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
                                         <div class="">
-                                            <h6 class="" style="font-weight: bold">Demo Soal
+                                            <h6 class="" style="font-weight: bold">Contoh Soal
                                             </h6>
                                         </div>
                                     </div>
