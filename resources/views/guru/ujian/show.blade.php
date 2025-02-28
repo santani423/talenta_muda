@@ -101,9 +101,9 @@
                                                                                         class="answer-text"
                                                                                         style="color: #000;">
                                                                                         <span></span>
-                                                                                        <img src="{{ url(substr($soal->pg_1, 3)) }}"
+                                                                                        <img src="{{ url($soal->pg_1) }}"
                                                                                             class="img-fluid"
-                                                                                            width="50%">
+                                                                                            width="25%">
                                                                                     </label>
                                                                                 </li>
                                                                             </div>
@@ -114,9 +114,9 @@
                                                                                         class="answer-text"
                                                                                         style="color: #000;">
                                                                                         <span></span>
-                                                                                        <img src="{{ url(substr($soal->pg_2, 3)) }}"
-                                                                                            class="img-fluid"
-                                                                                            width="50%">
+                                                                                        <img src="{{ url($soal->pg_2) }}"
+                                                                                        class="img-fluid"
+                                                                                        width="25%">
                                                                                     </label>
                                                                                 </li>
                                                                             </div>
@@ -127,9 +127,9 @@
                                                                                         class="answer-text"
                                                                                         style="color: #000;">
                                                                                         <span></span>
-                                                                                        <img src="{{ url(substr($soal->pg_3, 3)) }}"
-                                                                                            class="img-fluid"
-                                                                                            width="50%">
+                                                                                        <img src="{{ url($soal->pg_3) }}"
+                                                                                        class="img-fluid"
+                                                                                        width="25%">
                                                                                     </label>
                                                                                 </li>
                                                                             </div>
@@ -140,9 +140,9 @@
                                                                                         class="answer-text"
                                                                                         style="color: #000;">
                                                                                         <span></span>
-                                                                                        <img src="{{ url(substr($soal->pg_4, 3)) }}"
+                                                                                        <img src="{{ url($soal->pg_4) }}"
                                                                                             class="img-fluid"
-                                                                                            width="50%">
+                                                                                            width="25%">
                                                                                     </label>
                                                                                 </li>
                                                                             </div>
@@ -153,9 +153,9 @@
                                                                                         class="answer-text"
                                                                                         style="color: #000;">
                                                                                         <span></span>
-                                                                                        <img src="{{ url(substr($soal->pg_5, 3)) }}"
+                                                                                        <img src="{{ url($soal->pg_5) }}"
                                                                                             class="img-fluid"
-                                                                                            width="50%">
+                                                                                            width="25%">
                                                                                     </label>
                                                                                 </li>
                                                                             </div>
@@ -166,9 +166,9 @@
                                                                                         class="answer-text"
                                                                                         style="color: #000;">
                                                                                         <span></span>
-                                                                                        <img src="{{ url(substr($soal->pg_6, 3)) }}"
+                                                                                        <img src="{{ url($soal->pg_6) }}"
                                                                                             class="img-fluid"
-                                                                                            width="50%">
+                                                                                            width="25%">
                                                                                     </label>
                                                                                 </li>
                                                                             </div>
@@ -280,72 +280,7 @@
             </div>
 
 
-            {{-- Ujian Peserta & nilai --}}
-            <div id="iconsAccordion" class="accordion-icons shadow mt-3">
-                <div class="card">
-                    <div class="card-header bg-white" id="...">
-                        <section class="mb-0 mt-0">
-                            <div role="menu" class="" data-toggle="collapse" data-target="#iconAccordionOne"
-                                aria-expanded="true" aria-controls="iconAccordionOne" style="cursor: pointer;">
-                                Nilai Peserta (Klik untuk lihat & tutup)
-                            </div>
-                        </section>
-                    </div>
-
-                    <div id="iconAccordionOne" class="collapse show" aria-labelledby="..."
-                        data-parent="#iconsAccordion">
-                        <div class="card-body">
-
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="widget p-3 shadow">
-                                        <div class="widget-heading pl-2 pb-2" style="border-bottom: 1px solid #e0e6ed;">
-                                            Nilai Peserta
-                                        </div>
-
-                                        <div class="widget-content pt-3">
-                                            <!-- <a href="{{ url('/guru/ujian_cetak/' . $ujian->kode) }}" class="btn btn-info btn-sm" target="_blank"><span data-feather="printer"></span> Cetak</a>
-                                                            <a href="{{ url('/guru/ujian_ekspor/' . $ujian->kode) }}" class="btn btn-success btn-sm" target="_blank"><span data-feather="file-text"></span> Ekspor Excel</a>
-                                                            <a href="{{ url('/guru/ujian_reset/' . $ujian->kode) }}" class="btn btn-danger btn-sm reset-ujian-siswa"><span data-feather="refresh-ccw"></span> Reset Ujian Siswa</a> -->
-                                            <div class="table-responsive mt-3">
-                                                <table class="table table-bordered text-nowrap">
-                                                    <thead>
-                                                        <tr class="text-center">
-                                                            <th>Nama Peserta</th>
-                                                            <th>Benar</th>
-                                                            <th>Salah</th>
-                                                            <th>Tidak Dijawab</th>
-                                                            <th>Nilai</th>
-                                                            <!-- <th>opsi</th> -->
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($results as $s)
-                                                            <tr class="text-center">
-                                                                <td>{{ $s['siswa_nama'] }}</td>
-                                                                <td>{{ $s['jumlah_benar'] }}</td>
-                                                                <td>{{ $s['jumlah_salah'] }}</td>
-                                                                <td>{{ $s['jumlah_tidak_jawab'] }}</td>
-                                                                <td>{{ $s['nilai'] }}</td>
-                                                                <!-- <td>
-                                                                                        
-                                                                                    </td> -->
-
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
 
 
             <a href="{{ url('/guru/ujian') }}" class="btn btn-danger btn-sm mt-3"><span
