@@ -54,7 +54,7 @@
 
 </head>
 
-<body class="sidebar-noneoverflow">
+<body class="sidebar-noneoverflow" >
     <!-- BEGIN LOADER -->
     <div id="load_screen">
         <div class="loader">

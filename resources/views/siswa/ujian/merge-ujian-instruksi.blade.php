@@ -34,67 +34,61 @@
                         <img src="{{ asset($mergeUjian->instruksi_ujian) }}" alt="Banner" style="width: 100%; height: auto;">
                     </div> --}}
 
-                <div class="container-fluid mt-4">
-                    <div class="row justify-content-center">
+                <div class="container-fluid mt-4" id="instruksi" style="height: 100vh;">
+                    <div class="row justify-content-center align-items-center h-100">
                         <div class="col-md-12 mb-2">
                             <div class="card text-white shadow h-100"
                                 style="background: linear-gradient(to bottom, #1e3c72, #2a5298); border: none;">
                                 <div class="card-body text-center d-flex flex-column justify-content-center">
                                     <!-- Menampilkan instruksi -->
-                                    @foreach ($IntruksiUjian as $intr)
-                                        <h2 class="card-title" style="color: yellow; font-size: 40px; font-weight: bold;">
-                                            {{ $intr->label }}
-                                        </h2>
-                                        <p class="card-text" style="color: white; font-size: 30px; font-weight: bold;">
-                                            {!! $intr->intruksi !!}
-                                        </p>
-                                    @endforeach
+                                    @foreach ($IntruksiUjian as $index => $intr)
+                                        <div class="instruksi" id="instruksi-{{ $index }}"
+                                            style="{{ $index != 0 ? 'display:none;' : '' }}">
+                                            <h2 class="card-title"
+                                                style="color: yellow; font-size: 40px; font-weight: bold;">
+                                                {{ $intr->label }}
+                                            </h2>
+                                            <p class="card-text" style="color: white; font-size: 30px; font-weight: bold;">
+                                                {!! $intr->intruksi !!}
+                                            </p>
+                                            <div class="d-grid gap-2 col-6 mx-auto">
 
-                                    <!-- Tombol Next berdasarkan jenis ujian -->
-                                    @if ($mergeUjian->jenis_ujian == 1)
-                                        <a href="{{ url('siswa/ujian_essay/' . $ujian) }}"
-                                            class="btn btn-warning mt-3 btn-next">
-                                            Next
-                                        </a>
-                                    @elseif($mergeUjian->jenis_ujian == 2)
-                                        <a href="{{ url('siswa/ujian_kuesioner/' . $ujian) }}"
-                                            class="btn btn-warning mt-3 btn-next">
-                                            Next
-                                        </a>
-                                    @else
-                                        @if (empty($IntruksiUjian) && !in_array($mergeUjian->jenis_ujian, [1, 2, 3]))
-                                            <div class="card text-white shadow mt-3 h-100"
-                                                style="background: linear-gradient(to bottom, #1e3c72, #2a5298); border: none;">
-                                                <div
-                                                    class="card-body text-center d-flex flex-column justify-content-center">
-                                                    <h1 class="card-title"
-                                                        style="color: yellow; font-size: 40px; font-weight: bold;">
-                                                        Selamat!
-                                                    </h1>
-                                                    <h3 class="card-title"
-                                                        style="color: yellow; font-size: 40px; font-weight: bold;">
-                                                        TERIMA KASIH
-                                                    </h3>
-                                                    <p class="text-white-75 mb-5">Anda telah menyelesaikan test ini!
-                                                    </p>
-                                                    <a href="{{ url('/siswa') }}" class="btn btn-warning btn-next">
-                                                        Dashboard
-                                                    </a>
-                                                </div>
+                                                @if ($index < count($IntruksiUjian) - 1)
+                                                    <button class="btn btn-warning"
+                                                        onclick="showNextInstruksi({{ $index }})">Next</button>
+                                                @else
+                                                    <button class="btn btn-warning" onclick="showExampleQuestions()">Contoh
+                                                        Soal</button>
+                                                @endif
                                             </div>
-                                        @endif
-                                    @endif
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <script>
+                    function showNextInstruksi(currentIndex) {
+                        document.getElementById('instruksi-' + currentIndex).style.display = 'none';
+                        document.getElementById('instruksi-' + (currentIndex + 1)).style.display = 'block';
+                    }
+
+                    function showExampleQuestions() {
+                        document.querySelectorAll('.instruksi').forEach(el => el.style.display = 'none');
+                        document.querySelectorAll('.question').forEach(el => el.style.display = 'none');
+                        document.getElementById('instruksi').style.display = 'none';
+                        document.getElementById('showExampleQuestions').style.display = 'block';
+                        document.getElementById('soalDemoSoal0').style.display = 'block';
+                    }
+                </script>
+
 
 
 
                 <!-- Tambahkan tombol Next di bawah banner -->
-                <div class="container-fluid mt-3">
+                <div class="container-fluid mt-3" id="showExampleQuestions" style="display: none;">
                     @if ($mergeUjian->jenis_ujian == 0)
                         <div class="col-lg-12">
                             <form id="examwizard-question" action="{{ url('/siswa/ujian') }}" method="POST">
@@ -109,13 +103,13 @@
                                         @endphp
                                         @foreach ($simulasiPg as $keySG => $itemSG)
                                             <div class="question {{ $soal_hidden }} question-{{ $no }}"
-                                                id="soalDemoSoal{{$keySG}}" data-question="{{ $no }}"
+                                                id="soalDemoSoal{{ $keySG }}" data-question="{{ $no }}"
                                                 style="{{ $keySG != 0 ? 'display:none;' : '' }}">
                                                 <div class="widget-heading pl-2 pt-2"
                                                     style="border-bottom: 1px solid #e0e6ed;">
                                                     <div class="">
                                                         <h6 class="" style="font-weight: bold">Contoh Soal
-                                                            
+
                                                         </h6>
                                                     </div>
                                                 </div>
@@ -156,7 +150,7 @@
                                                                         for="{{ $keySG }}soal{{ $no }}-A"
                                                                         class="answer-text">
                                                                         A.<span><img src="{{ url($itemSG->pg_1) }}"
-                                                                                width="100" alt=""></span>
+                                                                                width="40%" alt=""></span>
                                                                     </label>
                                                                 </li>
                                                                 <li class="answer-item">
@@ -170,7 +164,7 @@
                                                                         for="{{ $keySG }}soal{{ $no }}-B"
                                                                         class="answer-text">
                                                                         B. <span><img src="{{ url($itemSG->pg_2) }}"
-                                                                                width="100" alt=""></span>
+                                                                                width="40%" alt=""></span>
                                                                     </label>
                                                                 </li>
                                                                 <li class="answer-item">
@@ -184,7 +178,7 @@
                                                                         for="{{ $keySG }}soal{{ $no }}-C"
                                                                         class="answer-text">
                                                                         C. <span><img src="{{ url($itemSG->pg_3) }}"
-                                                                                width="100" alt=""></span>
+                                                                                width="40%" alt=""></span>
                                                                     </label>
                                                                 </li>
                                                                 <li class="answer-item">
@@ -198,7 +192,7 @@
                                                                         for="{{ $keySG }}soal{{ $no }}-D"
                                                                         class="answer-text">
                                                                         D. <span><img src="{{ url($itemSG->pg_4) }}"
-                                                                                width="100" alt=""></span>
+                                                                                width="40%" alt=""></span>
                                                                     </label>
                                                                 </li>
                                                                 <li class="answer-item">
@@ -212,24 +206,24 @@
                                                                         for="{{ $keySG }}soal{{ $no }}-E"
                                                                         class="answer-text">
                                                                         E. <span><img src="{{ url($itemSG->pg_5) }}"
-                                                                                width="100" alt=""></span>
+                                                                                width="40%" alt=""></span>
                                                                     </label>
                                                                 </li>
-                                                                @if($itemSG->pg_6)
-                                                                <li class="answer-item">
-                                                                    <input type="radio" data-alternatetype="radio"
-                                                                        name="{{ $keySG }}simulasi_ujian"
-                                                                        value="f"
-                                                                        id="{{ $keySG }}soal{{ $no }}-F"
-                                                                        data-pg_siswa=""
-                                                                        data-noSoal="{{ $no }}" />
-                                                                    <label
-                                                                        for="{{ $keySG }}soal{{ $no }}-F"
-                                                                        class="answer-text">
-                                                                        F. <span><img src="{{ url($itemSG->pg_6) }}"
-                                                                                width="100" alt=""></span>
-                                                                    </label>
-                                                                </li>
+                                                                @if ($itemSG->pg_6)
+                                                                    <li class="answer-item">
+                                                                        <input type="radio" data-alternatetype="radio"
+                                                                            name="{{ $keySG }}simulasi_ujian"
+                                                                            value="f"
+                                                                            id="{{ $keySG }}soal{{ $no }}-F"
+                                                                            data-pg_siswa=""
+                                                                            data-noSoal="{{ $no }}" />
+                                                                        <label
+                                                                            for="{{ $keySG }}soal{{ $no }}-F"
+                                                                            class="answer-text">
+                                                                            F. <span><img src="{{ url($itemSG->pg_6) }}"
+                                                                                    width="40%" alt=""></span>
+                                                                        </label>
+                                                                    </li>
                                                                 @endif
                                                             </ol>
                                                             <button type="button" class="btn btn-primary"
@@ -285,7 +279,7 @@
                                         resultElement.textContent = 'Jawaban Anda Benar!';
                                         resultElement.style.color = 'green';
 
-                                 
+
                                         let nextQuestion = keySG + 1;
 
 
@@ -303,13 +297,13 @@
                                             resultElement.style.color = 'green';
                                             setTimeout(() => {
 
-                                                for (let index = 0; index < totalSoal; index++) { 
+                                                for (let index = 0; index < totalSoal; index++) {
                                                     console.log('soalDemoSoal' + index);
-                                                    
+
                                                     document.getElementById('soalDemoSoal' + index).style.display = "none";
                                                 }
- 
-                                                document.getElementById('soalDemoSoal'+nextQuestion).style.display = "block";
+
+                                                document.getElementById('soalDemoSoal' + nextQuestion).style.display = "block";
                                             }, 1000);
 
                                         }
@@ -358,7 +352,7 @@
                                                             class="answer-text">
                                                             {{ chr(64 + $i) }}.
                                                             <span>
-                                                                <img src="{{ url($sv->{'pg_' . $i}) }}" width="100"
+                                                                <img src="{{ url($sv->{'pg_' . $i}) }}" width="40%"
                                                                     alt="">
                                                             </span>
                                                         </label>
@@ -402,8 +396,8 @@
                                     resultElement.style.color = "green";
                                     if (keySG == count - 1) {
                                         resultElement.textContent = 'Simulasi selesai!'
-                                                .toUpperCase();
-                                            resultElement.style.color = 'green';
+                                            .toUpperCase();
+                                        resultElement.style.color = 'green';
                                         setTimeout(() => {
                                             window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
                                         }, 1000);
