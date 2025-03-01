@@ -1347,7 +1347,39 @@ class UjianGuruController extends Controller
         // Get total number of questions for the current ujian
         $total_soal_pg = $ujian->detailujian->count();
 
-        
+        $pgUjian = PgSiswa::join('detail_ujian as du', 'du.id', '=', 'pg_siswa.detail_ujian_id')
+            ->join('siswa', 'siswa.id', '=', 'pg_siswa.siswa_id')
+            ->where('du.kode', $ujian->kode)
+            ->select(
+                'siswa.id as siswa_id', // Include siswa ID for tracking duplicates
+                'siswa.nama_siswa as siswa_nama',
+                DB::raw("SUM(CASE WHEN UPPER(pg_siswa.jawaban) = UPPER(du.jawaban) THEN 1 ELSE 0 END) as jumlah_benar"),
+                DB::raw("SUM(CASE WHEN UPPER(pg_siswa.jawaban) != UPPER(du.jawaban) THEN 1 ELSE 0 END) as jumlah_salah"),
+                DB::raw("SUM(CASE WHEN pg_siswa.jawaban IS NULL OR pg_siswa.jawaban = '' THEN 1 ELSE 0 END) as jumlah_tidak_jawab") // Count unanswered questions
+            )
+            ->groupBy('siswa.id', 'siswa.nama_siswa')
+            ->get();
+
+        foreach ($pgUjian as $value) {
+            // Check if this student has already been processed
+            if (!in_array($value->siswa_id, $processedSiswaIds)) {
+                $jumlah_benar = $value->jumlah_benar;
+                // Calculate the score
+                $nilai = ($jumlah_benar / $total_soal_pg) * 100;
+
+                // Store each student's results in the array
+                $results[] = [
+                    'siswa_nama' => $value->siswa_nama,
+                    'jumlah_benar' => $jumlah_benar,
+                    'jumlah_salah' => $value->jumlah_salah,
+                    'jumlah_tidak_jawab' => $value->jumlah_tidak_jawab, // Add unanswered questions count
+                    'nilai' => $nilai
+                ];
+
+                // Mark this student ID as processed
+                $processedSiswaIds[] = $value->siswa_id;
+            }
+        }
         // Now $results contains unique entries for each student
         // dd($results); // Output the array to check the final result
 
@@ -1369,7 +1401,8 @@ class UjianGuruController extends Controller
                 'expanded' => 'ujian'
             ],
             'guru' => Guru::firstWhere('id', session()->get('id')),
-            'ujian' => $ujian, 
+            'ujian' => $ujian,
+            'results' => $results,
         ]);
     }
     public function show_visual(Ujian $ujian)

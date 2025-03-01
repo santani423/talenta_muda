@@ -36,10 +36,7 @@
                                                         {{ $bs->tempat_lahir_pg ?? 'Tempat lahir siswa tidak tersedia' }}
                                                     </td>
                                                     <td>
-                                                        {{-- <a href="{{ url('/guru/hasil_ujian_siswa/' . $bs->kode . '/' . ($bs->id_siswa_pg ?? ($bs->id_siswa_visual ?? ($bs->id_siswa_essay ?? ($bs->id_siswa_kuesioner ?? ''))))) }}"
-                                                            class="btn btn-primary btn-sm">
-                                                            <span data-feather="eye"></span>
-                                                        </a> --}}
+                                                      
 
                                                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                                             data-target="#exampleModal"
@@ -56,6 +53,23 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <nav aria-label="Page navigation example" class="d-flex justify-content-end">
+                                        <ul class="pagination">
+                                          <li class="page-item {{ ($MergeUjianSiswa->currentPage() == 1) ? ' disabled' : '' }}">
+                                            <a class="page-link" href="{{ $MergeUjianSiswa->previousPageUrl() }}" aria-label="Previous">
+                                              <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                          </li>
+                                          @for ($i = 1; $i <= $MergeUjianSiswa->lastPage(); $i++)
+                                            <li class="page-item {{ ($MergeUjianSiswa->currentPage() == $i) ? ' active' : '' }}"><a class="page-link" href="{{ $MergeUjianSiswa->url($i) }}">{{ $i }}</a></li>
+                                          @endfor
+                                          <li class="page-item {{ ($MergeUjianSiswa->currentPage() == $MergeUjianSiswa->lastPage()) ? ' disabled' : '' }}">
+                                            <a class="page-link" href="{{ $MergeUjianSiswa->nextPageUrl() }}" aria-label="Next">
+                                              <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </nav>
                                 </div>
                             </div>
                             <div class="col-lg-5 d-flex">
@@ -100,44 +114,7 @@
      </div>
      @include('template.footer')
  </div>
- <script>
-    $(document).ready(function() {
-        $(".btn-hapus").on("click", function(e) {
-            var t = $(this);
-            e.preventDefault(), swal({
-                title: "yakin di hapus?",
-                text: "data yang berkaitan akan dihapus dan tidak bisa di kembalikan!",
-                type: "warning",
-                showCancelButton: !0,
-                cancelButtonText: "tidak",
-                confirmButtonText: "ya, hapus",
-                padding: "2em"
-            }).then(function(e) {
-                e.value && t.parent("form").submit()
-            })
-        }), $("#datatable-table").DataTable({
-            scrollY: "300px",
-            scrollX: !0,
-            scrollCollapse: !0,
-            paging: !0,
-            oLanguage: {
-                oPaginate: {
-                    sPrevious: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
-                    sNext: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
-                },
-                sInfo: "tampilkan halaman _PAGE_ dari _PAGES_",
-                sSearch: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
-                sSearchPlaceholder: "Cari Data...",
-                sLengthMenu: "Hasil :  _MENU_"
-            },
-            stripeClasses: [],
-            lengthMenu: [
-                [-1, 5, 10, 25, 50],
-                ["All", 5, 10, 25, 50]
-            ]
-        })
-    });
-</script>
+ 
     <!-- MODAL -->
     <script>
         let itemPrint = '';
@@ -547,6 +524,8 @@
 
             html2pdf().from(element).save(`Hasil_Test_.pdf`);
         }
+
+        
     </script>
     {!! session('pesan') !!}
 @endsection

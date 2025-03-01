@@ -18,7 +18,6 @@
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
-                                
                             </div>
                         @endif
                         <div id="intruksi">
@@ -41,8 +40,9 @@
                                     <div class="isi_intruksi mt-2">
                                         <div class="form-group">
                                             <label for="">Instruksi {{ $no }}</label>
-                                            <textarea name="intruksi[]" cols="30" rows="20" class="form-control" wrap="hard" required>{{ $in->intruksi }}</textarea>
+                                            <textarea name="intruksi[]" cols="30" rows="20" class="form-control summernote" wrap="hard" required>{{ $in->intruksi }}</textarea>
                                         </div>
+                                        <button type="button" class="btn btn-danger hapus-intruksi mt-2">Hapus</button>
                                     </div>
                                 @endforeach
                             @else
@@ -59,15 +59,16 @@
                                 <div class="isi_intruksi mt-2">
                                     <div class="form-group">
                                         <label for="">Instruksi </label>
-                                        <textarea name="intruksi[]" cols="30" rows="2" class="form-control" wrap="hard" required></textarea>
+                                        <textarea name="intruksi[]" cols="30" rows="2" class="form-control summernote" wrap="hard" required></textarea>
                                     </div>
+                                    <button type="button" class="btn btn-danger hapus-intruksi mt-2">Hapus</button>
                                 </div>
                             @endif
                         </div>
 
-                        {{-- <div class="mt-2">
+                        <div class="mt-2">
                             <button type="button" class="btn btn-success tambah-intruksi">Tambah Instruksi</button>
-                        </div> --}}
+                        </div>
                         <div class="mt-4">
                             <button class="btn btn-primary">Submit</button>
                         </div>
@@ -80,8 +81,14 @@
     </div>
 
     <!--  END CONTENT AREA  -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('.summernote').summernote({
+                height: 200
+            });
+
             // Hitung jumlah instruksi awal
             let no_intruksi = $('#intruksi > #label').length;
             if (no_intruksi < 1) {
@@ -95,7 +102,7 @@
             <div id="label">
                 <div class="isi_label">
                     <div class="form-group">
-                        <label for="">Label  </label>
+                        <label for="">Label ${no}</label>
                         <input name="label[]" type="text" class="form-control"> 
                         <input name="id[]" value="" type="hidden" class="form-control"> 
                     </div>
@@ -103,14 +110,17 @@
             </div>
             <div class="isi_intruksi mt-2">
                 <div class="form-group">
-                    <label for="">Instruksi  </label>
-                    <textarea name="intruksi[]" cols="30" rows="2" class="form-control" wrap="hard" required></textarea>
+                    <label for="">Instruksi ${no}</label>
+                    <textarea name="intruksi[]" cols="30" rows="2" class="form-control summernote" wrap="hard" required></textarea>
                 </div>
                 <button type="button" class="btn btn-danger hapus-intruksi mt-2">Hapus</button>
             </div>
         `;
 
                 $('#intruksi').append(intruksiBaru);
+                $('.summernote').summernote({
+                    height: 200
+                });
                 no_intruksi++;
             });
 

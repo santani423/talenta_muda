@@ -24,9 +24,9 @@
 
 []kata kata selesai ujian, "yahoo, tidak ada ujian" Diganti selamat anda telah menyelesaikan test ini  terima kasih" Background diganti hijau
 
-[]text loading data di report, dihapus
+[done]text loading data di report, dihapus
 
-[]Bikin menu khusus untuk report peserta
+[done]Bikin menu khusus untuk report peserta
 
 []Rapihin tampilan, data untuk di demokan ke klien
 []Tiap Part ujian, masukan petunjuk instruksi umum di halaman pertama, di halaman ke dua ada tulisan petunjuk part1.1 dan di bawah nya ada simulasi/contoh soal
