@@ -120,7 +120,7 @@
                                                             style="word-wrap: break-word">
                                                             <center>
                                                                 <img src="{{ url($itemSG->soal) }}" class="img-fluid"
-                                                                    width="50%">
+                                                                    width="40%">
                                                             </center>
 
                                                         </h6>

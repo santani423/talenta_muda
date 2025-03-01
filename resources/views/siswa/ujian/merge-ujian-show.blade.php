@@ -22,7 +22,7 @@
                     <input type="hidden" name="kode" value="{{ $ujian->kode }}">
                     <input type="hidden" name="kode_merge_ujian" value="{{ $kode_merge_ujian }}">
                     <div class="widget shadow p-2">
-                        <div class="d-flex float-right">
+                        <div class="d-flex float-right hidden">
                             <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
                                 <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
                             </div>
@@ -46,7 +46,7 @@
                                                 style="word-wrap: break-word">
 
                                                 <img src="{{ url($soal->detailujian->soal) }}" alt=""
-                                                    style="width: 50%; height: auto;">
+                                                    style="width: 30%; height: auto;">
                                             </h6>
                                         </div>
                                         <div class="widget-content mt-3">
@@ -65,7 +65,7 @@
                                                                     <span>A </span>
                                                                     <img src="{{ url($soal->detailujian->pg_1) }}"
                                                                         alt=""
-                                                                        style="width: 50%; height: auto; margin-left: 10px;">
+                                                                        style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                         </div>
@@ -80,7 +80,7 @@
                                                                     <span>B </span>
                                                                     <img src="{{ url($soal->detailujian->pg_2) }}"
                                                                         alt=""
-                                                                        style="width: 50%; height: auto; margin-left: 10px;">
+                                                                        style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                             </li>
@@ -96,7 +96,7 @@
                                                                     <span>C </span>
                                                                     <img src="{{ url($soal->detailujian->pg_3) }}"
                                                                         alt=""
-                                                                        style="width: 50%; height: auto; margin-left: 10px;">
+                                                                        style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                             </li>
@@ -112,7 +112,7 @@
                                                                     <span>D </span>
                                                                     <img src="{{ url($soal->detailujian->pg_4) }}"
                                                                         alt=""
-                                                                        style="width: 50%; height: auto; margin-left: 10px;">
+                                                                        style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                             </li>
@@ -128,11 +128,13 @@
                                                                     <span>E </span>
                                                                     <img src="{{ url($soal->detailujian->pg_5) }}"
                                                                         alt=""
-                                                                        style="width: 50%; height: auto; margin-left: 10px;">
+                                                                        style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                             </li>
                                                         </div>
+                                                      
+                                                        @if ($soal->detailujian->pg_6 != null && $soal->detailujian->pg_6 != ''&& $soal->detailujian->pg_6 != 'f')
                                                         <div class="col-md-6">
                                                             <li class="answer-number">
                                                                 <li class="answer-number d-flex align-items-center">
@@ -144,11 +146,13 @@
                                                                         <span>F </span>
                                                                         <img src="{{ url($soal->detailujian->pg_6) }}"
                                                                             alt=""
-                                                                            style="width: 50%; height: auto; margin-left: 10px;">
+                                                                            style="width: 40%; height: auto; margin-left: 10px;">
                                                                     </label>
                                                                 </li>
                                                                 </li>
                                                         </div>
+                                                        @endif
+                                                 
                                                     </div>
                                                 </ol>
 

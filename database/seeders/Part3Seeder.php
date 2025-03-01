@@ -16,6 +16,7 @@ class Part3Seeder extends Seeder
      */
     public function run(): void
     {
+ 
         $part3 =  [
             ["soal" => "Ali memiliki 4 bantal. Ia membeli 6 bantal lagi. Berapa banyak bantal yang ia miliki sekarang?", "jawaban" => 10],
             ["soal" => "Dewi memiliki 13 spidol. Dia memberikan 7 spidol kepada Joni. Berapa banyak spidol yang masih ia miliki sekarang?", "jawaban" => 6],
@@ -91,6 +92,15 @@ class Part3Seeder extends Seeder
 
         DB::table('intruksi_ujians')->insert([
             'kode' => $kode,
+            'label' => 'part 3.',
+            'urutan' => '1',
+            'intruksi' => 'Jawablah soal-soal berikut ini dengan teliti dan benar!
+Tuliskan jawaban Anda pada kolom yang tersedia. Waktu pengerjaan terbatas tapi tidak kami beritahukan batas waktunya. Oleh karena itu kerjakan soal-soal yang Anda anggap paling mudah terlebih dahulu.',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        DB::table('intruksi_ujians')->insert([
+            'kode' => $tespart3,
             'label' => 'part 3.',
             'urutan' => '1',
             'intruksi' => 'Jawablah soal-soal berikut ini dengan teliti dan benar!

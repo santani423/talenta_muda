@@ -20,7 +20,7 @@
             <input type="hidden" name="kode" value="{{ $ujian->kode_ujian }}">
             <input type="hidden" name="kode_merge_ujian" value="{{ $kode_merge_ujian }}">
             <div class="widget shadow p-2">
-                <div class="d-flex float-right">
+                <div class="d-flex float-right hidden">
                     <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
                         <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
                     </div>
@@ -53,10 +53,10 @@
                                                     $pg = 'pg_' . $i;
                                                     $checked = in_array($soal->jawaban, [$soal->detailVisual->$pg]) ? 'checked' : '';
                                                 @endphp
-                                                <div class="col-md-6 col-lg-4 answer-number">
+                                                <div class="col-md-6 col-lg-6 answer-number">
                                                     <input type="checkbox" name="pilihan-{{ $soal->detailVisual->id }}[]" value="{{ chr(64 + $i) }}" id="soal{{ $no }}-{{ $soal->detailVisual->$pg }}" {{ $checked }} class="answer-checkbox"/>
                                                     <label for="soal{{ $no }}-{{ $soal->detailVisual->$pg }}" style="cursor: pointer;">
-                                                        <img src="{{ url($soal->detailVisual->$pg) }}" alt="Option {{ url(substr($soal->detailVisual->$pg, 0, 1)) }}" class="img-fluid">
+                                                        {{ chr(64 + $i) }} <img src="{{ url($soal->detailVisual->$pg) }}" alt="Option {{ url(substr($soal->detailVisual->$pg, 0, 1)) }}" width="40%" class="img-fluid">
                                                     </label>
                                                 </div>
                                             @endfor
