@@ -57,8 +57,7 @@ class LaporanController extends Controller
                 });
             })
             ->distinct()
-            ->paginate(10);
-
+            ->get();
         return view('guru.laporan.laporan_ujian_siswa', [
             'title' => 'Data Tes',
             'plugin' => '
@@ -68,8 +67,8 @@ class LaporanController extends Controller
                 <script src="https://cdn.datatables.net/fixedcolumns/4.1.0/js/dataTables.fixedColumns.min.js"></script>
             ',
             'menu' => [
-                'menu' => 'merge_ujian',
-                'expanded' => 'merge_ujian'
+                'menu' => 'laporan_ujian_siswa',
+                'expanded' => 'laporan_ujian_siswa'
             ],
             'guru' => Guru::firstWhere('id', session()->get('id')),
             'guru_kelas' => Gurukelas::where('guru_id', session()->get('id'))->get(),

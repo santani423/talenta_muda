@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <ul class="list-group">
-                                    <li class="list-group-item bg-primary light text-center">Kelas Saya</li>
+                                    <li class="list-group-item bg-primary light text-center">Batch Saya</li>
                                     @if ($guru_kelas->count() > 0)
                                         @foreach ($guru_kelas as $gk)
                                             <li class="list-group-item">{{ $gk->kelas->nama_kelas }}</li>

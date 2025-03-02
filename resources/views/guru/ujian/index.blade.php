@@ -118,41 +118,34 @@
                         <div class="col-md-12 mb-2">
                             <div class="row">
                                 <div class="col-md-3 mb-2">
-                                    <a href="{{ url('/guru/ujian/create') }}" class="btn btn-primary">Ganda</a>
+                                    <a href="{{ url('/guru/ujian/create') }}" class="btn btn-primary btn-block">Ganda</a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="{{ url('/guru/ujian_visual') }}" class="btn btn-primary">Visual</a>
+                                    <a href="{{ url('/guru/ujian_visual') }}" class="btn btn-primary btn-block">Visual</a>
                                 </div>
-                                
                             </div>
                         </div>
                         <div class="col-md-12 mb-2">
                             <div class="row">
-                                
                                 <div class="col-md-3 mb-2">
-                                    <a href="{{ url('/guru/ujian_essay') }}" class="btn btn-primary">Essay</a>
+                                    <a href="{{ url('/guru/ujian_essay') }}?type_kunci_jawaban=number" class="btn btn-primary btn-block">Essay Numeric</a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="{{ url('/guru/ujian_essay') }}?type_kunci_jawaban=number" class="btn btn-primary">Essay Numeric</a>
+                                    <a href="{{ url('/guru/ujian_essay') }}?type_kunci_jawaban=text" class="btn btn-primary btn-block">Essay Karakter</a>
                                 </div>
-                                <div class="col-md-3 mb-2">
-                                    <a href="{{ url('/guru/ujian_essay') }}?type_kunci_jawaban=text" class="btn btn-primary">Essay Karakter</a>
-                                </div>
-                                 
                             </div>
                         </div>
                         <div class="col-md-12 mb-2">
-                            <div class="row"> 
+                            <div class="row">
                                 <div class="col-md-3 mb-2">
-                                    <a href="{{ url('/guru/ujian_kuesioner') }}" class="btn btn-primary">Kuesioner</a>
+                                    <a href="{{ url('/guru/ujian_kuesioner') }}" class="btn btn-primary btn-block">Kuesioner</a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="{{ url('/guru/ujian_kuesioner') }}" class="btn btn-primary">Kuesioner</a>
+                                    <a href="{{ url('/guru/ujian_kuesioner') }}" class="btn btn-primary btn-block">Kuesioner</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
 
                 <div class="modal-footer">

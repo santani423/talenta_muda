@@ -115,10 +115,10 @@
                                                     {{ $bs->tempat_lahir_pg ?? 'Tempat lahir siswa tidak tersedia' }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ url('/guru/hasil_ujian_siswa/' . $bs->kode . '/' . ($bs->id_siswa_pg ?? ($bs->id_siswa_visual ?? ($bs->id_siswa_essay ?? ($bs->id_siswa_kuesioner ?? ''))))) }}"
+                                                    {{-- <a href="{{ url('/guru/hasil_ujian_siswa/' . $bs->kode . '/' . ($bs->id_siswa_pg ?? ($bs->id_siswa_visual ?? ($bs->id_siswa_essay ?? ($bs->id_siswa_kuesioner ?? ''))))) }}"
                                                         class="btn btn-primary btn-sm">
                                                         <span data-feather="eye"></span>
-                                                    </a>
+                                                    </a> --}}
 
                                                     <button type="button" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#exampleModal"
