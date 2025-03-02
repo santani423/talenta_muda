@@ -126,9 +126,20 @@ class Part4Seeder extends Seeder
                 "skor_0" => ["Hubungan dengan orang lain"]
             ]
         ];
+        $contohSoal = [
+            1 => [
+                "soal" => "Apa persamaan antara TIGA dan DELAPAN ?",
+                "jawaban" => "Angka", 
+            ], 
+            2 => [
+                "soal" => "Apa persamaan antara MANGGA dan PEPAYA ?",
+                "jawaban" => "Buah", 
+            ], 
+        ];
         
 
         $kode = 'part4';
+      
         DB::table('ujian')->insert([
             'kode' => $kode,
             'nama' => 'Part 4',
@@ -197,6 +208,23 @@ class Part4Seeder extends Seeder
                 'updated_at' => Carbon::now(),
             ]
         ]);
+
+        foreach ($contohSoal as $key => $value) {
+            DB::table('simulasi_ujian_essays')->insert([
+                'kode' => $kode,
+                'soal' => $value['soal'], 
+                'jawaban' => $value['jawaban'],  
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            DB::table('simulasi_ujian_essays')->insert([
+                'kode' => $tespart4,
+                'soal' => $value['soal'], 
+                'jawaban' => $value['jawaban'],  
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
 
         foreach ($soal as $number => $answer) {
 

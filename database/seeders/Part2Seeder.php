@@ -125,16 +125,7 @@ Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan An
             'updated_at' => Carbon::now()
         ]);
 
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $tespart2,
-            'label' => 'part 1.4.',
-            'urutan' => '1',
-            'intruksi' => 'Pilih satu jawaban yang 
-dianggap paling tepat
-',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+     
         DB::table('relasi_ujian_merge')->insert([
             [
                 'kode_ujian' => $kode,

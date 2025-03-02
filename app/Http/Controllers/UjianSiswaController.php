@@ -20,6 +20,7 @@ use App\Models\DetailKuisoner;
 use App\Models\DetailVisual;
 use App\Models\IntruksiUjian;
 use App\Models\KuesionerSiswa;
+use App\Models\SimulasiUjianEssay;
 use App\Models\SimulatorUjianPg;
 use App\Models\SimulatorUjianVisual;
 use App\Models\VisualSiswa;
@@ -662,7 +663,7 @@ class UjianSiswaController extends Controller
                 ->orderBy('rum.urutan', 'asc')
                 // ->orderBy('rum.urutan', 'desc')
                 ->first();
-            // dd( $mergeUjian);
+         
 
 
             if (!$mergeUjian) {
@@ -672,6 +673,7 @@ class UjianSiswaController extends Controller
             // dd($mergeUjian->kode);
             $simulasiPg = SimulatorUjianPg::where('kode', $mergeUjian->kode)->get();
             $simulasiVisual = SimulatorUjianVisual::where('kode', $mergeUjian->kode)->get();
+            $simulasiEssay = SimulasiUjianEssay::where('kode', $mergeUjian->kode)->get();
             // dd($simulasiVisual);
 
             // Notifikasi tugas dan ujian
@@ -684,9 +686,9 @@ class UjianSiswaController extends Controller
 
             // Intruksi ujian
             $IntruksiUjian = IntruksiUjian::where('kode', $mergeUjian->kode_ujian)->get();
-            // dd($mergeUjian->jenis_ujian );
-
-            if (count($simulasiPg) <= 0 && count($simulasiVisual) <= 0) {
+            // dd($mergeUjian->kode_ujian );
+            // dd( $IntruksiUjian);
+            if (count($simulasiPg) <= 0 && count($simulasiVisual) <= 0 && count($IntruksiUjian) <= 0) {
                 // dd($mergeUjian->jenis_ujian);
                 if ($mergeUjian->jenis_ujian == 0) {
                     return redirect(url('siswa/ujian/' . $ujian));
@@ -701,6 +703,7 @@ class UjianSiswaController extends Controller
                 }
             }
             // dd($simulasiPg);
+            // dd($mergeUjian->kode);
 
             return view('siswa.ujian.merge-ujian-instruksi', [
                 'title' => 'Intruksi Ujian',
@@ -722,6 +725,7 @@ class UjianSiswaController extends Controller
                 'simulasiPg' => $simulasiPg,
                 'simulasiVisual' => $simulasiVisual,
                 'IntruksiUjian' => $IntruksiUjian,
+                'simulasiEssay' => $simulasiEssay,
             ]);
         } catch (\Exception $e) {
             // Tangani kesalahan dan tampilkan pesan error

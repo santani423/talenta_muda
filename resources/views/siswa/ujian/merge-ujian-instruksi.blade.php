@@ -51,14 +51,33 @@
                                             <p class="card-text" style="color: white; font-size: 30px; font-weight: bold;">
                                                 {!! $intr->intruksi !!}
                                             </p>
+                                           
                                             <div class="d-grid gap-2 col-6 mx-auto">
 
                                                 @if ($index < count($IntruksiUjian) - 1)
                                                     <button class="btn btn-warning"
                                                         onclick="showNextInstruksi({{ $index }})">Next</button>
                                                 @else
-                                                    <button class="btn btn-warning" onclick="showExampleQuestions()">Contoh
-                                                        Soal</button>
+                                               
+                                                    @if (count($simulasiPg) > 0 || count($simulasiVisual) > 0 || count($simulasiEssay) > 0 || count($simulasiKuesioner) > 0)
+                                                        <button class="btn btn-warning"
+                                                            onclick="showExampleQuestions()">Contoh
+                                                            Soal</button>
+                                                    @else
+                                                        @if ($mergeUjian->jenis_ujian == 0)
+                                                            <a href="{{ url('siswa/ujian/' . $ujian) }}"
+                                                                class="btn btn-warning">Mulai Ujian</a>
+                                                        @elseif($mergeUjian->jenis_ujian == 1)
+                                                            <a href="{{ url('siswa/ujian_essay/' . $ujian) }}"
+                                                                class="btn btn-warning">Mulai Ujian</a>
+                                                        @elseif($mergeUjian->jenis_ujian == 2)
+                                                            <a href="{{ url('siswa/ujian_kuesioner/' . $ujian) }}"
+                                                                class="btn btn-warning">Mulai Ujian</a>                                                                       
+                                                        @elseif($mergeUjian->jenis_ujian == 3)
+                                                            <a href="{{ url('siswa/ujian_visual/' . $ujian) }}"
+                                                                class="btn btn-warning">Mulai Ujian</a>                                                                       
+                                                        @endif
+                                                    @endif
                                                 @endif
                                             </div>
                                         </div>
@@ -85,7 +104,7 @@
                 </script>
 
 
-
+{{-- {{dd($simulasiPg)}} --}}
 
                 <!-- Tambahkan tombol Next di bawah banner -->
                 <div class="container-fluid mt-3" id="showExampleQuestions" style="display: none;">
@@ -93,13 +112,14 @@
                         <div class="col-lg-12">
                             <form id="examwizard-question" action="{{ url('/siswa/ujian') }}" method="POST">
                                 @csrf
-
+                               
                                 <div class="widget shadow p-2">
 
                                     <div>
                                         @php
                                             $no = 1;
                                             $soal_hidden = '';
+                                   
                                         @endphp
                                         @foreach ($simulasiPg as $keySG => $itemSG)
                                             <div class="question {{ $soal_hidden }} question-{{ $no }}"
@@ -316,6 +336,125 @@
                                 } else {
                                     resultElement.textContent = 'Silakan pilih jawaban terlebih dahulu.';
                                     resultElement.style.color = 'orange';
+                                }
+                            }
+                        </script>
+                    @elseif($mergeUjian->jenis_ujian == 1)
+                        @foreach ($simulasiEssay as $keySG => $sv)
+                            <div class="question " id="soalDemoSoal{{ $keySG }}" >
+                                <div class="widget p-3 mt-3">
+                                    <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
+                                        <div class="">
+                                            <h6 class="" style="font-weight: bold">Contoh Soal
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class="widget-content mt-3" style="position: relative;">
+                                        <div class="widget-heading" style="border-bottom: 1px solid #e0e6ed;">
+                                            <h6 class="question-title color-green"
+                                                style="word-wrap: break-word">
+                                                 {!! $sv->soal !!}
+                                            </h6>
+                                        </div>
+                                        <div class="timer-check hidden"
+                                            style="position: absolute; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.5);">
+                                            <h5
+                                                style="display: flex; justify-content: center; align-items: center; margin-top: 60px;">
+                                                <span class="badge badge-danger">Waktu Habis!</span>
+                                            </h5>
+                                        </div>
+                                        <div class="row"></div>
+                                        <div class="green-radio color-green">
+                                            <input type="text" name="{{ $keySG }}simulasi_ujian" class="form-control">
+                                            <button type="button" class="btn btn-primary mt-2"
+                                                onclick="checkJawabanEssay({{ count($simulasiEssay) }},{{ $keySG }},1, ['{{ $sv->jawaban }}'])">Submit</button>
+                                            <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
+                                            </p>
+                                            <p id="{{ $keySG }}validation-1" style="font-weight: bold; color: orange;">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                function checkJawabanEssay(count, keySG, no, correctAnswers) {
+                                    const input = document.querySelector(`input[name='${keySG}simulasi_ujian']`);
+                                    const resultElement = document.getElementById(`${keySG}result-1`);
+                                    const validationElement = document.getElementById(`${keySG}validation-1`);
+                                    alert(correctAnswers);
+                                    if (!input.value.trim()) {
+                                        validationElement.innerText = "Jawaban tidak boleh kosong.";
+                                        return;
+                                    } else {
+                                        validationElement.innerText = "";
+                                    }
+
+                                    if (correctAnswers.includes(input.value.trim().toLowerCase())) {
+                                        resultElement.innerText = "Jawaban Benar!";
+                                        resultElement.style.color = "green";
+                                        if (keySG == count - 1) {
+                                            resultElement.textContent = 'Simulasi selesai!'.toUpperCase();
+                                            resultElement.style.color = 'green';
+                                            setTimeout(() => {
+                                                window.location.href = "{{ url('siswa/ujian_essay/' . $ujian) }}";
+                                            }, 1000);
+                                        } else {
+                                            setTimeout(() => {
+                                                document.getElementById('soalDemoSoal' + keySG).style.display = "none";
+                                                document.getElementById('soalDemoSoal' + (keySG + 1)).style.display = "block";
+                                            }, 1000);
+                                        }
+                                    } else {
+                                        resultElement.innerText = "Jawaban Salah. Jawaban yang benar adalah " + correctAnswers.join(' dan ');
+                                        resultElement.style.color = "red";
+                                    }
+                                }
+                            </script>
+                        @endforeach
+                        <script>
+                            function checkAnswers(count, keySG, no, correctAnswers) {
+                                // Ambil semua checkbox yang dipilih untuk pertanyaan ini
+                                const selected = document.querySelectorAll(`input[name='${keySG}simulasi_ujian[]']:checked`);
+                                console.log(selected);
+
+                                // Ambil nilai dari checkbox yang dipilih
+                                const selectedValues = Array.from(selected).map(input => input.value);
+
+                                // Cek apakah jumlah jawaban yang dipilih adalah 2
+                                if (selectedValues.length !== 2) {
+                                    const resultElement = document.getElementById(`${keySG}result-${no}`);
+                                    resultElement.innerText = "Anda harus memilih 2 jawaban.";
+                                    resultElement.style.color = "red";
+                                    return;
+                                }
+
+                                // console.log(selectedValues);
+                                // Cek apakah kedua jawaban sesuai dengan kunci jawaban
+                                const isCorrect = correctAnswers.every(answer => selectedValues.includes(answer));
+                                const resultElement = document.getElementById(`${keySG}result-${no}`);
+
+                                if (isCorrect) {
+                                    resultElement.innerText = "Jawaban Benar!";
+                                    resultElement.style.color = "green";
+                                    if (keySG == count - 1) {
+                                        resultElement.textContent = 'Simulasi selesai!'
+                                            .toUpperCase();
+                                        resultElement.style.color = 'green';
+                                        setTimeout(() => {
+                                            window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
+                                        }, 1000);
+
+                                    } else {
+                                        setTimeout(() => {
+                                            document.getElementById('soalDemoSoal' + keySG).style.display = "none";
+                                            document.getElementById('soalDemoSoal' + (keySG + 1)).style.display = "block";
+                                        }, 1000);
+                                    }
+
+                                } else {
+                                    resultElement.innerText = "Jawaban Salah. Jawaban yang benar adalah " + correctAnswers.join(' dan ');
+                                    resultElement.style.color = "red";
                                 }
                             }
                         </script>
