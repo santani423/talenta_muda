@@ -6,7 +6,7 @@
 <!--  BEGIN CONTENT AREA  -->
 <div id="content" class="main-content">
     <a href="javascript:void(0);" class="btn btn-primary tambah-pg"
-        style="position: fixed; right: -10px; top: 50%; z-index: 9999;">Tambah Ujan</a>
+        style="position: fixed; right: -10px; top: 50%; z-index: 9999;">Tambah Tes</a>
     <div class="layout-px-spacing">
         <form action="{{ url('/guru/merge_ujian') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -54,7 +54,7 @@
                 <div class="col-lg-12 layout-spacing">
                     <div class="widget shadow p-3">
                         <div class="widget-heading">
-                            <h5 class="">Soal Ujian</h5>
+                            <h5 class="">Soal Tes</h5>
                         </div>
                         <div id="soal_pg">
                             <div class="isi_soal">
@@ -67,7 +67,7 @@
                                     <input type="file" name="instruksi_ujian[]" class="form-control">
                                 </div> --}}
                                 <div class="form-group">
-                                    <label for="">Ujian</label>
+                                    <label for="">Tes</label>
                                     <select name="ujian_id[]" id="" class="form-control">
                                         @foreach($ujian as $uj)
                                         <option value="{{$uj->id}}">{{$uj->nama}}</option>
@@ -107,7 +107,7 @@
                     <div class="row mt-2">
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="">Nama Ujian / Quiz</label>
+                                <label for="">Nama Tes / Quiz</label>
                                 <input type="text" name="e_nama" class="form-control" required>
                             </div>
                         </div>
@@ -205,7 +205,7 @@
                     <hr>
                               
                                 <div class="form-group">
-                                    <label for="">Ujian</label>
+                                    <label for="">Tes</label>
                                     <select name="ujian_id[]" id="" class="form-control">
                                         @foreach($ujian as $uj)
                                         <option value="{{$uj->id}}">{{$uj->nama}}</option>

@@ -22,24 +22,24 @@
 
 
 
-[]kata kata selesai ujian, "yahoo, tidak ada ujian" Diganti selamat anda telah menyelesaikan test ini  terima kasih" Background diganti hijau
+[oke]kata kata selesai ujian, "yahoo, tidak ada ujian" Diganti selamat anda telah menyelesaikan test ini  terima kasih" Background diganti hijau
 
 [done]text loading data di report, dihapus
 
 [done]Bikin menu khusus untuk report peserta
 
-[]Rapihin tampilan, data untuk di demokan ke klien
+[oke]Rapihin tampilan, data untuk di demokan ke klien
 []Tiap Part ujian, masukan petunjuk instruksi umum di halaman pertama, di halaman ke dua ada tulisan petunjuk part1.1 dan di bawah nya ada simulasi/contoh soal
 
-[]text Matematika Ujian Diganti namanya jadi Tes Kepribadian
+[done]text Matematika Ujian Diganti namanya jadi Tes Kepribadian
 
-[]text demo soal diganti dengan contoh soal
+[done]text demo soal diganti dengan contoh soal
  
 
 
-[]semua text ujian diganti dengan test
+[done]semua text ujian diganti dengan test
 
-[]kelas saya diganti dengan batch, mapel saya diganti dengan test
+[done]kelas saya diganti dengan batch, mapel saya diganti dengan test
 
 []di merge ujian, detail jawaban di tiap part soal, di hilangkan
 

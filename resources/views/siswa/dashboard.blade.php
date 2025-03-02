@@ -158,7 +158,7 @@
                                     <div class="t-item">
                                         <div class="t-company-name">
                                             <div class="t-name">
-                                                <h4 style="color: #e7515a;">YahoOo.. Tidak ada ujian
+                                                <h4 style="color: #e7515a;">  Tidak ada ujian
                                                     <span data-feather="smile"></span>
                                                 </h4>
                                             </div>

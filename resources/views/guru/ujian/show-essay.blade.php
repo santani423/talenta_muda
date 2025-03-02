@@ -12,7 +12,7 @@
                             <h5 class="">{{ $ujian->nama }}</h5>
                             <table class="mt-2">
                                 <tr>
-                                    <th>Kelas</th>
+                                    <th>Batch</th>
                                     <th>: {{ $ujian->kelas->nama_kelas }}</th>
                                 </tr>
                                 <tr>
@@ -187,7 +187,7 @@
             </div>
 
 
-            {{-- Ujian siswa & nilai --}}
+            {{-- Tes siswa & nilai --}}
             <div id="iconsAccordion" class="accordion-icons shadow mt-3">
                 <div class="card">
                     <div class="card-header bg-white" id="...">

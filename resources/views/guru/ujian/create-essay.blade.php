@@ -15,11 +15,11 @@
                     <div class="col-lg-12 layout-spacing">
                         <div class="widget shadow p-3">
                             <div class="widget-heading">
-                                <h5 class="">Ujian Essay</h5>
+                                <h5 class="">Tes Essay</h5>
                                 <div class="row mt-2">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="">Nama Ujian</label>
+                                            <label for="">Nama Tes</label>
                                             <input type="text" name="nama" class="form-control" required>
                                         </div>
                                     </div>
@@ -68,7 +68,7 @@
                     <div class="col-lg-12 layout-spacing">
                         <div class="widget shadow p-3">
                             <div class="widget-heading">
-                                <h5 class="">Soal Ujian</h5>
+                                <h5 class="">Soal Tes</h5>
                             </div>
                             <div id="soal_essay">
                                 <!-- Contoh Soal Pertama -->
@@ -139,7 +139,7 @@
                         <div class="row mt-2">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="">Nama Ujian / Quiz</label>
+                                    <label for="">Nama Tes / Quiz</label>
                                     <input type="text" name="b_nama_ujian" class="form-control" required>
                                 </div>
                             </div>

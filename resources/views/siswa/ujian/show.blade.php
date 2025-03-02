@@ -22,7 +22,7 @@
                             <h5 class="">{{ $ujian->nama }}</h5>
                             <table class="mt-2">
                                 <tr>
-                                    <th>Kelas</th>
+                                    <th>Batch</th>
                                     <th>: {{ $ujian->kelas->nama_kelas }}</th>
                                 </tr>
                                 <tr>
@@ -34,7 +34,7 @@
                                     <th>: {{ $ujian->detailujian->count() }} Soal</th>
                                 </tr>
                                 <tr>
-                                    <th>Waktu Ujian</th>
+                                    <th>Waktu Tes</th>
                                     <th>: {{ $ujian->jam }} Jam {{ $ujian->menit }} Menit</th>
                                 </tr>
                             </table>
@@ -329,7 +329,7 @@
                                     @endif
                                 @endforeach
                                 <div class="widget-footer pl-2 py-2 mt-3" style="border-top: 1px solid #e0e6ed; font-weight: bold;">
-                                    Hasil Ujian
+                                    Hasil Tes
                                     <div class="table-responsive" style="overflow-x: scroll;">
                                         <table class="text-nowrap">
                                             @php
@@ -355,7 +355,7 @@
                                             <th>: <span class="badge btn-white mt-1">{{ $tidakDijawab }}</span></th>
                                         </tr>
                                         <tr>
-                                            <th>Nilai Ujian</th>
+                                            <th>Nilai Tes</th>
                                             @php
                                                 $total_soal_pg = $ujian->detailujian->count();
                                                 $nilai = ($benar / $total_soal_pg) * 100;

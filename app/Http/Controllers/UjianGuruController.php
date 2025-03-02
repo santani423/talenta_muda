@@ -1836,7 +1836,7 @@ class UjianGuruController extends Controller
         $ujian = Ujian::whereId($id)->first();
         // dd($ujian->simulasiPg);
         return view('guru.ujian.create-simulator-pg', [
-            'title' => 'Tambah Ujian Pilihan Ganda',
+            'title' => 'Tambah Tes Pilihan Ganda',
             'plugin' => '
                 <link href="' . url("/assets/cbt-malela") . '/plugins/file-upload/file-upload-with-preview.min.css" rel="stylesheet" type="text/css" />
                 <script src="' . url("/assets/cbt-malela") . '/plugins/file-upload/file-upload-with-preview.min.js"></script>

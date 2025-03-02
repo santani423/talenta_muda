@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Nilai Ujian</title>
+    <title>Nilai Tes</title>
     <link href="{{ url('/assets/cbt-malela') }}/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h2 class="text-center">NILAI UJIAN</h2>
+    <h2 class="text-center">NILAI Tes</h2>
     <hr>
     <table cellpadding="3">
         <tr>
-            <td>Ujian</td>
+            <td>Tes</td>
             <td> : {{ $ujian->nama }} | {{ ($ujian->jenis == 0) ? 'Pilihan Ganda' : 'Essay' }}</td>
         </tr>
         <tr>

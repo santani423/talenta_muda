@@ -48,7 +48,7 @@
                         <section class="mb-0 mt-0">
                             <div role="menu" class="" data-toggle="collapse" data-target="#iconAccordionOne"
                                 aria-expanded="true" aria-controls="iconAccordionOne" style="cursor: pointer;">
-                                Ujian Pilihan Ganda
+                                Tes Pilihan Ganda
                             </div>
                         </section>
                     </div>
@@ -105,7 +105,7 @@
                         <section class="mb-0 mt-0">
                             <div role="menu" class="" data-toggle="collapse" data-target="#iconAccordionOne"
                                 aria-expanded="true" aria-controls="iconAccordionOne" style="cursor: pointer;">
-                                Ujian Visual
+                                Tes Visual
                             </div>
                         </section>
                     </div>
@@ -164,7 +164,7 @@
                         <section class="mb-0 mt-0">
                             <div role="menu" class="" data-toggle="collapse" data-target="#iconAccordionOne"
                                 aria-expanded="true" aria-controls="iconAccordionOne" style="cursor: pointer;">
-                                Ujian Esay
+                                Tes Esay
                             </div>
                         </section>
                     </div>

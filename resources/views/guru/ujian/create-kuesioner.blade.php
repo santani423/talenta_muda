@@ -14,11 +14,11 @@
                     <div class="col-lg-12 layout-spacing">
                         <div class="widget shadow p-3">
                             <div class="widget-heading">
-                                <h5 class="">Ujian Kuesioner</h5> 
+                                <h5 class="">Tes Kuesioner</h5> 
                                 <div class="row mt-2">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="">Nama Ujian</label>
+                                            <label for="">Nama Tes</label>
                                             <input type="text" name="nama" class="form-control" required>
                                         </div>
                                     </div>

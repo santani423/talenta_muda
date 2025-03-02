@@ -22,7 +22,7 @@ class MergeUjianController extends Controller
         // $merge = MergeUjian::join('relasi_ujian_merge as rum','rum.kode_merge_ujian','=','merge_ujian.kode')->get();
         // dd(MergeUjian::get());
         return view('guru.merge-ujian.index', [
-            'title' => 'Data Ujian',
+            'title' => 'Data Tes',
             'plugin' => '
                 <link rel="stylesheet" type="text/css" href="' . url("/assets/cbt-malela") . '/plugins/table/datatable/datatables.css">
                 <link rel="stylesheet" type="text/css" href="' . url("/assets/cbt-malela") . '/plugins/table/datatable/dt-global_style.css">

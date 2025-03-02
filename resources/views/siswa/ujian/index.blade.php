@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-lg-7">
                                 <div class="widget-heading">
-                                    <h5 class="">Ujian</h5>
+                                    <h5 class="">Tes</h5>
                                 </div>
                                 <div class="table-responsive" style="overflow-x: scroll;">
                                     <table id="datatable-table" class="table text-center text-nowrap">
@@ -19,7 +19,7 @@
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Mapel</th>
-                                                <th>Kelas</th>
+                                                <th>Batch</th>
                                                 <th>Opsi</th>
                                             </tr>
                                         </thead>

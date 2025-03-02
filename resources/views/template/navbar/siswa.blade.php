@@ -46,7 +46,7 @@
                 <a href="{{ url("/siswa/ujian") }}" aria-expanded="{{ ($menu['expanded'] == 'ujian') ? 'true' : 'false'; }}" class="dropdown-toggle">
                     <div class="">
                         <span data-feather="cast"></span>
-                        <span>Ujian</span>
+                        <span>Tes</span>
                     </div>
                 </a>
             </li> -->

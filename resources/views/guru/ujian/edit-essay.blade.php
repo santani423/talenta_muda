@@ -15,11 +15,11 @@
                     <div class="col-lg-12 layout-spacing">
                         <div class="widget shadow p-3">
                             <div class="widget-heading">
-                                <h5>Edit Ujian Pilihan Essay</h5>
+                                <h5>Edit Tes Pilihan Essay</h5>
                                 <div class="row mt-2">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="nama">Nama Ujian / Quiz</label>
+                                            <label for="nama">Nama Tes / Quiz</label>
                                             <input type="text" name="nama" id="nama" class="form-control"
                                                 value="{{ $ujian->nama }}" required>
                                         </div>
@@ -76,7 +76,7 @@
                     <div class="col-lg-12 layout-spacing">
                         <div class="widget shadow p-3">
                             <div class="widget-heading">
-                                <h5 class="">Soal Ujian</h5>
+                                <h5 class="">Soal Tes</h5>
                             </div>
                             @php
                                 $jawaban_no = 1;
@@ -136,7 +136,7 @@
                         <div class="row mt-2">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="">Nama Ujian / Quiz</label>
+                                    <label for="">Nama Tes / Quiz</label>
                                     <input type="text" name="b_nama_ujian" class="form-control" required>
                                 </div>
                             </div>

@@ -22,7 +22,7 @@
                                 <th> : {{ $tugas_siswa->tugas->guru->nama_guru }}</th>
                             </tr>
                             <tr>
-                                <th>Kelas</th>
+                                <th>Batch</th>
                                 <th> : {{  $tugas_siswa->tugas->kelas->nama_kelas  }}</th>
                             </tr>
                             <tr>

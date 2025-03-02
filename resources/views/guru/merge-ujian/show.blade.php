@@ -12,7 +12,7 @@
                 <div class="col-lg-12 layout-spacing">
                     <div class="widget shadow p-3">
                         <div class="widget-heading">
-                            <h5 class="">Ujian</h5>
+                            <h5 class="">Tes</h5>
                             <table class="mt-2">
                                 <tr>
                                     <th>Nama Merge</th>
@@ -29,7 +29,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>Jenis Ujian</th>
+                                            <th>Jenis Tes</th>
                                             <th>Opsi</th>
                                         </tr>
                                     </thead>

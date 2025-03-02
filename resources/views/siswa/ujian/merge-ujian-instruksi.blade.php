@@ -58,7 +58,7 @@
                                                     <button class="btn btn-warning"
                                                         onclick="showNextInstruksi({{ $index }})">Next</button>
                                                 @else
-                                               
+                                                    
                                                     @if (count($simulasiPg) > 0 || count($simulasiVisual) > 0 || count($simulasiEssay) > 0 || count($simulasiKuesioner) > 0)
                                                         <button class="btn btn-warning"
                                                             onclick="showExampleQuestions()">Contoh
@@ -382,7 +382,7 @@
                                     const input = document.querySelector(`input[name='${keySG}simulasi_ujian']`);
                                     const resultElement = document.getElementById(`${keySG}result-1`);
                                     const validationElement = document.getElementById(`${keySG}validation-1`);
-                                    alert(correctAnswers);
+                                    // alert(correctAnswers);
                                     if (!input.value.trim()) {
                                         validationElement.innerText = "Jawaban tidak boleh kosong.";
                                         return;
@@ -390,7 +390,7 @@
                                         validationElement.innerText = "";
                                     }
 
-                                    if (correctAnswers.includes(input.value.trim().toLowerCase())) {
+                                    if (correctAnswers.map(answer => answer.toLowerCase()).includes(input.value.toLowerCase())) {
                                         resultElement.innerText = "Jawaban Benar!";
                                         resultElement.style.color = "green";
                                         if (keySG == count - 1) {

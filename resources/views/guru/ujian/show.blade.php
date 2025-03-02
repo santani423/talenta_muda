@@ -13,7 +13,7 @@
                           
                             <table class="mt-2">
                                 <tr>
-                                    <th>Kelas</th>
+                                    <th>Batch</th>
                                     <th>: {{ $ujian->kelas->nama_kelas }}</th>
                                 </tr>
                                 <tr>
@@ -25,14 +25,14 @@
                                     <th>: {{ $ujian->detailujian->count() }} Soal</th>
                                 </tr>
                                 <tr>
-                                    <th>Waktu Ujian</th>
+                                    <th>Waktu Tes</th>
                                     <th>: {{ $ujian->jam }} Jam {{ $ujian->menit }} Menit</th>
                                 </tr>
 
                             </table>
                             <!-- Button trigger modal -->
                             <a href="{{ url('/guru/ujian_simulator/create', $ujian->id) }}" class="btn btn-primary mt-2">
-                                Buat simulator ujian pilihan ganda
+                                Buat simulator Tes pilihan ganda
                             </a>
                             <a href="{{ url('/guru/ujian_intruksi/create', $ujian->id) }}" class="btn btn-primary mt-2">
                                 Buat Intruksi
@@ -48,7 +48,7 @@
                         <section class="mb-0 mt-0">
                             <div role="menu" class="" data-toggle="collapse" data-target="#defaultAccordionOne"
                                 aria-expanded="true" aria-controls="defaultAccordionOne" style="cursor: pointer;">
-                                Soal Ujian & Jawaban (Klik untuk lihat & tutup)
+                                Soal Tes & Jawaban (Klik untuk lihat & tutup)
                             </div>
                         </section>
                     </div>
@@ -296,8 +296,8 @@
             var href = $(this).attr('href');
             e.preventDefault();
             swal({
-                title: 'Reset Ujian Peserta?',
-                text: "Ujian Peserta berikut akan di Reset. Pastikan Peserta tidak sedang berada di dalam menu ujian!",
+                title: 'Reset Tes Peserta?',
+                text: "Tes Peserta berikut akan di Reset. Pastikan Peserta tidak sedang berada di dalam menu Tes!",
                 type: 'warning',
                 showCancelButton: true,
                 cancelButtonText: 'tidak',
@@ -313,8 +313,8 @@
             var href = $(this).attr('href');
             e.preventDefault();
             swal({
-                title: 'Reset Ujian Semua Peserta?',
-                text: "Ujian semua Peserta akan di Reset. Pastikan Peserta tidak sedang berada di dalam menu ujian!",
+                title: 'Reset Tes Semua Peserta?',
+                text: "Tes semua Peserta akan di Reset. Pastikan Peserta tidak sedang berada di dalam menu Tes!",
                 type: 'warning',
                 showCancelButton: true,
                 cancelButtonText: 'tidak',

@@ -30,7 +30,9 @@
 
                     </div>
                 @else
-                    <h1 class="text-center"  style="color: white; font-size: 40px; font-weight: bold;">Selesai</h1>
+                    <h1 class="text-center"  style="color: white; font-size: 40px; font-weight: bold;">Selamat! <br>
+                        Anda telah menyelesaikan test ini!</h1>
+                    <h1 class="text-center"  style="color: #ffda66; font-size: 40px; font-weight: bold;">Terimakasih!</h1>
                     <div class="text-center">
 
                         <a href="{{ url('/siswa') }}" class="btn btn-success">Dashboard</a>

@@ -60,7 +60,7 @@ class LaporanController extends Controller
             ->paginate(10);
 
         return view('guru.laporan.laporan_ujian_siswa', [
-            'title' => 'Data Ujian',
+            'title' => 'Data Tes',
             'plugin' => '
                 <link rel="stylesheet" type="text/css" href="' . url("/assets/cbt-malela") . '/plugins/table/datatable/datatables.css">
                 <link rel="stylesheet" type="text/css" href="' . url("/assets/cbt-malela") . '/plugins/table/datatable/dt-global_style.css">

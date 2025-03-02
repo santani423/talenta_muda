@@ -46,7 +46,7 @@
                 <a href="{{ url("/guru/ujian") }}" aria-expanded="{{ ($menu['expanded'] == 'ujian') ? 'true' : 'false'; }}" class="dropdown-toggle">
                     <div class="">
                         <span data-feather="cast"></span>
-                        <span>Ujian</span>
+                        <span>Tes</span>
                     </div>
                 </a>
             </li>
@@ -54,7 +54,7 @@
                 <a href="{{ url("/guru/merge_ujian") }}" aria-expanded="{{ ($menu['expanded'] == 'merge_ujian') ? 'true' : 'false'; }}" class="dropdown-toggle">
                     <div class="">
                         <span data-feather="cast"></span>
-                        <span>Merge Ujian</span>
+                        <span>Merge Tes</span>
                     </div>
                 </a>
             </li>

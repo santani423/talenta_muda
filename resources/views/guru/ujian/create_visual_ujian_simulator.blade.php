@@ -10,7 +10,7 @@
                 <div class="col-lg-12 layout-spacing">
                     <div class="widget shadow p-3">
                         <div class="widget-heading">
-                            <h5>Sempel Gunakan Ujian Pilihan Ganda</h5>
+                            <h5>Sempel Gunakan Tes Pilihan Ganda</h5>
                              
                           
                                 <div class="card-body">
@@ -38,7 +38,7 @@
                 <div class="col-lg-12 layout-spacing">
                     <div class="widget shadow p-3">
                         <div class="widget-heading">
-                            <h5>Ujian Pilihan Visual</h5>
+                            <h5>Tes Pilihan Visual</h5>
                             @if (session('success'))
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     {{ session('success') }}

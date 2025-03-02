@@ -8,11 +8,11 @@
                 <div class="col-lg-12 layout-spacing">
                     <div class="widget shadow p-3">
                         <div class="widget-heading">
-                            <h5>Ujian Pilihan Ganda</h5>
+                            <h5>Tes Pilihan Ganda</h5>
                             <div class="row mt-2">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label for="nama">Nama Ujian / Quiz</label>
+                                        <label for="nama">Nama Tes / Quiz</label>
                                         <input type="text" name="nama" id="nama" class="form-control" required>
                                     </div>
                                 </div>

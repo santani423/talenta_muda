@@ -13,12 +13,12 @@
                     <div class="col-lg-12 layout-spacing">
                         <div class="widget shadow p-3">
                             <div class="widget-heading">
-                                <h5 class="">Edit Merge Ujian</h5>
+                                <h5 class="">Edit Merge Tes</h5>
                             </div>
                             <div class="row mt-2">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="">Nama Ujian / Quiz</label>
+                                        <label for="">Nama Tes / Quiz</label>
                                         <input type="text" name="nama" class="form-control" required
                                             value="{{ $merge->nama }}">
                                     </div>
@@ -52,7 +52,7 @@
                     <div class="col-lg-12 layout-spacing">
                         <div class="widget shadow p-3">
                             <div class="widget-heading">
-                                <h5 class="">Soal Ujian</h5>
+                                <h5 class="">Soal Tes</h5>
                             </div>
                             <div id="soal_pg">
                                 @foreach ($relasi_merge_ujian as $rmg) 
@@ -77,7 +77,7 @@
                                             <img id="instruksiPreview{{ $loop->index }}" class="img-fluid mt-2" style="display: none;" width="50%">
                                         </div> --}}
                                         <div class="form-group">
-                                            <label for="">Ujian</label>
+                                            <label for="">Tes</label>
                                             <select name="ujian_id[]" id="" class="form-control">
                                                 @foreach ($ujian as $uj)
                                                     <option value="{{ $uj->id }}" {{$uj->kode == $rmg->kode_ujian ? 'selected' : ''}}>{{ $uj->nama }}</option>

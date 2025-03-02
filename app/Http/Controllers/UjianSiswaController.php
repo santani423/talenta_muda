@@ -726,6 +726,7 @@ class UjianSiswaController extends Controller
                 'simulasiVisual' => $simulasiVisual,
                 'IntruksiUjian' => $IntruksiUjian,
                 'simulasiEssay' => $simulasiEssay,
+                'simulasiKuesioner' => [],
             ]);
         } catch (\Exception $e) {
             // Tangani kesalahan dan tampilkan pesan error

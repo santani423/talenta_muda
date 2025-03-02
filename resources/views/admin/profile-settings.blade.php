@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label >Notif Ujian</label>
+                                    <label >Notif Tes</label>
                                     <div class="n-chk">
                                         <label class="new-control new-radio radio-classic-primary">
                                         <input type="radio" class="new-control-input" name="notif_ujian" value="1" {{ ($email_settings->notif_ujian == '1') ? 'checked' : ''}}>

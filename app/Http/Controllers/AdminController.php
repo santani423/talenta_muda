@@ -676,7 +676,7 @@ class AdminController extends Controller
     public function kelas()
     {
         return view('admin.kelas.index', [
-            'title' => 'Data kelas',
+            'title' => 'Data batch',
             'plugin' => '
                 <link rel="stylesheet" type="text/css" href="' . url("/assets/cbt-malela") . '/plugins/table/datatable/datatables.css">
                 <link rel="stylesheet" type="text/css" href="' . url("/assets/cbt-malela") . '/plugins/table/datatable/dt-global_style.css">
@@ -684,8 +684,8 @@ class AdminController extends Controller
                 <script src="https://cdn.datatables.net/fixedcolumns/4.1.0/js/dataTables.fixedColumns.min.js"></script>
             ',
             'menu' => [
-                'menu' => 'kelas',
-                'expanded' => 'kelas',
+                'menu' => 'batch',
+                'expanded' => 'batch',
                 'collapse' => '',
                 'sub' => '',
             ],
@@ -736,7 +736,7 @@ class AdminController extends Controller
             <script>
                 swal({
                     title: 'Berhasil!',
-                    text: 'data kelas di edit!',
+                    text: 'data batch di edit!',
                     type: 'success',
                     padding: '2em'
                 })
