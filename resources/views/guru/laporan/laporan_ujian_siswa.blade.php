@@ -92,7 +92,7 @@
                     <div id="pdf-content-review"></div>
 
                     <div class="form-group mt-4">
-                        <textarea class="form-control" cols="30" rows="10"></textarea>
+                        <textarea class="form-control"  id="formKomentar" cols="30" rows="10"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -201,7 +201,7 @@
                             let jawaban_essay = data?.siswa[i]?.jawaban_essay?.jawaban_essay.length ?? 0;
                             // let jawaban_essay =  0;
 
-                            console.log(`jawaban_essayqwertyui ${data.type}`, data?.siswa[i]?.nilai);
+                            // console.log(`jawaban_essayqwertyui ${data.type}`, data?.siswa[i]?.nilai);
 
                             htmlContent +=
                                 `<td style="width: auto;">
@@ -508,7 +508,7 @@
 
         function printNilaiSiswa() {
             // Ambil komentar dari textarea
-            var komentar = document.querySelector('.form-control').value;
+            var komentar = document.getElementById('formKomentar').value;
             const element = document.createElement('div');
             element.innerHTML = itemPrint;
             element.style.padding = '20px';
