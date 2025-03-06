@@ -106,6 +106,7 @@
     <!-- MODAL -->
     <script>
         let itemPrint = '';
+        let namaPeserta = '';
 
         function usia(tanggal_lahir) {
             const today = new Date();
@@ -122,6 +123,7 @@
         function printPDF(studentId, studentName, tempat_lahir, tanggal_lahir, gender) {
             const element = document.createElement('div');
             element.style.padding = '20px';
+            namaPeserta = studentName ?? 'Nama siswa tidak tersedia';
             element.innerHTML = `
             <h5 style="color: black;" class="text-center">HASIL TEST TALENTA MUDA</h5> 
             <div class="container-fluid" style="color: black;"> 
@@ -519,7 +521,7 @@
             </div>
         `;
 
-            html2pdf().from(element).save(`Hasil_Test_.pdf`);
+            html2pdf().from(element).save(`Hasil_Test_${namaPeserta}.pdf`);
         }
     </script>
     <script>
