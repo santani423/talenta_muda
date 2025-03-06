@@ -189,7 +189,7 @@ class PenilaianSiswaController extends Controller
                             $kuciJawaban = null;
                         } else {
                             $kuciJawaban = JawabanEssay::where('detail_essay_id', $value->detailessay->id)
-                                ->where('jawaban', 'LIKE', '%' . $value->jawaban . '%')
+                                ->whereRaw('LOWER(jawaban) LIKE ?', ['%' . strtolower($value->jawaban) . '%'])
                                 ->orderBy('nilai', 'desc')
                                 ->first();
                         }

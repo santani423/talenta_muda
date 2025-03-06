@@ -14,7 +14,7 @@ class PgSiswa extends Model
 
     protected $guarded = ['id'];
     protected $fillable = ['jawaban', 'nilai'];
-    protected $with = ['detailujian','jawaban','ujian'];
+    protected $with = ['detailujian','ujian'];
 
     // Relasi ke Detail Ujian
     public function detailujian()
@@ -37,10 +37,10 @@ class PgSiswa extends Model
     {
         return $this->hasOne(DetailUjian::class, 'id', 'detail_ujian_id');
     }
-    public function jawaban()
-    {
-        return $this->hasOne(DetailUjian::class, 'id', 'detail_ujian_id');
-    }
+    // public function jawaban()
+    // {
+    //     return $this->hasOne(DetailUjian::class, 'id', 'detail_ujian_id');
+    // }
 
     public function updateNilai()
     {
