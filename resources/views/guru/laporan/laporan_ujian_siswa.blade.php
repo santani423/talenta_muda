@@ -581,5 +581,7 @@
         renderTable(data);
         renderPagination(data);
     </script>
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     {!! session('pesan') !!}
 @endsection

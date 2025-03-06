@@ -19,7 +19,7 @@
                 <input type="hidden" name="kode" value="{{ $ujian->kode }}">
                 <input type="hidden" name="kode_merge_ujian" value="{{ $kode_merge_ujian }}">
                 <div class="widget shadow p-2">
-                    <div class="d-flex float-right">
+                    <div class="d-flex float-right hidden">
                         <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
                             <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
                         </div>
