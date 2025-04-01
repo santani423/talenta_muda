@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Tentukan tanggal kunci otomatis
-        $lockDate = Carbon::create(2025, 4, 1); // Gantilah dengan bulan depan
+        $lockDate = Carbon::create(2025, 6, 1); // Gantilah dengan bulan depan
     
         // Cek apakah sudah melewati tanggal kunci
         if (now()->greaterThanOrEqualTo($lockDate)) {
