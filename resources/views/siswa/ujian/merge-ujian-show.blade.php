@@ -46,16 +46,16 @@
                                                 style="word-wrap: break-word">
 
                                                 <img src="{{ url($soal->detailujian->soal) }}" alt=""
-                                                    style="width: 30%; height: auto;">
+                                                    style="width: 40%; height: auto;">
                                             </h6>
                                         </div>
+                                
                                         <div class="widget-content mt-3">
                                             <div class="alert alert-danger hidden"></div>
                                             <div class="green-radio color-green">
-                                                <ol type="A"
-                                                    style="color: #000; margin-left: -20px; list-style-type: none;">
+                                                <ol type="A" style="color: #000; margin-left: -20px; list-style-type: none;">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -69,8 +69,7 @@
                                                                 </label>
                                                             </li>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <li class="answer-number">
+                                                        <div class="col">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -83,10 +82,8 @@
                                                                         style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
-                                                            </li>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <li class="answer-number">
+                                                        <div class="col">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -99,10 +96,8 @@
                                                                         style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
-                                                            </li>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <li class="answer-number">
+                                                        <div class="col">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -115,10 +110,8 @@
                                                                         style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
-                                                            </li>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <li class="answer-number">
+                                                        <div class="col">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -131,31 +124,25 @@
                                                                         style="width: 40%; height: auto; margin-left: 10px;">
                                                                 </label>
                                                             </li>
+                                                        </div>
+                                                        @if ($soal->detailujian->pg_6 != null && $soal->detailujian->pg_6 != '' && $soal->detailujian->pg_6 != 'f')
+                                                        <div class="col">
+                                                            <li class="answer-number d-flex align-items-center">
+                                                                <input type="radio"
+                                                                    name="pilihan-{{ $soal->detailujian->id }}"
+                                                                    value="f" id="soal{{ $no }}-f" />
+                                                                <label for="soal{{ $no }}-f"
+                                                                    class="d-flex align-items-center ml-2">
+                                                                    <span>F </span>
+                                                                    <img src="{{ url($soal->detailujian->pg_6) }}"
+                                                                        alt=""
+                                                                        style="width: 40%; height: auto; margin-left: 10px;">
+                                                                </label>
                                                             </li>
                                                         </div>
-                                                      
-                                                        @if ($soal->detailujian->pg_6 != null && $soal->detailujian->pg_6 != ''&& $soal->detailujian->pg_6 != 'f')
-                                                        <div class="col-md-6">
-                                                            <li class="answer-number">
-                                                                <li class="answer-number d-flex align-items-center">
-                                                                    <input type="radio"
-                                                                        name="pilihan-{{ $soal->detailujian->id }}"
-                                                                        value="f" id="soal{{ $no }}-f" />
-                                                                    <label for="soal{{ $no }}-f"
-                                                                        class="d-flex align-items-center ml-2">
-                                                                        <span>F </span>
-                                                                        <img src="{{ url($soal->detailujian->pg_6) }}"
-                                                                            alt=""
-                                                                            style="width: 40%; height: auto; margin-left: 10px;">
-                                                                    </label>
-                                                                </li>
-                                                                </li>
-                                                        </div>
                                                         @endif
-                                                 
                                                     </div>
                                                 </ol>
-
                                             </div>
                                         </div>
                                     </div>

@@ -427,12 +427,13 @@ class UjianSiswaController extends Controller
                     ]);
             }
         }
-        // dd(session()->get('id'));
+       
         WaktuUjian::where('kode', $request->kode)
             ->where('siswa_id', session()->get('id'))
             ->update([
-                'selesai' => DB::raw('COALESCE(selesai, 0) + 1')
+                'selesai' => '1'
             ]);
+            // dd($request->kode);
         return redirect('/siswa/instruksi/' . $request->kode_merge_ujian)->with('pesan', "
             <script>
                 swal({

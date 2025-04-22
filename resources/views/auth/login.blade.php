@@ -181,7 +181,7 @@
                                         <circle cx="12" cy="7" r="4"></circle>
                                     </svg>
                                     <input type="email" id="username" name="email" type="text"
-                                        class="form-control" value="{{ old('email') }}" placeholder="Username"
+                                        class="form-control" value="{{ old('email') }}" placeholder="Email"
                                         required>
                                 </div>
 
