@@ -16,18 +16,18 @@ class GuruSeeder extends Seeder
     {
         DB::table('guru')->insert([
             [
-                'nama_guru' => 'samsudin',
+                'nama_guru' => 'Egi',
                 'gender' => 'Laki-laki',
-                'email' => 'samsudin@gmail.com',
+                'email' => 'egi.suni@gmail.com',
                 'password' => bcrypt('123'),
-                'avatar' => 'wqqzHdJXSx1umRxkPRKlkdmRrFvxqK8uOA7KbVoJ.jpg',
+                'avatar' => 'jxDMpVvTA1ue7Xp6bSfnbRRH3xGKxDuV2I9hVEFB.png',
                 'role' => 2,
                 'is_active' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nama_guru' => 'Siti Aminah',
+                'nama_guru' => 'Lena',
                 'gender' => 'Perempuan',
                 'email' => 'siti.aminah@example.com',
                 'password' => bcrypt('password123'),
@@ -36,29 +36,7 @@ class GuruSeeder extends Seeder
                 'is_active' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'nama_guru' => 'Agus Wijaya',
-                'gender' => 'Laki-laki',
-                'email' => 'agus.wijaya@example.com',
-                'password' => bcrypt('password123'),
-                'avatar' => 'wqqzHdJXSx1umRxkPRKlkdmRrFvxqK8uOA7KbVoJ.jpg',
-                'role' => 2,
-                'is_active' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nama_guru' => 'Dewi Lestari',
-                'gender' => 'Perempuan',
-                'email' => 'dewi.lestari@example.com',
-                'password' => bcrypt('password123'),
-                'avatar' => 'wqqzHdJXSx1umRxkPRKlkdmRrFvxqK8uOA7KbVoJ.jpg',
-                'role' => 2,
-                'is_active' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ], 
         ]);
         DB::table('admins')->insert([
             [

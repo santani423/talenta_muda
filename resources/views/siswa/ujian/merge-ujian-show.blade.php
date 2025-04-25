@@ -31,7 +31,7 @@
                             @php
                                 $no = 1;
                                 $soal_hidden = '';
-                            @endphp
+                            @endphpqwe
                             @foreach ($pg_siswa as $soal)
                                 <div class="question {{ $soal_hidden }} question-{{ $no }}"
                                     data-question="{{ $no }}">
