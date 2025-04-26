@@ -108,20 +108,20 @@ class Part5_2Seeder extends Seeder
             'updated_at' => now()
         ]);
 
-        $tespart5_2 = 'tespart5_2';
-        DB::table('ujian')->insert([
-            'kode' => $tespart5_2,
-            'nama' => 'Part 5.2',
-            'jenis' => 2, // Sesuaikan dengan jenis yang berlaku
-            'guru_id' => 1, // Sesuaikan dengan ID guru yang valid
-            'kelas_id' => 1, // Sesuaikan dengan ID kelas yang valid
-            'mapel_id' => 1, // Sesuaikan dengan ID mapel yang valid
-            'jam' => 1, // Waktu default
-            'menit' => 30, // Waktu default dalam menit
-            'acak' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        // $tespart5_2 = 'tespart5_2';
+        // DB::table('ujian')->insert([
+        //     'kode' => $tespart5_2,
+        //     'nama' => 'Part 5.2',
+        //     'jenis' => 2, // Sesuaikan dengan jenis yang berlaku
+        //     'guru_id' => 1, // Sesuaikan dengan ID guru yang valid
+        //     'kelas_id' => 1, // Sesuaikan dengan ID kelas yang valid
+        //     'mapel_id' => 1, // Sesuaikan dengan ID mapel yang valid
+        //     'jam' => 1, // Waktu default
+        //     'menit' => 30, // Waktu default dalam menit
+        //     'acak' => 0,
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
 
         DB::table('intruksi_ujians')->insert([
             'kode' => $kode,
@@ -134,17 +134,17 @@ Tidak ada jawaban benar atau salah. Deskripsikan diri anda secara jujur dan nyat
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $tespart5_2,
-            'label' => 'part 5.2.',
-            'urutan' => '1',
-            'intruksi' => 'PETUNJUK<br>
-Bacalah semua instruksi ini dengan teliti. Persoalan berikut ini terdiri atas 70 pernyataan. Bacalah masing-masing pernyataan dengan hati-hati dan pilihlah satu jawaban yang paling tepat untuk menyatakan persetujuan Anda. Anda diminta untuk menentukan satu jawaban dari lima alternatif berikut: Sangat Tidak Setuju (STS), Tidak Setuju (TS), Netral (N), Setuju (S), dan Sangat Setuju (SS)<br>. 
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $tespart5_2,
+//             'label' => 'part 5.2.',
+//             'urutan' => '1',
+//             'intruksi' => 'PETUNJUK<br>
+// Bacalah semua instruksi ini dengan teliti. Persoalan berikut ini terdiri atas 70 pernyataan. Bacalah masing-masing pernyataan dengan hati-hati dan pilihlah satu jawaban yang paling tepat untuk menyatakan persetujuan Anda. Anda diminta untuk menentukan satu jawaban dari lima alternatif berikut: Sangat Tidak Setuju (STS), Tidak Setuju (TS), Netral (N), Setuju (S), dan Sangat Setuju (SS)<br>. 
 
-Tidak ada jawaban benar atau salah. Deskripsikan diri anda secara jujur dan nyatakan pendapat anda seakurat mungkin. Anda harus menjawab semua persoalan yang ada tanpa terlewatkan. Waktu yang disediakan 13 menit.<br>',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+// Tidak ada jawaban benar atau salah. Deskripsikan diri anda secara jujur dan nyatakan pendapat anda seakurat mungkin. Anda harus menjawab semua persoalan yang ada tanpa terlewatkan. Waktu yang disediakan 13 menit.<br>',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
 
 
         DB::table('relasi_ujian_merge')->insert([
@@ -157,15 +157,15 @@ Tidak ada jawaban benar atau salah. Deskripsikan diri anda secara jujur dan nyat
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'kode_ujian' => $tespart5_2,
-                'kode_merge_ujian' => 'tes_merge_ujian_2',
-                'banner' => 'banner2.jpg',
-                'instruksi_ujian' => 'Pastikan koneksi stabil.',
-                'urutan' => 9,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
+            // [
+            //     'kode_ujian' => $tespart5_2,
+            //     'kode_merge_ujian' => 'tes_merge_ujian_2',
+            //     'banner' => 'banner2.jpg',
+            //     'instruksi_ujian' => 'Pastikan koneksi stabil.',
+            //     'urutan' => 9,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]
         ]);
 
         foreach ($kuisoner as $number => $answer) {
@@ -192,21 +192,21 @@ Tidak ada jawaban benar atau salah. Deskripsikan diri anda secara jujur dan nyat
             if ($counter >= 3) break;
             $counter++;
 
-            $DetailKuisoner = DetailKuisoner::create([
-                'kode' => $tespart5_2,
-                'soal' => $answer['val0'],
-                'item' => $answer['val2'],
-                'jenis_jawaban_kuesioner_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-            $sekala = Sekala::where('sekala', $answer['val1'])->first();
-            DetailKuisonerSekala::create([
-                'detail_kuisoner_id' => $DetailKuisoner->id,
-                'kode_sekala' =>  $sekala ? $sekala->kode : $answer['val1'],
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            // $DetailKuisoner = DetailKuisoner::create([
+            //     'kode' => $tespart5_2,
+            //     'soal' => $answer['val0'],
+            //     'item' => $answer['val2'],
+            //     'jenis_jawaban_kuesioner_id' => 1,
+            //     'created_at' => now(),
+            //     'updated_at' => now()
+            // ]);
+            // $sekala = Sekala::where('sekala', $answer['val1'])->first();
+            // DetailKuisonerSekala::create([
+            //     'detail_kuisoner_id' => $DetailKuisoner->id,
+            //     'kode_sekala' =>  $sekala ? $sekala->kode : $answer['val1'],
+            //     'created_at' => now(),
+            //     'updated_at' => now()
+            // ]);
         }
     }
 }

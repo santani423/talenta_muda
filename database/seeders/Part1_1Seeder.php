@@ -37,55 +37,55 @@ class Part1_1Seeder extends Seeder
         $kode = 'part1_1';
         $kode_test = 'tes_part1_1';
 
-        DB::table('ujian')->insert([
-            'kode' => $kode_test,
-            'nama' => 'Part 1.1 ',
-            'jenis' => 0, // Sesuaikan dengan jenis yang berlaku
-            'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
-            'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
-            'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
-            'jam' => 1, // Waktu default
-            'menit' => 30, // Waktu default dalam menit
-            'acak' => 0,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $kode_test,
-            'label' => 'Selamat datang',
-            'urutan' => '1',
-            'intruksi' => 'Talenta Muda <br> Rangkaian test berikut ini untuk menunjukan dengan tepat 
-betapa Anda penuh talenta dari Tuhan. <br>',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $kode_test,
-            'label' => 'petunjuk umum',
-            'urutan' => '2',
-            'intruksi' => 'Berikut ini Anda akan dihadapkan pada beberapa persoalan di dalam empat kelompok yang berbeda. <br>
+        // DB::table('ujian')->insert([
+        //     'kode' => $kode_test,
+        //     'nama' => 'Part 1.1 ',
+        //     'jenis' => 0, // Sesuaikan dengan jenis yang berlaku
+        //     'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
+        //     'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
+        //     'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
+        //     'jam' => 1, // Waktu default
+        //     'menit' => 30, // Waktu default dalam menit
+        //     'acak' => 0,
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now()
+        // ]);
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $kode_test,
+//             'label' => 'Selamat datang',
+//             'urutan' => '1',
+//             'intruksi' => 'Talenta Muda <br> Rangkaian test berikut ini untuk menunjukan dengan tepat 
+// betapa Anda penuh talenta dari Tuhan. <br>',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $kode_test,
+//             'label' => 'petunjuk umum',
+//             'urutan' => '2',
+//             'intruksi' => 'Berikut ini Anda akan dihadapkan pada beberapa persoalan di dalam empat kelompok yang berbeda. <br>
 
-Tugas Anda adalah memilih jawaban yang paling tepat sesuai dengan instruksi yang ada di setiap kelompok persoalan. Sebelum mengerjakan masing-masing persoalan akan ada contoh cara mengerjakannya terlebih dahulu. <br>
+// Tugas Anda adalah memilih jawaban yang paling tepat sesuai dengan instruksi yang ada di setiap kelompok persoalan. Sebelum mengerjakan masing-masing persoalan akan ada contoh cara mengerjakannya terlebih dahulu. <br>
 
-Anda harus bekerja secepat-cepatnya karena ada batas waktu untuk setiap kelompok soal dan batas waktu tersebut tidak disampaikan. <br>
+// Anda harus bekerja secepat-cepatnya karena ada batas waktu untuk setiap kelompok soal dan batas waktu tersebut tidak disampaikan. <br>
 
-Kerjakanlah soal-soal yang paling mudah untuk diselesaikan dan jangan berhenti lama pada satu soal yang sulit.<br>
+// Kerjakanlah soal-soal yang paling mudah untuk diselesaikan dan jangan berhenti lama pada satu soal yang sulit.<br>
 
-Anda berhak untuk kembali ke soal yang sulit tersebut apabila masih tersedia Waktu. <br>
-',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $kode_test,
-            'label' => 'part 1.1.',
-            'urutan' => '3',
-            'intruksi' => 'Pilih satu jawaban yang 
-dianggap paling tepat
-',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+// Anda berhak untuk kembali ke soal yang sulit tersebut apabila masih tersedia Waktu. <br>
+// ',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $kode_test,
+//             'label' => 'part 1.1.',
+//             'urutan' => '3',
+//             'intruksi' => 'Pilih satu jawaban yang 
+// dianggap paling tepat
+// ',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
 
         DB::table('ujian')->insert([
             'kode' => $kode,
@@ -147,15 +147,15 @@ dianggap paling tepat
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'kode_ujian' => $kode_test,
-                'kode_merge_ujian' => 'tes_merge_ujian_2',
-                'banner' => 'banner2.png',
-                'instruksi_ujian' => 'Pastikan koneksi stabil.',
-                'urutan' => 1,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
+            // [
+            //     'kode_ujian' => $kode_test,
+            //     'kode_merge_ujian' => 'tes_merge_ujian_2',
+            //     'banner' => 'banner2.png',
+            //     'instruksi_ujian' => 'Pastikan koneksi stabil.',
+            //     'urutan' => 1,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]
         ]);
 
         foreach ($part1_1 as $number => $answer) {
@@ -192,19 +192,19 @@ dianggap paling tepat
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
-            DB::table('simulai_ujan_pg')->insert([
-                'kode' => $kode_test,
-                'soal' => 'ujian_seeder/Part1_1/contoh' . $no . '/soal.png',
-                'pg_1' => 'ujian_seeder/Part1_1/contoh' . $no . '/a.png',
-                'pg_2' => 'ujian_seeder/Part1_1/contoh' . $no . '/b.png',
-                'pg_3' => 'ujian_seeder/Part1_1/contoh' . $no . '/c.png',
-                'pg_4' => 'ujian_seeder/Part1_1/contoh' . $no . '/d.png',
-                'pg_5' => 'ujian_seeder/Part1_1/contoh' . $no . '/e.png',
-                'pg_6' => 'ujian_seeder/Part1_1/contoh' . $no . '/f.png',
-                'jawaban' => strtoupper($answer),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // DB::table('simulai_ujan_pg')->insert([
+            //     'kode' => $kode_test,
+            //     'soal' => 'ujian_seeder/Part1_1/contoh' . $no . '/soal.png',
+            //     'pg_1' => 'ujian_seeder/Part1_1/contoh' . $no . '/a.png',
+            //     'pg_2' => 'ujian_seeder/Part1_1/contoh' . $no . '/b.png',
+            //     'pg_3' => 'ujian_seeder/Part1_1/contoh' . $no . '/c.png',
+            //     'pg_4' => 'ujian_seeder/Part1_1/contoh' . $no . '/d.png',
+            //     'pg_5' => 'ujian_seeder/Part1_1/contoh' . $no . '/e.png',
+            //     'pg_6' => 'ujian_seeder/Part1_1/contoh' . $no . '/f.png',
+            //     'jawaban' => strtoupper($answer),
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
         }
 
         $counter = 0;
@@ -213,19 +213,19 @@ dianggap paling tepat
             if ($counter >= 3) break;
             $counter++;
             $no = $number++;
-            DB::table('detail_ujian')->insert([
-                'kode' => $kode_test,
-                'soal' => 'ujian_seeder/Part1_1/' . $no . '/soal.png',
-                'pg_1' => 'ujian_seeder/Part1_1/' . $no . '/a.png',
-                'pg_2' => 'ujian_seeder/Part1_1/' . $no . '/b.png',
-                'pg_3' => 'ujian_seeder/Part1_1/' . $no . '/c.png',
-                'pg_4' => 'ujian_seeder/Part1_1/' . $no . '/d.png',
-                'pg_5' => 'ujian_seeder/Part1_1/' . $no . '/e.png',
-                'pg_6' => 'ujian_seeder/Part1_1/' . $no . '/f.png',
-                'jawaban' => strtoupper($answer),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // DB::table('detail_ujian')->insert([
+            //     'kode' => $kode_test,
+            //     'soal' => 'ujian_seeder/Part1_1/' . $no . '/soal.png',
+            //     'pg_1' => 'ujian_seeder/Part1_1/' . $no . '/a.png',
+            //     'pg_2' => 'ujian_seeder/Part1_1/' . $no . '/b.png',
+            //     'pg_3' => 'ujian_seeder/Part1_1/' . $no . '/c.png',
+            //     'pg_4' => 'ujian_seeder/Part1_1/' . $no . '/d.png',
+            //     'pg_5' => 'ujian_seeder/Part1_1/' . $no . '/e.png',
+            //     'pg_6' => 'ujian_seeder/Part1_1/' . $no . '/f.png',
+            //     'jawaban' => strtoupper($answer),
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
         }
     }
 }

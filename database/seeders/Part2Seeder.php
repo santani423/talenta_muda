@@ -62,19 +62,19 @@ class Part2Seeder extends Seeder
         ]);
 
         $tespart2 = 'tespart2';
-        DB::table('ujian')->insert([
-            'kode' => $tespart2,
-            'nama' => 'Part 2',
-            'jenis' => 0, // Sesuaikan dengan jenis yang berlaku
-            'guru_id' =>  2, // Sesuaikan dengan ID guru yang valid
-            'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
-            'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
-            'jam' => 1, // Waktu default
-            'menit' => 30, // Waktu default dalam menit
-            'acak' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        // DB::table('ujian')->insert([
+        //     'kode' => $tespart2,
+        //     'nama' => 'Part 2',
+        //     'jenis' => 0, // Sesuaikan dengan jenis yang berlaku
+        //     'guru_id' =>  2, // Sesuaikan dengan ID guru yang valid
+        //     'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
+        //     'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
+        //     'jam' => 1, // Waktu default
+        //     'menit' => 30, // Waktu default dalam menit
+        //     'acak' => 0,
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
 
 
         DB::table('intruksi_ujians')->insert([
@@ -101,29 +101,29 @@ Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan An
             'updated_at' => Carbon::now()
         ]);
 
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $tespart2,
-            'label' => 'part 2.',
-            'urutan' => '1',
-            'intruksi' => 'Pilih satu jawaban yang 
-dianggap paling tepat
-',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $tespart2,
+//             'label' => 'part 2.',
+//             'urutan' => '1',
+//             'intruksi' => 'Pilih satu jawaban yang 
+// dianggap paling tepat
+// ',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
 
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $tespart2,
-            'label' => 'Petunjuk',
-            'urutan' => '2',
-            'intruksi' => 'Berikut ini terdapat matriks 2x2, tugas Anda adalah memilih salah satu dari lima pilihan (a, b, c, d, e) yang di Bawah matriks tersebut.<br>
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $tespart2,
+//             'label' => 'Petunjuk',
+//             'urutan' => '2',
+//             'intruksi' => 'Berikut ini terdapat matriks 2x2, tugas Anda adalah memilih salah satu dari lima pilihan (a, b, c, d, e) yang di Bawah matriks tersebut.<br>
 
-Jawaban yang tepat akan cocok untuk semua gambar secara mendatar maupun menurun. Anda hanya perlu melihat mendatar dan menurun untuk menemukan jawabannya. Jangan melihat secara diagonal. <br>
+// Jawaban yang tepat akan cocok untuk semua gambar secara mendatar maupun menurun. Anda hanya perlu melihat mendatar dan menurun untuk menemukan jawabannya. Jangan melihat secara diagonal. <br>
 
-Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan Anda pada kotak yang Anda rasa paling benar atau pada huruf di Bawah kotak tersebut.<br>',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+// Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan Anda pada kotak yang Anda rasa paling benar atau pada huruf di Bawah kotak tersebut.<br>',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
 
      
         DB::table('relasi_ujian_merge')->insert([
@@ -136,15 +136,15 @@ Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan An
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'kode_ujian' => $tespart2,
-                'kode_merge_ujian' => 'tes_merge_ujian_2',
-                'banner' => 'banner2.png',
-                'instruksi_ujian' => 'Pastikan koneksi stabil.',
-                'urutan' => 5,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
+            // [
+            //     'kode_ujian' => $tespart2,
+            //     'kode_merge_ujian' => 'tes_merge_ujian_2',
+            //     'banner' => 'banner2.png',
+            //     'instruksi_ujian' => 'Pastikan koneksi stabil.',
+            //     'urutan' => 5,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]
         ]);
 
         foreach ($part2 as $number => $answer) {
@@ -179,38 +179,38 @@ Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan An
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]);
-            DB::table('simulai_ujan_pg')->insert([
-                'kode' => $tespart2,
-                'soal' => 'ujian_seeder/Part_2/contoh' . $no . '/soal.png',
-                'pg_1' => 'ujian_seeder/Part_2/contoh' . $no . '/a.png',
-                'pg_2' => 'ujian_seeder/Part_2/contoh' . $no . '/b.png',
-                'pg_3' => 'ujian_seeder/Part_2/contoh' . $no . '/c.png',
-                'pg_4' => 'ujian_seeder/Part_2/contoh' . $no . '/d.png',
-                'pg_5' => 'ujian_seeder/Part_2/contoh' . $no . '/e.png',
-                // 'pg_6' => 'ujian_seeder/Part_2/contoh' . $no . '/f.png',
-                'jawaban' => strtoupper($answer),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // DB::table('simulai_ujan_pg')->insert([
+            //     'kode' => $tespart2,
+            //     'soal' => 'ujian_seeder/Part_2/contoh' . $no . '/soal.png',
+            //     'pg_1' => 'ujian_seeder/Part_2/contoh' . $no . '/a.png',
+            //     'pg_2' => 'ujian_seeder/Part_2/contoh' . $no . '/b.png',
+            //     'pg_3' => 'ujian_seeder/Part_2/contoh' . $no . '/c.png',
+            //     'pg_4' => 'ujian_seeder/Part_2/contoh' . $no . '/d.png',
+            //     'pg_5' => 'ujian_seeder/Part_2/contoh' . $no . '/e.png',
+            //     // 'pg_6' => 'ujian_seeder/Part_2/contoh' . $no . '/f.png',
+            //     'jawaban' => strtoupper($answer),
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
         }
  
         $no = 0;
         foreach ($part2 as $number => $answer) {
             if ($number >= 3) break;
             $no = $number++;
-            DB::table('detail_ujian')->insert([
-                'kode' => $tespart2,
-                'soal' => 'ujian_seeder/Part_2/' . $no . '/soal.png',
-                'pg_1' => 'ujian_seeder/Part_2/' . $no . '/a.png',
-                'pg_2' => 'ujian_seeder/Part_2/' . $no . '/b.png',
-                'pg_3' => 'ujian_seeder/Part_2/' . $no . '/c.png',
-                'pg_4' => 'ujian_seeder/Part_2/' . $no . '/d.png',
-                'pg_5' => 'ujian_seeder/Part_2/' . $no . '/e.png',
-                // 'pg_6' => 'ujian_seeder/Part_2/' . $no . '/f.png',
-                'jawaban' => $answer,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // DB::table('detail_ujian')->insert([
+            //     'kode' => $tespart2,
+            //     'soal' => 'ujian_seeder/Part_2/' . $no . '/soal.png',
+            //     'pg_1' => 'ujian_seeder/Part_2/' . $no . '/a.png',
+            //     'pg_2' => 'ujian_seeder/Part_2/' . $no . '/b.png',
+            //     'pg_3' => 'ujian_seeder/Part_2/' . $no . '/c.png',
+            //     'pg_4' => 'ujian_seeder/Part_2/' . $no . '/d.png',
+            //     'pg_5' => 'ujian_seeder/Part_2/' . $no . '/e.png',
+            //     // 'pg_6' => 'ujian_seeder/Part_2/' . $no . '/f.png',
+            //     'jawaban' => $answer,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
         }
     }
 }

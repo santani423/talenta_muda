@@ -140,7 +140,7 @@
                                                             style="word-wrap: break-word">
                                                             <center>
                                                                 <img src="{{ url($itemSG->soal) }}" class="img-fluid"
-                                                                    width="40%">
+                                                                style="width: auto; height: 35vh;">
                                                             </center>
 
                                                         </h6>
@@ -155,97 +155,97 @@
                                                             </h5>
                                                         </div>
 
-
+                                                      
 
                                                         <div class="green-radio color-green">
-                                                            <ol type="A" class="answer-list">
-                                                                <li class="answer-item">
-                                                                    <input type="radio" data-alternatetype="radio"
-                                                                        name="{{ $keySG }}simulasi_ujian"
-                                                                        value="a"
-                                                                        id="{{ $keySG }}soal{{ $no }}-A"
-                                                                        data-pg_siswa=""
-                                                                        data-noSoal="{{ $no }}" />
-                                                                    <label
-                                                                        for="{{ $keySG }}soal{{ $no }}-A"
-                                                                        class="answer-text">
-                                                                        A.<span><img src="{{ url($itemSG->pg_1) }}"
-                                                                                width="40%" alt=""></span>
-                                                                    </label>
-                                                                </li>
-                                                                <li class="answer-item">
-                                                                    <input type="radio" data-alternatetype="radio"
-                                                                        name="{{ $keySG }}simulasi_ujian"
-                                                                        value="b"
-                                                                        id="{{ $keySG }}soal{{ $no }}-B"
-                                                                        data-pg_siswa=""
-                                                                        data-noSoal="{{ $no }}" />
-                                                                    <label
-                                                                        for="{{ $keySG }}soal{{ $no }}-B"
-                                                                        class="answer-text">
-                                                                        B. <span><img src="{{ url($itemSG->pg_2) }}"
-                                                                                width="40%" alt=""></span>
-                                                                    </label>
-                                                                </li>
-                                                                <li class="answer-item">
-                                                                    <input type="radio" data-alternatetype="radio"
-                                                                        name="{{ $keySG }}simulasi_ujian"
-                                                                        value="c"
-                                                                        id="{{ $keySG }}soal{{ $no }}-C"
-                                                                        data-pg_siswa=""
-                                                                        data-noSoal="{{ $no }}" />
-                                                                    <label
-                                                                        for="{{ $keySG }}soal{{ $no }}-C"
-                                                                        class="answer-text">
-                                                                        C. <span><img src="{{ url($itemSG->pg_3) }}"
-                                                                                width="40%" alt=""></span>
-                                                                    </label>
-                                                                </li>
-                                                                <li class="answer-item">
-                                                                    <input type="radio" data-alternatetype="radio"
-                                                                        name="{{ $keySG }}simulasi_ujian"
-                                                                        value="d"
-                                                                        id="{{ $keySG }}soal{{ $no }}-D"
-                                                                        data-pg_siswa=""
-                                                                        data-noSoal="{{ $no }}" />
-                                                                    <label
-                                                                        for="{{ $keySG }}soal{{ $no }}-D"
-                                                                        class="answer-text">
-                                                                        D. <span><img src="{{ url($itemSG->pg_4) }}"
-                                                                                width="40%" alt=""></span>
-                                                                    </label>
-                                                                </li>
-                                                                <li class="answer-item">
-                                                                    <input type="radio" data-alternatetype="radio"
-                                                                        name="{{ $keySG }}simulasi_ujian"
-                                                                        value="e"
-                                                                        id="{{ $keySG }}soal{{ $no }}-E"
-                                                                        data-pg_siswa=""
-                                                                        data-noSoal="{{ $no }}" />
-                                                                    <label
-                                                                        for="{{ $keySG }}soal{{ $no }}-E"
-                                                                        class="answer-text">
-                                                                        E. <span><img src="{{ url($itemSG->pg_5) }}"
-                                                                                width="40%" alt=""></span>
-                                                                    </label>
-                                                                </li>
-                                                                @if ($itemSG->pg_6)
-                                                                    <li class="answer-item">
-                                                                        <input type="radio" data-alternatetype="radio"
+                                                            <div class="row answer-list">
+                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                    <li class="answer-number d-flex align-items-center">
+                                                                        <input type="radio"
                                                                             name="{{ $keySG }}simulasi_ujian"
-                                                                            value="f"
-                                                                            id="{{ $keySG }}soal{{ $no }}-F"
-                                                                            data-pg_siswa=""
-                                                                            data-noSoal="{{ $no }}" />
-                                                                        <label
-                                                                            for="{{ $keySG }}soal{{ $no }}-F"
-                                                                            class="answer-text">
-                                                                            F. <span><img src="{{ url($itemSG->pg_6) }}"
-                                                                                    width="40%" alt=""></span>
+                                                                            value="a" id="{{ $keySG }}soal{{ $no }}-A" />
+                                                                        <label for="{{ $keySG }}soal{{ $no }}-A"
+                                                                            class="d-flex align-items-center ml-2">
+                                                                            <span>A </span>
+                                                                            <img src="{{ url($itemSG->pg_1) }}"
+                                                                                alt=""
+                                                                                style="width: auto; height: 15vh; margin-left: 10px;">
                                                                         </label>
                                                                     </li>
+                                                                </div>
+                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                    <li class="answer-number d-flex align-items-center">
+                                                                        <input type="radio"
+                                                                            name="{{ $keySG }}simulasi_ujian"
+                                                                            value="b" id="{{ $keySG }}soal{{ $no }}-B" />
+                                                                        <label for="{{ $keySG }}soal{{ $no }}-B"
+                                                                            class="d-flex align-items-center ml-2">
+                                                                            <span>B</span>
+                                                                            <img src="{{ url($itemSG->pg_2) }}"
+                                                                                alt=""
+                                                                                style="width: auto; height: 15vh; margin-left: 10px;">
+                                                                        </label>
+                                                                    </li>
+                                                                </div>
+                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                    <li class="answer-number d-flex align-items-center">
+                                                                        <input type="radio"
+                                                                            name="{{ $keySG }}simulasi_ujian"
+                                                                            value="c" id="{{ $keySG }}soal{{ $no }}-C" />
+                                                                        <label for="{{ $keySG }}soal{{ $no }}-C"
+                                                                            class="d-flex align-items-center ml-2">
+                                                                            <span>C</span>
+                                                                            <img src="{{ url($itemSG->pg_3) }}"
+                                                                                alt=""
+                                                                                style="width: auto; height: 15vh; margin-left: 10px;">
+                                                                        </label>
+                                                                    </li>
+                                                                </div>
+                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                    <li class="answer-number d-flex align-items-center">
+                                                                        <input type="radio"
+                                                                            name="{{ $keySG }}simulasi_ujian"
+                                                                            value="d" id="{{ $keySG }}soal{{ $no }}-D" />
+                                                                        <label for="{{ $keySG }}soal{{ $no }}-D"
+                                                                            class="d-flex align-items-center ml-2">
+                                                                            <span>D</span>
+                                                                            <img src="{{ url($itemSG->pg_4) }}"
+                                                                                alt=""
+                                                                                style="width: auto; height: 15vh; margin-left: 10px;">
+                                                                        </label>
+                                                                    </li>
+                                                                </div>
+                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                    <li class="answer-number d-flex align-items-center">
+                                                                        <input type="radio"
+                                                                            name="{{ $keySG }}simulasi_ujian"
+                                                                            value="e" id="{{ $keySG }}soal{{ $no }}-E" />
+                                                                        <label for="{{ $keySG }}soal{{ $no }}-E"
+                                                                            class="d-flex align-items-center ml-2">
+                                                                            <span>E</span>
+                                                                            <img src="{{ url($itemSG->pg_5) }}"
+                                                                                alt=""
+                                                                                style="width: auto; height: 15vh; margin-left: 10px;">
+                                                                        </label>
+                                                                    </li>
+                                                                </div>
+                                                                @if ($itemSG->pg_6)
+                                                                    <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                        <li class="answer-number d-flex align-items-center">
+                                                                            <input type="radio"
+                                                                                name="{{ $keySG }}simulasi_ujian"
+                                                                                value="f" id="{{ $keySG }}soal{{ $no }}-F" />
+                                                                            <label for="{{ $keySG }}soal{{ $no }}-F"
+                                                                                class="d-flex align-items-center ml-2">
+                                                                                <span>F</span>
+                                                                                <img src="{{ url($itemSG->pg_6) }}"
+                                                                                    alt=""
+                                                                                    style="width: auto; height: 15vh; margin-left: 10px;">
+                                                                            </label>
+                                                                        </li>
+                                                                    </div>
                                                                 @endif
-                                                            </ol>
+                                                            </div>
                                                             <button type="button" class="btn btn-primary"
                                                                 onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit</button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"

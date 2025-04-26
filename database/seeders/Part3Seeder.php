@@ -51,21 +51,21 @@ class Part3Seeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
-        $tespart3 = 'tespart3';
-        DB::table('ujian')->insert([
-            'kode' => $tespart3,
-            'nama' => 'Part 3',
-            'jenis' => 1, // Sesuaikan dengan jenis yang berlaku
-            'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
-            'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
-            'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
-            'jam' => 1, // Waktu default
-            'menit' => 30, // Waktu default dalam menit
-            'acak' => 0,
-            'nilai_tambahan' => 5,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        // $tespart3 = 'tespart3';
+        // DB::table('ujian')->insert([
+        //     'kode' => $tespart3,
+        //     'nama' => 'Part 3',
+        //     'jenis' => 1, // Sesuaikan dengan jenis yang berlaku
+        //     'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
+        //     'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
+        //     'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
+        //     'jam' => 1, // Waktu default
+        //     'menit' => 30, // Waktu default dalam menit
+        //     'acak' => 0,
+        //     'nilai_tambahan' => 5,
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
 
 
         DB::table('relasi_ujian_merge')->insert([
@@ -78,15 +78,15 @@ class Part3Seeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'kode_ujian' => $tespart3,
-                'kode_merge_ujian' => 'tes_merge_ujian_2',
-                'banner' => 'banner2.jpg',
-                'instruksi_ujian' => 'Pastikan koneksi stabil.',
-                'urutan' => 6,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
+            // [
+            //     'kode_ujian' => $tespart3,
+            //     'kode_merge_ujian' => 'tes_merge_ujian_2',
+            //     'banner' => 'banner2.jpg',
+            //     'instruksi_ujian' => 'Pastikan koneksi stabil.',
+            //     'urutan' => 6,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]
         ]);
 
 
@@ -99,15 +99,15 @@ Tuliskan jawaban Anda pada kolom yang tersedia. Waktu pengerjaan terbatas tapi t
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $tespart3,
-            'label' => 'part 3.',
-            'urutan' => '1',
-            'intruksi' => 'Jawablah soal-soal berikut ini dengan teliti dan benar!
-Tuliskan jawaban Anda pada kolom yang tersedia. Waktu pengerjaan terbatas tapi tidak kami beritahukan batas waktunya. Oleh karena itu kerjakan soal-soal yang Anda anggap paling mudah terlebih dahulu.',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $tespart3,
+//             'label' => 'part 3.',
+//             'urutan' => '1',
+//             'intruksi' => 'Jawablah soal-soal berikut ini dengan teliti dan benar!
+// Tuliskan jawaban Anda pada kolom yang tersedia. Waktu pengerjaan terbatas tapi tidak kami beritahukan batas waktunya. Oleh karena itu kerjakan soal-soal yang Anda anggap paling mudah terlebih dahulu.',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
 
         foreach ($part3 as $number => $answer) {
             $detailEssy = DetailEssay::create([
@@ -130,21 +130,21 @@ Tuliskan jawaban Anda pada kolom yang tersedia. Waktu pengerjaan terbatas tapi t
         foreach ($part3 as $number => $answer) {
             if ($counter >= 3) break;
             $counter++;
-            $detailEssy = DetailEssay::create([
-                'kode' => $tespart3,
-                'soal' => $answer['soal'],
-                'type_kunci_jawaban' => "number",
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // $detailEssy = DetailEssay::create([
+            //     'kode' => $tespart3,
+            //     'soal' => $answer['soal'],
+            //     'type_kunci_jawaban' => "number",
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
 
-            JawabanEssay::create([
-                'detail_essay_id' => $detailEssy->id,
-                'jawaban' => $answer['jawaban'],
-                'nilai' => 1,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // JawabanEssay::create([
+            //     'detail_essay_id' => $detailEssy->id,
+            //     'jawaban' => $answer['jawaban'],
+            //     'nilai' => 1,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
         }
     }
 }

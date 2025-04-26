@@ -156,20 +156,20 @@ class Part4Seeder extends Seeder
         ]);
 
         $tespart4 = 'tespart4';
-        DB::table('ujian')->insert([
-            'kode' => $tespart4,
-            'nama' => 'Part 4',
-            'jenis' => 1, // Sesuaikan dengan jenis yang berlaku
-            'guru_id' => 1, // Sesuaikan dengan ID guru yang valid
-            'kelas_id' => 1, // Sesuaikan dengan ID kelas yang valid
-            'mapel_id' => 1, // Sesuaikan dengan ID mapel yang valid
-            'jam' => 1, // Waktu default
-            'menit' => 30, // Waktu default dalam menit
-            'acak' => 0,
-            'nilai_tambahan' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        // DB::table('ujian')->insert([
+        //     'kode' => $tespart4,
+        //     'nama' => 'Part 4',
+        //     'jenis' => 1, // Sesuaikan dengan jenis yang berlaku
+        //     'guru_id' => 1, // Sesuaikan dengan ID guru yang valid
+        //     'kelas_id' => 1, // Sesuaikan dengan ID kelas yang valid
+        //     'mapel_id' => 1, // Sesuaikan dengan ID mapel yang valid
+        //     'jam' => 1, // Waktu default
+        //     'menit' => 30, // Waktu default dalam menit
+        //     'acak' => 0,
+        //     'nilai_tambahan' => 0,
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
 
         
         DB::table('intruksi_ujians')->insert([
@@ -180,14 +180,14 @@ class Part4Seeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $tespart4,
-            'label' => 'part 4.',
-            'urutan' => '1',
-            'intruksi' => 'Berikut ini terdapat dua kata dan Anda diminta untuk menjelaskan kesamaan antara kedua kata tersebut. ',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+        // DB::table('intruksi_ujians')->insert([
+        //     'kode' => $tespart4,
+        //     'label' => 'part 4.',
+        //     'urutan' => '1',
+        //     'intruksi' => 'Berikut ini terdapat dua kata dan Anda diminta untuk menjelaskan kesamaan antara kedua kata tersebut. ',
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now()
+        // ]);
         DB::table('relasi_ujian_merge')->insert([
             [
                 'kode_ujian' => $kode,
@@ -198,15 +198,15 @@ class Part4Seeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'kode_ujian' => $tespart4,
-                'kode_merge_ujian' => 'tes_merge_ujian_2',
-                'banner' => 'banner2.jpg',
-                'instruksi_ujian' => 'Pastikan koneksi stabil.',
-                'urutan' => 7,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
+            // [
+            //     'kode_ujian' => $tespart4,
+            //     'kode_merge_ujian' => 'tes_merge_ujian_2',
+            //     'banner' => 'banner2.jpg',
+            //     'instruksi_ujian' => 'Pastikan koneksi stabil.',
+            //     'urutan' => 7,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]
         ]);
 
         foreach ($contohSoal as $key => $value) {
@@ -217,13 +217,13 @@ class Part4Seeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
-            DB::table('simulasi_ujian_essays')->insert([
-                'kode' => $tespart4,
-                'soal' => $value['soal'], 
-                'jawaban' => $value['jawaban'],  
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            // DB::table('simulasi_ujian_essays')->insert([
+            //     'kode' => $tespart4,
+            //     'soal' => $value['soal'], 
+            //     'jawaban' => $value['jawaban'],  
+            //     'created_at' => now(),
+            //     'updated_at' => now()
+            // ]);
         }
 
         foreach ($soal as $number => $answer) {
@@ -275,41 +275,41 @@ class Part4Seeder extends Seeder
             $counter++;
 
 
-            $detailEssy = DetailEssay::create([
-                'kode' => $tespart4,
-                'soal' => $answer['soal'], 
-                'type_kunci_jawaban' => "text",
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // $detailEssy = DetailEssay::create([
+            //     'kode' => $tespart4,
+            //     'soal' => $answer['soal'], 
+            //     'type_kunci_jawaban' => "text",
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
 
-            foreach ($answer['skor_0'] as $jawab) {
-                JawabanEssay::create([
-                    'detail_essay_id' => $detailEssy->id,
-                    'jawaban' => $jawab,
-                    'nilai' => 0,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]);
-            }
-            foreach ($answer['skor_1'] as $jawab) {
-                JawabanEssay::create([
-                    'detail_essay_id' => $detailEssy->id,
-                    'jawaban' => $jawab,
-                    'nilai' => 1,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]);
-            }
-            foreach ($answer['skor_2'] as $jawab) {
-                JawabanEssay::create([
-                    'detail_essay_id' => $detailEssy->id,
-                    'jawaban' => $jawab,
-                    'nilai' => 2,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]);
-            }
+            // foreach ($answer['skor_0'] as $jawab) {
+            //     JawabanEssay::create([
+            //         'detail_essay_id' => $detailEssy->id,
+            //         'jawaban' => $jawab,
+            //         'nilai' => 0,
+            //         'created_at' => Carbon::now(),
+            //         'updated_at' => Carbon::now()
+            //     ]);
+            // }
+            // foreach ($answer['skor_1'] as $jawab) {
+            //     JawabanEssay::create([
+            //         'detail_essay_id' => $detailEssy->id,
+            //         'jawaban' => $jawab,
+            //         'nilai' => 1,
+            //         'created_at' => Carbon::now(),
+            //         'updated_at' => Carbon::now()
+            //     ]);
+            // }
+            // foreach ($answer['skor_2'] as $jawab) {
+            //     JawabanEssay::create([
+            //         'detail_essay_id' => $detailEssy->id,
+            //         'jawaban' => $jawab,
+            //         'nilai' => 2,
+            //         'created_at' => Carbon::now(),
+            //         'updated_at' => Carbon::now()
+            //     ]);
+            // }
              
         }
         

@@ -46,19 +46,19 @@ class Part1_4Seeder extends Seeder
         ]);
         
         $tespart1_4 = 'tespart1_4';
-        DB::table('ujian')->insert([
-            'kode' => $tespart1_4,
-            'nama' => 'Part 1.4',
-            'jenis' => 0, // Sesuaikan dengan jenis yang berlaku
-            'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
-            'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
-            'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
-            'jam' => 1, // Waktu default
-            'menit' => 30, // Waktu default dalam menit
-            'acak' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        // DB::table('ujian')->insert([
+        //     'kode' => $tespart1_4,
+        //     'nama' => 'Part 1.4',
+        //     'jenis' => 0, // Sesuaikan dengan jenis yang berlaku
+        //     'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
+        //     'kelas_id' => 2, // Sesuaikan dengan ID kelas yang valid
+        //     'mapel_id' => 2, // Sesuaikan dengan ID mapel yang valid
+        //     'jam' => 1, // Waktu default
+        //     'menit' => 30, // Waktu default dalam menit
+        //     'acak' => 0,
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
 
         DB::table('intruksi_ujians')->insert([
             'kode' => $kode,
@@ -71,16 +71,16 @@ dianggap paling tepat
             'updated_at' => Carbon::now()
         ]);
 
-        DB::table('intruksi_ujians')->insert([
-            'kode' => $tespart1_4,
-            'label' => 'part 1.4.',
-            'urutan' => '1',
-            'intruksi' => 'Pilih satu jawaban yang 
-dianggap paling tepat
-',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+//         DB::table('intruksi_ujians')->insert([
+//             'kode' => $tespart1_4,
+//             'label' => 'part 1.4.',
+//             'urutan' => '1',
+//             'intruksi' => 'Pilih satu jawaban yang 
+// dianggap paling tepat
+// ',
+//             'created_at' => Carbon::now(),
+//             'updated_at' => Carbon::now()
+//         ]);
         DB::table('relasi_ujian_merge')->insert([
             [
                 'kode_ujian' => $kode,
@@ -91,15 +91,15 @@ dianggap paling tepat
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'kode_ujian' => $tespart1_4,
-                'kode_merge_ujian' => 'tes_merge_ujian_2',
-                'banner' => 'banner2.png',
-                'instruksi_ujian' => 'Pastikan koneksi stabil.',
-                'urutan' => 4,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
+            // [
+            //     'kode_ujian' => $tespart1_4,
+            //     'kode_merge_ujian' => 'tes_merge_ujian_2',
+            //     'banner' => 'banner2.png',
+            //     'instruksi_ujian' => 'Pastikan koneksi stabil.',
+            //     'urutan' => 4,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]
         ]);
         $no = 0;
         foreach ($part1_4 as $number => $answer) { 
@@ -126,19 +126,19 @@ dianggap paling tepat
         foreach ($part1_4 as $number => $answer) { 
             if ($counter >= 3) break;
             $no = $number++;
-            DB::table('detail_ujian')->insert([
-                'kode' => $tespart1_4,
-                'soal' => 'ujian_seeder/Part1_4/'.$no.'/soal.png',
-                'pg_1' => 'ujian_seeder/Part1_4/'.$no.'/a.png',
-                'pg_2' => 'ujian_seeder/Part1_4/'.$no.'/b.png',
-                'pg_3' => 'ujian_seeder/Part1_4/'.$no.'/c.png',
-                'pg_4' => 'ujian_seeder/Part1_4/'.$no.'/d.png',
-                'pg_5' => 'ujian_seeder/Part1_4/'.$no.'/e.png',
-                // 'pg_6' => 'ujian_seeder/Part1_4/'.$no.'/f.png',
-                'jawaban' => $answer,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
+            // DB::table('detail_ujian')->insert([
+            //     'kode' => $tespart1_4,
+            //     'soal' => 'ujian_seeder/Part1_4/'.$no.'/soal.png',
+            //     'pg_1' => 'ujian_seeder/Part1_4/'.$no.'/a.png',
+            //     'pg_2' => 'ujian_seeder/Part1_4/'.$no.'/b.png',
+            //     'pg_3' => 'ujian_seeder/Part1_4/'.$no.'/c.png',
+            //     'pg_4' => 'ujian_seeder/Part1_4/'.$no.'/d.png',
+            //     'pg_5' => 'ujian_seeder/Part1_4/'.$no.'/e.png',
+            //     // 'pg_6' => 'ujian_seeder/Part1_4/'.$no.'/f.png',
+            //     'jawaban' => $answer,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]);
             $counter++;
         } 
 
@@ -158,19 +158,19 @@ dianggap paling tepat
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]); 
-            DB::table('simulai_ujan_pg')->insert([
-                'kode' => $tespart1_4,
-                'soal' => 'ujian_seeder/Part1_4/contoh'.$no.'/soal.png',
-                'pg_1' => 'ujian_seeder/Part1_4/contoh'.$no.'/a.png',
-                'pg_2' => 'ujian_seeder/Part1_4/contoh'.$no.'/b.png',
-                'pg_3' => 'ujian_seeder/Part1_4/contoh'.$no.'/c.png',
-                'pg_4' => 'ujian_seeder/Part1_4/contoh'.$no.'/d.png',
-                'pg_5' => 'ujian_seeder/Part1_4/contoh'.$no.'/e.png',
-                // 'pg_6' => 'ujian_seeder/Part1_4/contoh'.$no.'/f.png',
-                'jawaban' => strtoupper($answer),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]); 
+            // DB::table('simulai_ujan_pg')->insert([
+            //     'kode' => $tespart1_4,
+            //     'soal' => 'ujian_seeder/Part1_4/contoh'.$no.'/soal.png',
+            //     'pg_1' => 'ujian_seeder/Part1_4/contoh'.$no.'/a.png',
+            //     'pg_2' => 'ujian_seeder/Part1_4/contoh'.$no.'/b.png',
+            //     'pg_3' => 'ujian_seeder/Part1_4/contoh'.$no.'/c.png',
+            //     'pg_4' => 'ujian_seeder/Part1_4/contoh'.$no.'/d.png',
+            //     'pg_5' => 'ujian_seeder/Part1_4/contoh'.$no.'/e.png',
+            //     // 'pg_6' => 'ujian_seeder/Part1_4/contoh'.$no.'/f.png',
+            //     'jawaban' => strtoupper($answer),
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now()
+            // ]); 
         }
      
  

@@ -31,7 +31,7 @@
                             @php
                                 $no = 1;
                                 $soal_hidden = '';
-                            @endphpqwe
+                            @endphp
                             @foreach ($pg_siswa as $soal)
                                 <div class="question {{ $soal_hidden }} question-{{ $no }}"
                                     data-question="{{ $no }}">
@@ -46,30 +46,33 @@
                                                 style="word-wrap: break-word">
 
                                                 <img src="{{ url($soal->detailujian->soal) }}" alt=""
-                                                    style="width: 40%; height: auto;">
+                                                    style="width: auto; height: 25vh;">
                                             </h6>
                                         </div>
-                                
+
                                         <div class="widget-content mt-3">
                                             <div class="alert alert-danger hidden"></div>
                                             <div class="green-radio color-green">
-                                                <ol type="A" style="color: #000; margin-left: -20px; list-style-type: none;">
+                                                <ol type="A"
+                                                    style="color: #000; margin-left: -20px; list-style-type: none;">
                                                     <div class="row">
-                                                        <div class="col">
+                                                        <div
+                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
                                                                     value="a" id="soal{{ $no }}-a" />
                                                                 <label for="soal{{ $no }}-a"
                                                                     class="d-flex align-items-center ml-2">
-                                                                    <span>A </span>
+                                                                    <span>A</span>
                                                                     <img src="{{ url($soal->detailujian->pg_1) }}"
                                                                         alt=""
-                                                                        style="width: 40%; height: auto; margin-left: 10px;">
+                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                         </div>
-                                                        <div class="col">
+                                                        <div
+                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -79,11 +82,12 @@
                                                                     <span>B </span>
                                                                     <img src="{{ url($soal->detailujian->pg_2) }}"
                                                                         alt=""
-                                                                        style="width: 40%; height: auto; margin-left: 10px;">
+                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                         </div>
-                                                        <div class="col">
+                                                        <div
+                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -93,11 +97,12 @@
                                                                     <span>C </span>
                                                                     <img src="{{ url($soal->detailujian->pg_3) }}"
                                                                         alt=""
-                                                                        style="width: 40%; height: auto; margin-left: 10px;">
+                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                         </div>
-                                                        <div class="col">
+                                                        <div
+                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -107,11 +112,12 @@
                                                                     <span>D </span>
                                                                     <img src="{{ url($soal->detailujian->pg_4) }}"
                                                                         alt=""
-                                                                        style="width: 40%; height: auto; margin-left: 10px;">
+                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                         </div>
-                                                        <div class="col">
+                                                        <div
+                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                             <li class="answer-number d-flex align-items-center">
                                                                 <input type="radio"
                                                                     name="pilihan-{{ $soal->detailujian->id }}"
@@ -121,25 +127,26 @@
                                                                     <span>E </span>
                                                                     <img src="{{ url($soal->detailujian->pg_5) }}"
                                                                         alt=""
-                                                                        style="width: 40%; height: auto; margin-left: 10px;">
+                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
                                                                 </label>
                                                             </li>
                                                         </div>
                                                         @if ($soal->detailujian->pg_6 != null && $soal->detailujian->pg_6 != '' && $soal->detailujian->pg_6 != 'f')
-                                                        <div class="col">
-                                                            <li class="answer-number d-flex align-items-center">
-                                                                <input type="radio"
-                                                                    name="pilihan-{{ $soal->detailujian->id }}"
-                                                                    value="f" id="soal{{ $no }}-f" />
-                                                                <label for="soal{{ $no }}-f"
-                                                                    class="d-flex align-items-center ml-2">
-                                                                    <span>F </span>
-                                                                    <img src="{{ url($soal->detailujian->pg_6) }}"
-                                                                        alt=""
-                                                                        style="width: 40%; height: auto; margin-left: 10px;">
-                                                                </label>
-                                                            </li>
-                                                        </div>
+                                                            <div
+                                                                class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
+                                                                <li class="answer-number d-flex align-items-center">
+                                                                    <input type="radio"
+                                                                        name="pilihan-{{ $soal->detailujian->id }}"
+                                                                        value="f" id="soal{{ $no }}-f" />
+                                                                    <label for="soal{{ $no }}-f"
+                                                                        class="d-flex align-items-center ml-2">
+                                                                        <span>F </span>
+                                                                        <img src="{{ url($soal->detailujian->pg_6) }}"
+                                                                            alt=""
+                                                                            style="width: auto; height: 20vh; margin-left: 10px;">
+                                                                    </label>
+                                                                </li>
+                                                            </div>
                                                         @endif
                                                     </div>
                                                 </ol>
