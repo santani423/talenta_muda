@@ -250,6 +250,7 @@ class UjianSiswaController extends Controller
             // })
             ->where('waktu_ujian.selesai', '!=', 1)
             ->where('ujian.jenis', 1)
+            ->where('waktu_ujian.siswa_id', session()->get('id'))
             ->select(
                 'rum.*',
                 'waktu_ujian.*',
