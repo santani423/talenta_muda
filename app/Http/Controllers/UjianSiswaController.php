@@ -650,8 +650,8 @@ class UjianSiswaController extends Controller
                 ->join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
                 ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
                 ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
-                ->where('merge_ujian.siswa_id', session()->get('id'))
-                ->where()
+                ->where('waktu_ujian.selesai', '!=', 1)
+                ->where('waktu_ujian.siswa_id', session()->get('id'))
                 ->select(
                     'rum.*',
                     'waktu_ujian.*',
