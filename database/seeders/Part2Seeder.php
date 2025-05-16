@@ -16,32 +16,33 @@ class Part2Seeder extends Seeder
     {
         $part2 = [
             1 => "c",
-            2 => "c",
-            3 => "e",
-            4 => "a",
-            5 => "b",
-            6 => "c",
-            7 => "d",
-            8 => "b",
-            9 => "e",
-            10 => "b",
-            11 => "e",
-            12 => "d",
-            13 => "e",
+            2 => "e",
+            3 => "a",
+            4 => "b",
+            5 => "c",
+            6 => "d",
+            7 => "b",
+            8 => "e", // sebelumnya "b"
+            9 => "b", // sebelumnya "e"
+            10 => "e", // sebelumnya "b"
+            11 => "d", // sebelumnya "e"
+            12 => "e", // sebelumnya "d"
+            13 => "c", // sebelumnya "e"
             14 => "d",
-            15 => "c",
-            16 => "a",
-            17 => "b",
-            18 => "d",
+            15 => "a", // sebelumnya "c"
+            16 => "b", // sebelumnya "a"
+            17 => "d", // sebelumnya "b"
+            18 => "c", // sebelumnya "d"
             19 => "c",
             20 => "c",
-            21 => "d",
+            21 => "a", // sebelumnya "d"
             22 => "a",
             23 => "a",
-            24 => "a",
+            24 => "c", // sebelumnya "a"
             25 => "e",
             26 => "b"
         ];
+
         $contoh_part2 = [
             1 => "a",
             2 => "c",
@@ -114,31 +115,31 @@ Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan An
             'updated_at' => Carbon::now()
         ]);
 
-//         DB::table('intruksi_ujians')->insert([
-//             'kode' => $tespart2,
-//             'label' => 'part 2.',
-//             'urutan' => '1',
-//             'intruksi' => 'Pilih satu jawaban yang 
-// dianggap paling tepat
-// ',
-//             'created_at' => Carbon::now(),
-//             'updated_at' => Carbon::now()
-//         ]);
+        //         DB::table('intruksi_ujians')->insert([
+        //             'kode' => $tespart2,
+        //             'label' => 'part 2.',
+        //             'urutan' => '1',
+        //             'intruksi' => 'Pilih satu jawaban yang 
+        // dianggap paling tepat
+        // ',
+        //             'created_at' => Carbon::now(),
+        //             'updated_at' => Carbon::now()
+        //         ]);
 
-//         DB::table('intruksi_ujians')->insert([
-//             'kode' => $tespart2,
-//             'label' => 'Petunjuk',
-//             'urutan' => '2',
-//             'intruksi' => 'Berikut ini terdapat matriks 2x2, tugas Anda adalah memilih salah satu dari lima pilihan (a, b, c, d, e) yang di Bawah matriks tersebut.<br>
+        //         DB::table('intruksi_ujians')->insert([
+        //             'kode' => $tespart2,
+        //             'label' => 'Petunjuk',
+        //             'urutan' => '2',
+        //             'intruksi' => 'Berikut ini terdapat matriks 2x2, tugas Anda adalah memilih salah satu dari lima pilihan (a, b, c, d, e) yang di Bawah matriks tersebut.<br>
 
-// Jawaban yang tepat akan cocok untuk semua gambar secara mendatar maupun menurun. Anda hanya perlu melihat mendatar dan menurun untuk menemukan jawabannya. Jangan melihat secara diagonal. <br>
+        // Jawaban yang tepat akan cocok untuk semua gambar secara mendatar maupun menurun. Anda hanya perlu melihat mendatar dan menurun untuk menemukan jawabannya. Jangan melihat secara diagonal. <br>
 
-// Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan Anda pada kotak yang Anda rasa paling benar atau pada huruf di Bawah kotak tersebut.<br>',
-//             'created_at' => Carbon::now(),
-//             'updated_at' => Carbon::now()
-//         ]);
+        // Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan Anda pada kotak yang Anda rasa paling benar atau pada huruf di Bawah kotak tersebut.<br>',
+        //             'created_at' => Carbon::now(),
+        //             'updated_at' => Carbon::now()
+        //         ]);
 
-     
+
         DB::table('relasi_ujian_merge')->insert([
             [
                 'kode_ujian' => $kode,
@@ -206,7 +207,7 @@ Manakah jawaban yang paling tepat dari lima alternatif yang ada? Klik pilihan An
             //     'updated_at' => Carbon::now()
             // ]);
         }
- 
+
         $no = 0;
         foreach ($part2 as $number => $answer) {
             if ($number >= 3) break;
