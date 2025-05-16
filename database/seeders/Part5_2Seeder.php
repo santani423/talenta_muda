@@ -107,6 +107,19 @@ class Part5_2Seeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+        DB::table('ujian')->insert([
+            'kode' => $kode,
+            'nama' => 'Part 5.2',
+            'jenis' => 2, // Sesuaikan dengan jenis yang berlaku
+            'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
+            'kelas_id' => 1, // Sesuaikan dengan ID kelas yang valid
+            'mapel_id' => 1, // Sesuaikan dengan ID mapel yang valid
+            'jam' => 1, // Waktu default
+            'menit' => 30, // Waktu default dalam menit
+            'acak' => 0,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
         // $tespart5_2 = 'tespart5_2';
         // DB::table('ujian')->insert([

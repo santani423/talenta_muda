@@ -31,7 +31,7 @@ class GuruKelasSeeder extends Seeder
         ];
         $data[] = [
             'guru_id' => 2,
-            'kelas_id' => 2,
+            'kelas_id' => 1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ];

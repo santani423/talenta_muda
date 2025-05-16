@@ -100,6 +100,19 @@ class Part1_1Seeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+        DB::table('ujian')->insert([
+            'kode' => $kode,
+            'nama' => 'Part 1.1 ',
+            'jenis' => 0, // Sesuaikan dengan jenis yang berlaku
+            'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
+            'kelas_id' => 1, // Sesuaikan dengan ID kelas yang valid
+            'mapel_id' => 1, // Sesuaikan dengan ID mapel yang valid
+            'jam' => 1, // Waktu default
+            'menit' => 30, // Waktu default dalam menit
+            'acak' => 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
 
         DB::table('intruksi_ujians')->insert([
             'kode' => $kode,

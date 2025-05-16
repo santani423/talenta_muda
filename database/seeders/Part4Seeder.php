@@ -154,6 +154,20 @@ class Part4Seeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+        DB::table('ujian')->insert([
+            'kode' => $kode,
+            'nama' => 'Part 4',
+            'jenis' => 1, // Sesuaikan dengan jenis yang berlaku
+            'guru_id' => 2, // Sesuaikan dengan ID guru yang valid
+            'kelas_id' => 1, // Sesuaikan dengan ID kelas yang valid
+            'mapel_id' => 1, // Sesuaikan dengan ID mapel yang valid
+            'jam' => 1, // Waktu default
+            'menit' => 30, // Waktu default dalam menit
+            'acak' => 0,
+            'nilai_tambahan' => 0,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
         $tespart4 = 'tespart4';
         // DB::table('ujian')->insert([

@@ -29,7 +29,7 @@ class GuruSeeder extends Seeder
             [
                 'nama_guru' => 'Lena',
                 'gender' => 'Perempuan',
-                'email' => 'siti.aminah@example.com',
+                'email' => 'siti.aminah@gmail.com',
                 'password' => bcrypt('123'),
                 'avatar' => 'wqqzHdJXSx1umRxkPRKlkdmRrFvxqK8uOA7KbVoJ.jpg',
                 'role' => 2,
