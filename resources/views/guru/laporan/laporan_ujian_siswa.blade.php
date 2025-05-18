@@ -201,7 +201,7 @@
                 fetchStudentData(studentId, 'part5_1', 2),
                 fetchStudentData(studentId, 'part5_2', 2),
                 fetchStudentData(studentId, 'part5_3', 2),
-            ]).then(results => {
+            ]).then(async results => {
 
                 let jumlahKolom = 0;
                 let jumlahKolom2 = 0;
@@ -222,8 +222,6 @@
                     if (data.typeUjian != 2) {
                         htmlContent += `<td><p style="margin:8px; color: black;">${data.type}</p></td>`;
                     }
-
-
                 });
                 htmlContent += `</tr>`;
 
@@ -231,20 +229,14 @@
                     htmlContent += `<tr>`;
                     results.forEach((data) => {
                         if (data.typeUjian != 2) {
-                            console.log('data.siswa', data.siswa[i]);
-
                             let jawaban = (data?.siswa[i]?.jawaban ?? '-').toLowerCase();
                             let kunci_jawaban = (data?.siswa[i]?.kunci_jawaban ?? '-').toLowerCase();
-                            let jawaban_essay = data?.siswa[i]?.jawaban_essay?.jawaban_essay.length ?? 0;
-                            // let jawaban_essay =  0;
-
-                            // console.log(`jawaban_essayqwertyui ${data.type}`, data?.siswa[i]?.nilai);
+                            let jawaban_essay = data?.siswa[i]?.jawaban_essay?.jawaban_essay?.length ?? 0;
 
                             htmlContent +=
                                 `<td style="width: auto;">
                         <p style="margin:2px; text-align:left; color: black;">
                             ${i + 1 < 10 ? '0' : ''}${i + 1} . ${jawaban}  
-
                             ${ data?.siswa[i]?.jawaban_essay?.type_kunci_jawaban != 'text' && data?.siswa[i]?.nilai != '-' &&  data?.siswa[i]?.nilai != 'undefined'  && data?.siswa[i]?.nilai != '-' &&  data?.siswa[i]?.nilai != null ? data?.siswa[i]?.nilai == '1' ? '✔' : '✘' :''}
                         </p>
                     </td>`;
@@ -257,8 +249,6 @@
                 let nilaiTscore = 0;
                 results.forEach((data) => {
                     if (data.typeUjian != 2) {
-                        console.log('dataertyuio', data);
-
                         htmlContent +=
                             `<td><p style="margin:10px; color: black;">${data.nilai+(data?.niaiTambah ?? 0)}</p></td>`;
                     }
@@ -267,34 +257,27 @@
                         nilaiTscore = parseInt(data?.nilai ?? 0) + parseInt(nilaiTscore ?? 0);
                     }
                 });
-                let tScoreData = tScore(nilaiTscore, tanggal_lahir);
                 htmlContent += `</tr>`;
                 htmlContent += `</table>
                 <p style="margin:10px; color: black;" id="skorIq">Skor IQ :  </p> 
                 <p style="margin:10px; color: black;" id="kualifikasiIq">Kualifikasi IQ:  </p>
                 </div>`;
 
-                // Setelah tScoreData resolve, update skorIq dan kualifikasiIq
-                tScoreData.then(function(response) {
-                    console.log('tScoreDatatScoreData', response);
-                    
-                    const skorIq = response?.kalenderScore?.nilai ?? '-';
-                    const kualifikasiIq = response?.klasifikasi?.klasifikasi ?? '-';
-                    document.getElementById('skorIq').innerText = `Skor IQ : ${skorIq}`;
-                    document.getElementById('kualifikasiIq').innerText = `Kualifikasi IQ: ${kualifikasiIq}`;
-                }).catch(function(error) {
-                    document.getElementById('skorIq').innerText = 'Skor IQ : -';
-                    document.getElementById('kualifikasiIq').innerText = 'Kualifikasi IQ: -';
-                    console.error('Error tScoreData:', error);
-                });
-                // ----------------------------------------------------------------------------------------------------------------
+                // Tunggu tScoreData resolve sebelum menampilkan/print
+                try {
+                    let tScoreResponse = await tScore(nilaiTscore, tanggal_lahir);
+                    const skorIq = tScoreResponse?.kalenderScore?.nilai ?? '-';
+                    const kualifikasiIq = tScoreResponse?.klasifikasi?.klasifikasi ?? '-';
+                    // Replace placeholder in htmlContent
+                    htmlContent = htmlContent.replace('id="skorIq">Skor IQ :  </p>', `id="skorIq">Skor IQ : ${skorIq}</p>`);
+                    htmlContent = htmlContent.replace('id="kualifikasiIq">Kualifikasi IQ:  </p>', `id="kualifikasiIq">Kualifikasi IQ: ${kualifikasiIq}</p>`);
+                } catch (error) {
+                    htmlContent = htmlContent.replace('id="skorIq">Skor IQ :  </p>', `id="skorIq">Skor IQ : -</p>`);
+                    htmlContent = htmlContent.replace('id="kualifikasiIq">Kualifikasi IQ:  </p>', `id="kualifikasiIq">Kualifikasi IQ: -</p>`);
+                }
 
                 results.forEach((data) => {
                     if (data.typeUjian == 2) {
-                        console.log('data.jenis_jawaban_kuesioner_id', data?.ujian
-                            ?.jenis_jawaban_kuesioner_id);
-
-
                         htmlContent += `
                 <div class="mt-4"  style="page-break-before: always;"> 
                 <p class="mt-4" style="color: black;">${data?.ujian?.nama}</p></p>`;
@@ -306,7 +289,6 @@
                             htmlContent += `<tr>`;
                             noKusoner = index + 1;
                             data.siswa.forEach((kuisoner, ndx) => {
-                                console.log("cek kuisoner", kuisoner?.kuisoner[noKusoner - 1]);
                                 htmlContent +=
                                     `<td style="text-align: left; width: 500px;"><p style="margin:10px; font-size: 10px; color: black;">${noKusoner}.${kuisoner?.kuisoner[noKusoner-1]?.detail_jawaban_kuisoner[0]?.kode ?? '-'}</p></td>`;
                                 noKusoner = noKusoner + 20;
@@ -316,53 +298,38 @@
 
                         htmlContent += `</table></div>`;
                         htmlContent += `   <div class="row mt-3">`;
-                        console.log('data.facet', data);
 
                         if (data.facet.some(facet => facet?.totalScore != 0)) {
                             data.facet.forEach((facet, ndxFacet) => {
-
                                 htmlContent +=
                                     `     <div class="col-md-6" style="color: black;">${facet?.domain}: ${facet?.totalScore}</div>`;
-
                             });
                         }
                         htmlContent += `   </div>`;
                         htmlContent += `   <div class="row mt-3">`;
-                        // console.log('data.sekaladata?.sekala?.total_average_score', data?.skorNilai);
 
                         if (data?.sekala?.average_scores?.some(sekala => sekala?.average_score != 0)) {
-
-
                             if (data?.skorNilai) {
-
                                 htmlContent +=
                                     `<div class="col-md-12 mt-5" style="color: black; text-align: center; font-weight: bold;">Skor  : ${data?.kuisonersBenarSalah?.totalNilai}</div>`;
-
                             } else {
                                 data?.sekala?.average_scores?.forEach((sekala, ndxsekala) => {
-
                                     htmlContent +=
                                         `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.average_score}</div>`;
-
                                 });
                                 htmlContent +=
                                     `   
                         <div class="col-md-12 mt-2" style="color: black; text-align: center; font-weight: bold;">Skor Dark Triad Personality   : ${data?.sekala?.total_average_score}</div>`;
-
                             }
                         } else {
                             if (data?.skorNilai) {
-
                                 htmlContent +=
                                     `<div class="col-md-12 mt-5" style="color: black; text-align: center; font-weight: bold;">Skor  : ${data?.kuisonersBenarSalah?.totalNilai}</div>`;
-
                             }
                         }
                         htmlContent += `   </div>`;
                         htmlContent += `    </div>`; // penutup div yang kurang
                     }
-
-
                 });
 
                 itemPrint = element.innerHTML + htmlContent;
