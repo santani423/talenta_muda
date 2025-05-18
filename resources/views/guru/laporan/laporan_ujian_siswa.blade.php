@@ -15,10 +15,12 @@
                                 <div class="widget-heading">
                                     <h5 class="">Laporan Ujian Peserta</h5>
                                 </div>
-                                <div class="mt-3">
-                                    <input type="text" id="searchInput" class="form-control"
-                                        placeholder="Search by name">
-                                </div>
+                                <form action="{{ url('guru/laporan_ujian_siswa') }}" method="GET" class="mt-3 d-flex"
+                                    role="search">
+                                    <input type="text" name="search" class="form-control me-2"
+                                        placeholder="Search by name" value="{{ request('search') }}">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </form>
                                 <div class="mt-3">
                                     <p>Total Data: <span id="totalData">{{ count($MergeUjianSiswa) }}</span></p>
                                 </div>
@@ -30,15 +32,16 @@
                                                 <th>Nama</th>
                                                 <th>Tempat Lahir</th>
                                                 {{-- <th>Total Soal</th> --}}
-                                                <th>Opsi</th>
+                                                {{-- <th>Opsi</th> --}}
                                             </tr>
                                         </thead>
-                                        <tbody id="tableBody">
+
+                                        <tbody>
                                             @foreach ($MergeUjianSiswa as $key => $bs)
                                                 <tr>
                                                     <td>{{ ++$key }}</td>
                                                     <td>
-                                                        {{ $bs->nama_siswa_pg ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}
+                                                        {{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}
                                                     </td>
                                                     {{-- <td>
                                                         {{ $bs->tempat_lahir_pg ?? 'Tempat lahir siswa tidak tersedia' }}
@@ -47,11 +50,11 @@
                                                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                                             data-target="#exampleModal"
                                                             onclick="printPDF(
-                                                        '{{ $bs->id_siswa_pg ?? ($bs->id_siswa_visual ?? ($bs->id_siswa_essay ?? ($bs->id_siswa_kuesioner ?? ''))) }}',
-                                                        '{{ $bs->nama_siswa_pg ?? 'Nama siswa tidak tersedia' }}',
-                                                        '{{ $bs->tempat_lahir_pg ?? 'Tempat lahir siswa tidak tersedia' }}',
-                                                        '{{ $bs->tanggal_lahir_pg ?? 'Tanggal Lahir siswa tidak tersedia' }}',
-                                                        '{{ $bs->gender_pg ?? 'Tanggal Lahir siswa tidak tersedia' }}')">
+                                                        '{{ $bs->id ?? ($bs->id_siswa_visual ?? ($bs->id_siswa_essay ?? ($bs->id_siswa_kuesioner ?? ''))) }}',
+                                                        '{{ $bs->nama_siswa ?? 'Nama siswa tidak tersedia' }}',
+                                                        '{{ $bs->tempat_lahir ?? 'Tempat lahir siswa tidak tersedia' }}',
+                                                        '{{ $bs->tanggal_lahir ?? 'Tanggal Lahir siswa tidak tersedia' }}',
+                                                        '{{ $bs->gender ?? 'Tanggal Lahir siswa tidak tersedia' }}')">
                                                             Hasil Tes
                                                         </button>
                                                     </td>
@@ -60,10 +63,39 @@
                                         </tbody>
                                     </table>
                                     <nav aria-label="Page navigation example" class="d-flex justify-content-end">
-                                        <ul class="pagination" id="pagination">
+                                        <ul class="pagination">
                                             <!-- Pagination items will be added here by JavaScript -->
                                         </ul>
                                     </nav>
+                                    <nav aria-label="Navigasi Halaman Laporan Ujian Siswa">
+                                        <ul class="pagination">
+                                            {{-- Previous Page Link --}}
+                                            @if ($MergeUjianSiswa->onFirstPage())
+                                                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                                            @else
+                                                <li class="page-item"><a class="page-link"
+                                                        href="{{ $MergeUjianSiswa->previousPageUrl() }}">Previous</a></li>
+                                            @endif
+
+                                            {{-- Pagination Elements --}}
+                                            @for ($i = 1; $i <= $MergeUjianSiswa->lastPage(); $i++)
+                                                <li
+                                                    class="page-item {{ $MergeUjianSiswa->currentPage() == $i ? 'active' : '' }}">
+                                                    <a class="page-link"
+                                                        href="{{ $MergeUjianSiswa->url($i) }}">{{ $i }}</a>
+                                                </li>
+                                            @endfor
+
+                                            {{-- Next Page Link --}}
+                                            @if ($MergeUjianSiswa->hasMorePages())
+                                                <li class="page-item"><a class="page-link"
+                                                        href="{{ $MergeUjianSiswa->nextPageUrl() }}">Next</a></li>
+                                            @else
+                                                <li class="page-item disabled"><span class="page-link">Next</span></li>
+                                            @endif
+                                        </ul>
+                                    </nav>
+
                                 </div>
                             </div>
                             <div class="col-lg-5 d-flex">
@@ -92,7 +124,7 @@
                     <div id="pdf-content-review"></div>
 
                     <div class="form-group mt-4">
-                        <textarea class="form-control"  id="formKomentar" cols="30" rows="10"></textarea>
+                        <textarea class="form-control" id="formKomentar" cols="30" rows="10"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
