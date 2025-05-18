@@ -104,7 +104,7 @@ class SkorKalender extends Seeder
         foreach ($array as $key => $value) {
             DB::table('skor_kalenders')->insert([
                 'total_raw_score' => $value['val0'],
-                'usia_dari_tahun' => '13',
+                'usia_dari_tahun' => '0',
                 'usia_dari_bulan' => '0',
                 'usia_sampai_tahun' => '13',
                 'usia_sampai_bulan' => '4',
@@ -156,7 +156,7 @@ class SkorKalender extends Seeder
                 'total_raw_score' => $value['val0'],
                 'usia_dari_tahun' => '17',
                 'usia_dari_bulan' => '0',
-                'usia_sampai_tahun' => '0',
+                'usia_sampai_tahun' => '100',
                 'usia_sampai_bulan' => '0',
                 'nilai' => $value['val6'],
                 'created_at' => now(),

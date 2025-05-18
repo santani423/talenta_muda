@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('skor_kalenders', function (Blueprint $table) {
+        Schema::create('t_scores', function (Blueprint $table) {
             $table->id();
-            $table->string('total_raw_score'); 
-            $table->string('usia_dari_tahun'); 
-            $table->string('usia_dari_bulan');  
-            $table->string('usia_sampai_tahun');
-            $table->string('usia_sampai_bulan');
-            $table->string('nilai');  
+            $table->unsignedBigInteger('ujian_id'); // ID ujian
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('skor_kalenders');
+        Schema::dropIfExists('t_scores');
     }
 };

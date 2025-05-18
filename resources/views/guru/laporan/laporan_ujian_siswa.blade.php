@@ -217,10 +217,13 @@
                 htmlContent = `<div class="table-responsive"><table border="1" style="width:100%; color: black;">`;
 
                 htmlContent += `<tr>`;
+
                 results.forEach((data) => {
                     if (data.typeUjian != 2) {
                         htmlContent += `<td><p style="margin:8px; color: black;">${data.type}</p></td>`;
                     }
+
+
                 });
                 htmlContent += `</tr>`;
 
@@ -251,6 +254,7 @@
                 }
 
                 htmlContent += `<tr>`;
+                let nilaiTscore = 0;
                 results.forEach((data) => {
                     if (data.typeUjian != 2) {
                         console.log('dataertyuio', data);
@@ -258,10 +262,31 @@
                         htmlContent +=
                             `<td><p style="margin:10px; color: black;">${data.nilai+(data?.niaiTambah ?? 0)}</p></td>`;
                     }
+                    if (data.codeUjian == 'part1_1' || data.codeUjian == 'part1_2' || data.codeUjian ==
+                        'part1_3' || data.codeUjian == 'part1_4') {
+                        nilaiTscore = parseInt(data?.nilai ?? 0) + parseInt(nilaiTscore ?? 0);
+                    }
                 });
+                let tScoreData = tScore(nilaiTscore, tanggal_lahir);
                 htmlContent += `</tr>`;
+                htmlContent += `</table>
+                <p style="margin:10px; color: black;" id="skorIq">Skor IQ :  </p> 
+                <p style="margin:10px; color: black;" id="kualifikasiIq">Kualifikasi IQ:  </p>
+                </div>`;
 
-                htmlContent += `</table></div>`;
+                // Setelah tScoreData resolve, update skorIq dan kualifikasiIq
+                tScoreData.then(function(response) {
+                    console.log('tScoreDatatScoreData', response);
+                    
+                    const skorIq = response?.kalenderScore?.nilai ?? '-';
+                    const kualifikasiIq = response?.klasifikasi?.klasifikasi ?? '-';
+                    document.getElementById('skorIq').innerText = `Skor IQ : ${skorIq}`;
+                    document.getElementById('kualifikasiIq').innerText = `Kualifikasi IQ: ${kualifikasiIq}`;
+                }).catch(function(error) {
+                    document.getElementById('skorIq').innerText = 'Skor IQ : -';
+                    document.getElementById('kualifikasiIq').innerText = 'Kualifikasi IQ: -';
+                    console.error('Error tScoreData:', error);
+                });
                 // ----------------------------------------------------------------------------------------------------------------
 
                 results.forEach((data) => {
@@ -303,7 +328,7 @@
                         }
                         htmlContent += `   </div>`;
                         htmlContent += `   <div class="row mt-3">`;
-                        console.log('data.sekaladata?.sekala?.total_average_score', data?.skorNilai);
+                        // console.log('data.sekaladata?.sekala?.total_average_score', data?.skorNilai);
 
                         if (data?.sekala?.average_scores?.some(sekala => sekala?.average_score != 0)) {
 
@@ -348,9 +373,11 @@
                 html2pdf().from(element).save(`Hasil_Test_${studentName}.pdf`);
             });
 
+
         }
 
         function modalReview(htmlContent) {
+
             const element = document.getElementById('pdf-content-review');
             element.innerHTML = htmlContent;
         }
@@ -373,6 +400,7 @@
         function pg(studentId, kdUjian, typeUjian) {
             const nilaiSiswa = {
                 type: kdUjian,
+                codeUjian: kdUjian,
                 siswa: [],
                 nilai: 0,
                 typeUjian: typeUjian,
@@ -409,9 +437,35 @@
             });
         }
 
+        function tScore(nilaiTscore, tanggal_lahir) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/tscore',
+                    type: 'GET',
+                    data: {
+                        nilai: nilaiTscore,
+                        tanggal_lahir: tanggal_lahir
+                    },
+                    success: function(response) {
+                        // Pastikan data dikembalikan dalam format yang diharapkan
+                        if (response) {
+                            resolve(response);
+                        } else {
+                            reject(new Error("Response kosong atau tidak valid"));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        reject(new Error(`Gagal mengambil data: ${error}`));
+                    }
+                });
+            });
+        }
+
+
         function kuisoner(studentId, kdUjian, typeUjian) {
             const nilaiSiswa = {
                 type: kdUjian,
+                codeUjian: kdUjian,
                 siswa: [],
                 kuisoner: [],
                 facet: [],
@@ -466,6 +520,7 @@
         function essay(studentId, kdUjian, typeUjian) {
             const nilaiSiswa = {
                 type: kdUjian,
+                codeUjian: kdUjian,
                 siswa: [],
                 nilai: 0,
                 typeUjian: typeUjian,
@@ -507,6 +562,7 @@
         function visual(studentId, kdUjian) {
             const nilaiSiswa = {
                 type: kdUjian,
+                codeUjian: kdUjian,
                 siswa: [],
                 nilai: 0,
                 typeUjian: 3
