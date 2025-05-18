@@ -13,7 +13,7 @@ class LaporanController extends Controller
     public function laporan_ujian_siswa(Request $request)
     {
         $search = $request->input('search');
-        $perPage = 5;
+        $perPage = 10;
         $page = $request->input('page', 1);
 
         // $MergeUjianSiswa = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', '=', 'merge_ujian.kode')
