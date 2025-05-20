@@ -100,17 +100,17 @@ class UjianSiswaController extends Controller
             }
         }
         // dd($request->kode);
-    //   $waktu_ujian =  WaktuUjian::where('kode', $request->kode)
-    //     ->where('siswa_id', session()->get('id'))
-    //     ->get();
-    //     // ->update([
-    //     //     'selesai' => 1
-    //     // ]);
-      $waktu_ujian =  WaktuUjian::where('kode', $request->kode)
-        ->where('siswa_id', session()->get('id'))
-        ->update([
-            'selesai' => 1
-        ]);
+        //   $waktu_ujian =  WaktuUjian::where('kode', $request->kode)
+        //     ->where('siswa_id', session()->get('id'))
+        //     ->get();
+        //     // ->update([
+        //     //     'selesai' => 1
+        //     // ]);
+        $waktu_ujian =  WaktuUjian::where('kode', $request->kode)
+            ->where('siswa_id', session()->get('id'))
+            ->update([
+                'selesai' => 1
+            ]);
         // dd($waktu_ujian);
 
         // dd(session()->get('id'));
@@ -143,7 +143,7 @@ class UjianSiswaController extends Controller
         // dd($essay_siswa);
         WaktuUjian::where('kode', $request->kode)
             ->where('siswa_id', session()->get('id'))
-            ->update(['selesai' =>1]);
+            ->update(['selesai' => 1]);
         return redirect('/siswa/instruksi/' . $request->kode_merge_ujian)->with('pesan', "
             <script>
                 swal({
@@ -207,7 +207,7 @@ class UjianSiswaController extends Controller
 
 
         UjianServiceController::startUJian($ujian->kode);
-        // dd($ujian);
+        dd(7);
 
         $waktu_ujian = WaktuUjian::where('kode', $ujian->kode)
             ->where('siswa_id', session()->get('id'))
@@ -278,10 +278,10 @@ class UjianSiswaController extends Controller
             ->get();
 
         $essay_siswa = EssaySiswa::where('kode', $ujian->kode)
-           
+
             ->where('siswa_id', session()->get('id'))
             ->get();
-     
+
         if ($essay_siswa->count() == 0) {
             $data_essay_siswa = [];
             foreach ($ujian->detailessay as $soal) {
@@ -429,13 +429,13 @@ class UjianSiswaController extends Controller
                     ]);
             }
         }
-       
+
         WaktuUjian::where('kode', $request->kode)
             ->where('siswa_id', session()->get('id'))
             ->update([
                 'selesai' => '1'
             ]);
-            // dd($request->kode);
+        // dd($request->kode);
         return redirect('/siswa/instruksi/' . $request->kode_merge_ujian)->with('pesan', "
             <script>
                 swal({
@@ -503,7 +503,7 @@ class UjianSiswaController extends Controller
         //     dd(session()->get('id'));
         // dd($mergeUjian->kode_ujian);
         foreach ($detail_siswa as $value) {
-           $kuiosnerSiswa = KuesionerSiswa::where('detail_kuisoner', $value->id)
+            $kuiosnerSiswa = KuesionerSiswa::where('detail_kuisoner', $value->id)
                 ->where('kode', $mergeUjian->kode_ujian)
                 ->where('siswa_id', session()->get('id'))
                 ->first();
@@ -642,11 +642,11 @@ class UjianSiswaController extends Controller
     }
     public function instruksi($ujian)
     {
-        
+
         try {
             // Atur waktu selesai ujian
             UjianServiceController::setEndTimeForExam($ujian);
-          
+
             // Ambil data merge ujian
             $mergeUjian = MergeUjian::where('merge_ujian.kode', $ujian)
                 ->join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
@@ -667,7 +667,7 @@ class UjianSiswaController extends Controller
                 ->orderBy('rum.urutan', 'asc')
                 // ->orderBy('rum.urutan', 'desc')
                 ->first();
-         
+
 
 
             if (!$mergeUjian) {
@@ -699,7 +699,7 @@ class UjianSiswaController extends Controller
                 } elseif ($mergeUjian->jenis_ujian == 1) {
                     return redirect(url('siswa/ujian_essay/' . $ujian));
                 } elseif ($mergeUjian->jenis_ujian == 2) {
-                    return redirect(url('siswa/ujian_kuesioner/' . $ujian)); 
+                    return redirect(url('siswa/ujian_kuesioner/' . $ujian));
                 } elseif ($mergeUjian->jenis_ujian == 3) {
                     return redirect(url('siswa/ujian_visual/' . $ujian));
                 } elseif ($mergeUjian->jenis_ujian == 'Kuesioner') {

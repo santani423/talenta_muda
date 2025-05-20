@@ -1341,7 +1341,7 @@ class UjianGuruController extends Controller
 
         $results = []; // Initialize an array to store the results
         $processedSiswaIds = []; // Array to keep track of processed siswa IDs
-
+        
         foreach ($ujian->detailujian as $key => $detailujian) {
         }
         // Get total number of questions for the current ujian

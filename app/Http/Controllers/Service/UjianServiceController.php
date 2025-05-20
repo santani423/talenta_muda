@@ -37,7 +37,7 @@ class UjianServiceController extends Controller
             )
             ->orderBy('rum.urutan', 'asc')
             ->first();
-                dd($mergeUjian);
+        // dd($mergeUjian);
         return $mergeUjian;
     }
 
@@ -81,7 +81,7 @@ class UjianServiceController extends Controller
                 ->distinct('rum.id')
                 ->orderBy('rum.urutan', 'asc')
                 ->first();
-                // dd($mergeUjian);
+            // dd($mergeUjian);
         }
 
         $dataEndTime = [
@@ -104,6 +104,7 @@ class UjianServiceController extends Controller
 
         return $dataEndTime;
     }
+
     public static function startUJian($kodeUjian)
     {
         $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
@@ -121,23 +122,26 @@ class UjianServiceController extends Controller
         $endTime = date('Y-m-d H:i', strtotime("+$hours hour +$minutes minute", $timestamp));
 
         $dataEndTime = [
+            'waktu_mulai' => date('Y-m-d H:i'),
             'waktu_berakhir' => $endTime,
             'selesai' => 0
         ];
-
-        
-
-        $waktuUjian->update($dataEndTime);
-
-        $ujian = Ujian::where('kode',$kodeUjian)->first();
         // dd($ujian);
-       
-        if($ujian->jenis == '3'){
+
+        if (!$waktuUjian->waktu_mulai) {
+
+            $waktuUjian->update($dataEndTime);
+        }
+
+        $ujian = Ujian::where('kode', $kodeUjian)->first();
+        // dd($ujian);
+
+        if ($ujian->jenis == '3') {
             $visual_siswa = VisualSiswa::where('kode', $kodeUjian)
-            ->where('siswa_id', session()->get('id'))
-            ->count();
-            if($visual_siswa == 0){
-                $detailVisual = DetailVisual::where('kode',$kodeUjian)->get();
+                ->where('siswa_id', session()->get('id'))
+                ->count();
+            if ($visual_siswa == 0) {
+                $detailVisual = DetailVisual::where('kode', $kodeUjian)->get();
                 foreach ($detailVisual as $key => $value) {
                     VisualSiswa::create([
                         'siswa_id' => session()->get('id'),
@@ -263,9 +267,10 @@ class UjianServiceController extends Controller
         return $ujian;
     }
 
-    public static function pilihan_ganda_siswa($kode,$id){
-        $ujian = Ujian::where('kode',$kode)->first();
-        
+    public static function pilihan_ganda_siswa($kode, $id)
+    {
+        $ujian = Ujian::where('kode', $kode)->first();
+
         $results = []; // Initialize an array to store the results
         $processedSiswaIds = []; // Array to keep track of processed siswa IDs
 
@@ -306,14 +311,14 @@ class UjianServiceController extends Controller
                 $processedSiswaIds[] = $value->siswa_id;
             }
         }
- 
+
         return  $results;
     }
 
-    
-    public static function pilihan_kusoner_siswa($kode,$id)
+
+    public static function pilihan_kusoner_siswa($kode, $id)
     {
-        $ujian = Ujian::where('kode',$kode)->first();
+        $ujian = Ujian::where('kode', $kode)->first();
         $results = []; // Initialize an array to store the results
         $processedSiswaIds = []; // Array to keep track of processed siswa IDs
         //  dd($ujian);
@@ -399,9 +404,9 @@ class UjianServiceController extends Controller
         return  $results;
     }
 
-    public static function pilihan_esay_siswa($kode,$id)
+    public static function pilihan_esay_siswa($kode, $id)
     {
-        $ujian = Ujian::where('kode',$kode)->first();
+        $ujian = Ujian::where('kode', $kode)->first();
         $results = []; // Initialize an array to store the results
         $processedSiswaIds = []; // Array to keep track of processed siswa IDs
 
@@ -464,9 +469,9 @@ class UjianServiceController extends Controller
         return  $results;
     }
 
-    public static function pilihan_visual_siswa($kode,$id)
+    public static function pilihan_visual_siswa($kode, $id)
     {
-        $ujian = Ujian::where('kode',$kode)->first();
+        $ujian = Ujian::where('kode', $kode)->first();
 
 
         $results = []; // Initialize an array to store the results
