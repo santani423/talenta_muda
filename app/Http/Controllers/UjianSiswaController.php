@@ -394,7 +394,8 @@ class UjianSiswaController extends Controller
             }
             EssaySiswa::insert($data_essay_siswa);
         }
-        UjianServiceController::startUJian($mergeUjian->kode_ujian);
+        UjianServiceController::startUJian($mergeUjian->kode_ujian, $ujian);
+
         $waktu_ujian = WaktuUjian::where('kode', $mergeUjian->kode_ujian)
             ->where('siswa_id', session()->get('id'))
             ->first();
@@ -459,7 +460,7 @@ class UjianSiswaController extends Controller
         }
 
 
-        UjianServiceController::startUJian($mergeUjian->kode_ujian);
+        UjianServiceController::startUJian($mergeUjian->kode_ujian,$kodeMergeUjian);
 
 
 
@@ -592,7 +593,7 @@ class UjianSiswaController extends Controller
             ->get();
 
         UjianServiceController::setEndTimeForExam($kodeMergeUjian);
-        UjianServiceController::startUJian($mergeUjian->kode_ujian);
+        UjianServiceController::startUJian($mergeUjian->kode_ujian,$kodeMergeUjian);
 
         $waktu_ujian = WaktuUjian::where('kode', $mergeUjian->kode_ujian)
             ->where('siswa_id', session()->get('id'))

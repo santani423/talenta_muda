@@ -105,7 +105,7 @@ class UjianServiceController extends Controller
         return $dataEndTime;
     }
 
-    public static function startUJian($kodeUjian,$kodeMergeUjian)
+    public static function startUJian($kodeUjian, $kodeMergeUjian)
     {
         $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
             ->where('siswa_id', session()->get('id'))
@@ -131,26 +131,32 @@ class UjianServiceController extends Controller
         if (!$waktuUjian->waktu_mulai) {
 
             $waktuUjian->update($dataEndTime);
-        }else{
-              $mergeUjian = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
-            ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
-            ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
-            ->where('merge_ujian.kode', $kodeMergeUjian)
-            ->where('waktu_ujian.selesai', 1)
-            ->where('waktu_ujian.siswa_id', session()->get('id'))
-            ->select(
-                'rum.*',
-                'waktu_ujian.*',
-                'ujian.jenis as jenis_ujian',
-                'ujian.kode as kode_ujian',
-                'merge_ujian.jam',
-                'merge_ujian.menit',
-                'merge_ujian.kode as merge_ujian_kode'
-            )
-            ->distinct('rum.id')
-            ->orderBy('rum.urutan', 'asc')
-            ->take(2) // ambil 2 data
-            ->get();
+        } else {
+            $mergeUjian = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
+                ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
+                ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
+                ->where('merge_ujian.kode', $kodeMergeUjian)
+                ->where('waktu_ujian.selesai', 1)
+                ->where('waktu_ujian.siswa_id', session()->get('id'))
+                ->select(
+                    'rum.*',
+                    'waktu_ujian.*',
+                    'ujian.jenis as jenis_ujian',
+                    'ujian.kode as kode_ujian',
+                    'merge_ujian.jam',
+                    'merge_ujian.menit',
+                    'merge_ujian.kode as merge_ujian_kode'
+                )
+                ->distinct('rum.id')
+                ->orderBy('rum.urutan', 'asc')
+                ->take(2) // ambil 2 data
+                ->get();
+
+            if ($mergeUjian) {
+                if ($mergeUjian[0]->kode_ujian != $kodeUjian) {
+                    
+                }
+            }
         }
 
         $ujian = Ujian::where('kode', $kodeUjian)->first();
