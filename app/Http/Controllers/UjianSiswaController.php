@@ -24,6 +24,7 @@ use App\Models\SimulasiUjianEssay;
 use App\Models\SimulatorUjianPg;
 use App\Models\SimulatorUjianVisual;
 use App\Models\VisualSiswa;
+use Carbon\Carbon;
 
 class UjianSiswaController extends Controller
 {
@@ -206,7 +207,7 @@ class UjianSiswaController extends Controller
             ->get();
 
 
-        UjianServiceController::startUJian($ujian->kode);
+        UjianServiceController::startUJian($ujian->kode,$kodeMergeUjian);
         // dd(7);
 
         $waktu_ujian = WaktuUjian::where('kode', $ujian->kode)
@@ -216,7 +217,7 @@ class UjianSiswaController extends Controller
         $pg_siswa = PgSiswa::where('kode', $mergeUjian->kode_ujian)
             ->where('siswa_id', session()->get('id'))
             ->get();
-        dd($mergeUjian);
+        // dd($mergeUjian);
         return view('siswa.ujian.merge-ujian-show', [
             'title' => 'Ujian Pilihan Ganda',
             'plugin' => '
@@ -241,8 +242,100 @@ class UjianSiswaController extends Controller
 
     public function cek_waktu_ujian(Request $request)
     {
-         
+
+        // Ambil data merge ujian
+        // $mergeUjian = MergeUjian::where('merge_ujian.kode', $request->kode_merge_ujian)
+        //     ->join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
+        //     ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
+        //     ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
+        //     ->where('waktu_ujian.selesai', 1)
+        //     ->where('waktu_ujian.siswa_id', session()->get('id'))
+        //     ->select(
+        //         'rum.*',
+        //         'waktu_ujian.*',
+        //         'ujian.jenis as jenis_ujian',
+        //         'ujian.kode as kode_ujian',
+        //         'merge_ujian.jam',
+        //         'merge_ujian.menit',
+        //         'merge_ujian.kode as merge_ujian_kode'
+        //     )
+        //     ->distinct('rum.id')
+        //     ->orderBy('rum.urutan', 'asc')
+        //     ->take(2) // ambil 2 data
+        //     ->get();
+        // dd(count($mergeUjian));
+        // // dd($request->all());
+        // $ujian = Ujian::where('kode', $request->kode_ujian)
+        //     ->first();
+        // if (count($mergeUjian) < 2) {
+
+        //     $cekWaktu = $this->cekSisaWaktuUjian($request->waktu_ujian_id, $request->kode_ujian);
+        //     // Anda bisa memproses hasil $cekWaktu sesuai kebutuhan, misal logging atau return response
+
+        //     return $cekWaktu;
+        // } else {
+        //     // dd($mergeUjian);
+        //     $data1 = $mergeUjian[0];
+        //     $data2 = $mergeUjian[1];
+        //     $totalMenit = $this->hitungRentangWaktuDalamMenit($data1->waktu_mulai, $data2->waktu_mulai);
+        //     $jam = $ujian->jam;
+        //     $menit =  $ujian->menit;
+
+
+        //     $batasWaktuMenit = ($jam * 60) + $menit;
+        //     if ($totalMenit >= $batasWaktuMenit) {
+        //         $cekWaktu = $this->cekSisaWaktuUjian($request->waktu_ujian_id, $request->kode_ujian);
+        //         return response()->json(['status' => 'expired', 'message' => 'Waktu ujian telah habis.']);
+        //     }
+        //     dd($totalMenit);
+        // }
     }
+
+    function hitungRentangWaktuDalamMenit($startDateTime, $endDateTime)
+    {
+        $start = Carbon::parse($startDateTime);
+        $end = Carbon::parse($endDateTime);
+
+        return $start->diffInMinutes($end);
+    }
+
+    public function cekSisaWaktuUjian($waktu_ujian_id, $kode_ujian = null)
+    {
+        $ujian = Ujian::where('kode', $kode_ujian)
+            ->first();
+        $waktu_ujian = WaktuUjian::where('id', $waktu_ujian_id)
+            ->where('siswa_id', session()->get('id'))
+            ->first();
+
+        if (!$waktu_ujian) {
+            return response()->json(['message' => 'Waktu ujian tidak ditemukan'], 404);
+        }
+        $jam = $ujian->jam;
+        $menit =  $ujian->menit;
+
+
+        $batasWaktuMenit = ($jam * 60) + $menit;
+
+        $targetTime = Carbon::parse($waktu_ujian->waktu_mulai);
+        $now = Carbon::now();
+        $waktuAkhir = $targetTime->copy()->addMinutes($batasWaktuMenit);
+
+        if ($now->greaterThan($waktuAkhir)) {
+            return response()->json(['status' => 'expired', 'message' => 'Waktu ujian telah habis.']);
+        } else {
+            $diffInMinutes = $now->diffInMinutes($waktuAkhir, false);
+            $jam = floor($diffInMinutes / 60);
+            $menit = $diffInMinutes % 60;
+
+            return response()->json([
+                'status' => 'active',
+                'message' => "Sisa waktu ujian: $jam jam $menit menit lagi.",
+                'jam' => $jam,
+                'menit' => $menit
+            ]);
+        }
+    }
+
 
 
 
