@@ -9,7 +9,7 @@ class WaktuUjian extends Model
 {
     public $table = 'waktu_ujian';
     // Disable the model timestamps
-    public $timestamps = false;
+    // public $timestamps = false;
     use HasFactory;
 
     protected $guarded = ['id'];

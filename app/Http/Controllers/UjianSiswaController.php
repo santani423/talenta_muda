@@ -207,7 +207,7 @@ class UjianSiswaController extends Controller
 
 
         UjianServiceController::startUJian($ujian->kode);
-        dd(7);
+        // dd(7);
 
         $waktu_ujian = WaktuUjian::where('kode', $ujian->kode)
             ->where('siswa_id', session()->get('id'))
@@ -216,7 +216,7 @@ class UjianSiswaController extends Controller
         $pg_siswa = PgSiswa::where('kode', $mergeUjian->kode_ujian)
             ->where('siswa_id', session()->get('id'))
             ->get();
-        // dd($ujian);
+        dd($mergeUjian);
         return view('siswa.ujian.merge-ujian-show', [
             'title' => 'Ujian Pilihan Ganda',
             'plugin' => '
@@ -238,6 +238,14 @@ class UjianSiswaController extends Controller
             'waktu_ujian' => $waktu_ujian
         ]);
     }
+
+    public function cek_waktu_ujian(Request $request)
+    {
+         
+    }
+
+
+
     public function essay($ujian)
     {
         $mergeUjian = MergeUjian::where('merge_ujian.kode', $ujian)
@@ -668,7 +676,7 @@ class UjianSiswaController extends Controller
                 // ->orderBy('rum.urutan', 'desc')
                 ->first();
 
-
+            // dd($mergeUjian);
 
             if (!$mergeUjian) {
                 throw new \Exception("Data Merge Ujian tidak ditemukan.");

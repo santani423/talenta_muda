@@ -238,6 +238,9 @@ Route::post('/siswa/ujian_kuesioner', [UjianSiswaController::class, 'store_ujian
 Route::get('/siswa/ujian_essay/{ujian:kode}', [UjianSiswaController::class, 'essay'])->middleware('is_siswa');
 Route::post('/siswa/ujian_essay', [UjianSiswaController::class, 'store_essay'])->middleware('is_siswa');
 
+// Route::post('/siswa/cek-waktu-ujian', [UjianSiswaController::class, 'cek_waktu_ujian'])->middleware('is_siswa');
+Route::post('/siswa/cek-waktu-ujian', [UjianSiswaController::class, 'cek_waktu_ujian']);
+
 
 Route::post('/upload-soal', [UjianSiswaController::class, 'uploadSoal']); 
 Route::post('/upload-soal-visual', [UjianSiswaController::class, 'uploadSoalVisual']); 
