@@ -15,6 +15,11 @@
                                 <div class="widget-heading">
                                     <h5 class="">Laporan Ujian Peserta</h5>
                                 </div>
+                                <div id="chart_div" style="width: 100%; height: 500px;">
+                                    <canvas id="pointStyleChart" width="400" height="300"></canvas>
+                                </div>
+
+
                                 <form action="{{ url('guru/laporan_ujian_siswa') }}" method="GET" class="mt-3 d-flex"
                                     role="search">
                                     <input type="text" name="search" class="form-control me-2"
@@ -135,6 +140,39 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('pointStyleChart').getContext('2d');
+        const pointStyleChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+                datasets: [{
+                    label: 'Nilai Siswa',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    pointStyle: 'rectRot',
+                    pointRadius: 8,
+                    pointBorderColor: 'rgb(75, 192, 192)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)'
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
     <!-- MODAL -->
     <script>
         let itemPrint = '';
@@ -211,7 +249,7 @@
                     }
                     if (data.typeUjian == 2) {
                         jumlahKolom2 = data.siswa.length > jumlahKolom ? data.siswa.length :
-                        jumlahKolom;
+                            jumlahKolom;
                     }
                 });
 
@@ -283,11 +321,12 @@
                         `id="kualifikasiIq">Kualifikasi IQ: -</p>`);
                 }
 
+
                 results.forEach((data) => {
                     if (data.typeUjian == 2) {
                         htmlContent += `
                 <div class="mt-4"  style="page-break-before: always;"> 
-                <p class="mt-4" style="color: black;">${data?.ujian?.nama}</p></p>`;
+                <p class="mt-4" style="color: black;">${data?.ujian?.nama}  </p></p>`;
 
                         let noKusoner = 0;
                         htmlContent +=
@@ -309,7 +348,7 @@
                         if (data.facet.some(facet => facet?.totalScore != 0)) {
                             data.facet.forEach((facet, ndxFacet) => {
                                 htmlContent +=
-                                    `     <div class="col-md-6" style="color: black;">${facet?.domain}: ${facet?.totalScore}</div>`;
+                                    `     <div class="col-md-6" style="color: black;">${facet?.domain}: ${facet?.totalScore}--</div>`;
                             });
                         }
                         htmlContent += `   </div>`;
@@ -317,7 +356,7 @@
 
                         if (data?.sekala?.average_scores?.some(sekala => sekala?.average_score != 0)) {
                             if (data?.skorNilai) {
-                                let  total_score5_1 = 0;
+                                let total_score5_1 = 0;
                                 data?.sekala?.average_scores?.forEach((sekala, ndxsekala) => {
                                     htmlContent +=
                                         `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.total_score}</div>`;
@@ -344,7 +383,85 @@
                         }
                         htmlContent += `   </div>`;
                         htmlContent += `    </div>`; // penutup div yang kurang
+                        results.forEach((subData) => {
+                            console.log('facetfacetwertyui', subData?.ujian?.kode);
+
+                            if (subData.typeUjian == 2 && data?.ujian?.kode == "part5_1") {
+                                if (subData.facet.some(facet => facet?.totalScore != 0)) {
+                                    subData.facet.forEach((facet, ndxFacet) => {
+                                        // ID unik untuk setiap chart
+                                        const canvasId = `pointStyleChart_${ndxFacet}`;
+
+                                        htmlContent += `
+        <div class="mt-4" style="page-break-before: always;">
+            <p class="mt-4" style="color: black;">${subData?.ujian?.nama} - ${facet?.domain}</p>
+            <canvas id="${canvasId}" width="400" height="200"></canvas>
+        </div>
+    `;
+
+                                        // Pastikan script Chart.js dijalankan setelah elemen dimasukkan ke DOM
+                                        setTimeout(() => {
+                                            const ctx = document.getElementById(
+                                                canvasId)?.getContext('2d');
+                                            if (ctx) {
+                                                new Chart(ctx, {
+                                                    type: 'line',
+                                                    data: {
+                                                        labels: facet
+                                                            ?.labels ||
+                                                            ['Senin',
+                                                                'Selasa',
+                                                                'Rabu',
+                                                                'Kamis',
+                                                                'Jumat',
+                                                                'Sabtu',
+                                                                'Minggu'
+                                                            ],
+                                                        datasets: [{
+                                                            label: 'Nilai Siswa',
+                                                            data: facet
+                                                                ?.nilai ||
+                                                                [65, 59,
+                                                                    80,
+                                                                    81,
+                                                                    56,
+                                                                    55,
+                                                                    40
+                                                                ],
+                                                            fill: false,
+                                                            borderColor: 'rgb(75, 192, 192)',
+                                                            tension: 0.1,
+                                                            pointStyle: 'rectRot',
+                                                            pointRadius: 8,
+                                                            pointBorderColor: 'rgb(75, 192, 192)',
+                                                            pointBackgroundColor: 'rgb(255, 99, 132)'
+                                                        }]
+                                                    },
+                                                    options: {
+                                                        plugins: {
+                                                            legend: {
+                                                                display: true
+                                                            }
+                                                        },
+                                                        scales: {
+                                                            y: {
+                                                                beginAtZero: true
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        100); // beri jeda agar canvas sudah tersedia di DOM
+                                    });
+
+                                }
+                            }
+
+                        });
                     }
+                    // facet
+
                 });
 
                 itemPrint = element.innerHTML + htmlContent;

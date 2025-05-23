@@ -99,8 +99,8 @@ class PenilaianSiswaController extends Controller
         // dd($totalNilai);
 
         $facet = $this->facet($id, $kode);
+        // dd($facet);
         $sekala = $this->sekala($id, $kode);
-        // dd($sekala);
 
         try {
             $kuisonerItem = KuesionerSiswa::where('kuesioner_siswa.siswa_id', $id)
@@ -348,15 +348,17 @@ class PenilaianSiswaController extends Controller
             ->join('detail_kuisoner', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner.id')
             ->join('detail_jawaban_kuesioner', 'kuesioner_siswa.detail_jawaban_kuesioner_id', '=', 'detail_jawaban_kuesioner.id')
             ->join('detail_kuisoner_facets', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner_facets.detail_kuisoner_id')
+            ->join('facets', 'facets.code', '=', 'detail_kuisoner_facets.kode_facet')
             ->where('kuesioner_siswa.kode', $kode)
             ->select(
                 'kuesioner_siswa.*',
                 'detail_jawaban_kuesioner.kode as jawaban',
                 'detail_kuisoner_facets.*',
+                'facets.deskripsi as deskripsi_facet',
                 'detail_kuisoner.item as kuisoner_item'
             )
             ->get();
-
+        //    dd($pgs); 
         foreach ($pgs as $pg) {
             $jawabanKode = $pg->jawaban;
             $kuisonerItem = $pg->kuisoner_item;
@@ -385,12 +387,13 @@ class PenilaianSiswaController extends Controller
 
             $results[] = [
                 'facet_code' => $pg->kode_facet,
+                'deskripsi_facet' => $pg->deskripsi_facet,
                 'jawaban_kode' => $jawabanKode,
                 'kuisoner_item' => $kuisonerItem,
                 'score' => $score
             ];
         }
-
+        // dd($results);
         $domainFacet = Domain::with('domainFacet')->get();
         $facetCodes = [];
 
@@ -406,16 +409,38 @@ class PenilaianSiswaController extends Controller
 
         foreach ($facetCodes as $value) {
             $domain = $value['deskripsi'];
+            // dd($value);
             $filteredResults = array_filter($results, function ($result) use ($value) {
                 return in_array($result['facet_code'], $value['facet']);
             });
+            
 
+            $grouped = [];
+
+            foreach ($filteredResults as $item) {
+                $facetData = $item['deskripsi_facet'];
+                $score = $item['score'];
+
+                if (!isset($grouped[$facetData])) {
+                    $grouped[$facetData] = [
+                        'deskripsi_facet' => $facetData,
+                        'total_score' => 0,
+                        'items' => []
+                    ];
+                }
+
+                $grouped[$facetData]['total_score'] += $score;
+                $grouped[$facetData]['items'][] = $item;
+            }
+
+            
             $totalScore = array_reduce($filteredResults, function ($carry, $item) {
                 return $carry + $item['score'];
             }, 0);
-
+            // dd($domain);
             $facet[] = [
                 'domain' => $domain,
+                'subdomain' => $grouped,
                 'results' => $filteredResults,
                 'totalScore' => $totalScore,
             ];
@@ -453,7 +478,7 @@ class PenilaianSiswaController extends Controller
                     // dd($jawaban);
                     $score = $jawaban == $jawabanKode ? 1 : 0;
                     if ($jawaban == $jawabanKode) {
-                       
+
                         $score = 1;
                     } else {
                         $score = 0;
