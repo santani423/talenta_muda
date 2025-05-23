@@ -210,11 +210,13 @@
                         jumlahKolom = data.siswa.length > jumlahKolom ? data.siswa.length : jumlahKolom;
                     }
                     if (data.typeUjian == 2) {
-                        jumlahKolom2 = data.siswa.length > jumlahKolom ? data.siswa.length : jumlahKolom;
+                        jumlahKolom2 = data.siswa.length > jumlahKolom ? data.siswa.length :
+                        jumlahKolom;
                     }
                 });
 
-                htmlContent = `<div class="table-responsive"><table border="1" style="width:100%; color: black;">`;
+                htmlContent =
+                    `<div class="table-responsive"><table border="1" style="width:100%; color: black;">`;
 
                 htmlContent += `<tr>`;
 
@@ -231,7 +233,8 @@
                         if (data.typeUjian != 2) {
                             let jawaban = (data?.siswa[i]?.jawaban ?? '-').toLowerCase();
                             let kunci_jawaban = (data?.siswa[i]?.kunci_jawaban ?? '-').toLowerCase();
-                            let jawaban_essay = data?.siswa[i]?.jawaban_essay?.jawaban_essay?.length ?? 0;
+                            let jawaban_essay = data?.siswa[i]?.jawaban_essay?.jawaban_essay?.length ??
+                                0;
 
                             htmlContent +=
                                 `<td style="width: auto;">
@@ -269,11 +272,15 @@
                     const skorIq = tScoreResponse?.kalenderScore?.nilai ?? '-';
                     const kualifikasiIq = tScoreResponse?.klasifikasi?.klasifikasi ?? '-';
                     // Replace placeholder in htmlContent
-                    htmlContent = htmlContent.replace('id="skorIq">Skor IQ :  </p>', `id="skorIq">Skor IQ : ${skorIq}</p>`);
-                    htmlContent = htmlContent.replace('id="kualifikasiIq">Kualifikasi IQ:  </p>', `id="kualifikasiIq">Kualifikasi IQ: ${kualifikasiIq}</p>`);
+                    htmlContent = htmlContent.replace('id="skorIq">Skor IQ :  </p>',
+                        `id="skorIq">Skor IQ : ${skorIq}</p>`);
+                    htmlContent = htmlContent.replace('id="kualifikasiIq">Kualifikasi IQ:  </p>',
+                        `id="kualifikasiIq">Kualifikasi IQ: ${kualifikasiIq}</p>`);
                 } catch (error) {
-                    htmlContent = htmlContent.replace('id="skorIq">Skor IQ :  </p>', `id="skorIq">Skor IQ : -</p>`);
-                    htmlContent = htmlContent.replace('id="kualifikasiIq">Kualifikasi IQ:  </p>', `id="kualifikasiIq">Kualifikasi IQ: -</p>`);
+                    htmlContent = htmlContent.replace('id="skorIq">Skor IQ :  </p>',
+                        `id="skorIq">Skor IQ : -</p>`);
+                    htmlContent = htmlContent.replace('id="kualifikasiIq">Kualifikasi IQ:  </p>',
+                        `id="kualifikasiIq">Kualifikasi IQ: -</p>`);
                 }
 
                 results.forEach((data) => {
@@ -310,8 +317,14 @@
 
                         if (data?.sekala?.average_scores?.some(sekala => sekala?.average_score != 0)) {
                             if (data?.skorNilai) {
+                                let  total_score5_1 = 0;
+                                data?.sekala?.average_scores?.forEach((sekala, ndxsekala) => {
+                                    htmlContent +=
+                                        `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.total_score}</div>`;
+                                    total_score5_1 += sekala?.total_score;
+                                });
                                 htmlContent +=
-                                    `<div class="col-md-12 mt-5" style="color: black; text-align: center; font-weight: bold;">Skor  : ${data?.kuisonersBenarSalah?.totalNilai}</div>`;
+                                    `<div class="col-md-12 mt-5" style="color: black; text-align: center; font-weight: bold;">Skor  : ${total_score5_1}</div>`;
                             } else {
                                 data?.sekala?.average_scores?.forEach((sekala, ndxsekala) => {
                                     htmlContent +=
@@ -323,6 +336,8 @@
                             }
                         } else {
                             if (data?.skorNilai) {
+                                console.log('skornilai51', data?.sekala);
+
                                 htmlContent +=
                                     `<div class="col-md-12 mt-5" style="color: black; text-align: center; font-weight: bold;">Skor  : ${data?.kuisonersBenarSalah?.totalNilai}</div>`;
                             }

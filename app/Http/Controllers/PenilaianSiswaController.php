@@ -75,7 +75,7 @@ class PenilaianSiswaController extends Controller
                 'detail_jawaban_kuesioner.pilihan_kuesioner'
             )
             ->get();
-
+        // dd($kuisoners);
 
 
         $totalNilai = 0;
@@ -96,7 +96,7 @@ class PenilaianSiswaController extends Controller
             }
             $totalNilai += $kuisonersBenarSalah->nilai;
         }
-
+        // dd($totalNilai);
 
         $facet = $this->facet($id, $kode);
         $sekala = $this->sekala($id, $kode);
@@ -203,7 +203,7 @@ class PenilaianSiswaController extends Controller
                 'nilai' => $nilai,
             ];
         }
- 
+
 
         try {
             $kuisonerItem = KuesionerSiswa::where('kuesioner_siswa.siswa_id', $id)
@@ -437,39 +437,54 @@ class PenilaianSiswaController extends Controller
                 'detail_jawaban_kuesioner.kode as jawaban',
                 'detail_kuisoner_sekalas.*',
                 'sekalas.sekala as keterangan',
-                'detail_kuisoner.item as kuisoner_item'
+                'detail_kuisoner.item as kuisoner_item',
+                'detail_kuisoner.jawaban as kuisoner_jawaban',
             )
             ->get();
+        // dd($kuisoners);
         $results = [];
         if ($kuisoners->count() > 0) {
             foreach ($kuisoners as $kuisoner) {
                 $jawabanKode = $kuisoner->jawaban;
                 $kuisonerItem = $kuisoner->kuisoner_item;
+                $jawaban = str_replace(' ', '', $kuisoner->kuisoner_jawaban);
                 $score = 0;
-
-                switch ($jawabanKode) {
-                    case 'STS':
-                        $score = ($kuisonerItem == 'pos') ? 5 : 1;
-                        break;
-                    case 'TS':
-                        $score = ($kuisonerItem == 'pos') ? 4 : 2;
-                        break;
-                    case 'N':
-                        $score = 3;
-                        break;
-                    case 'S':
-                        $score = ($kuisonerItem == 'pos') ? 2 : 4;
-                        break;
-                    case 'SS':
-                        $score = ($kuisonerItem == 'pos') ? 1 : 5;
-                        break;
-                    default:
+                if ($jawaban) {
+                    // dd($jawaban);
+                    $score = $jawaban == $jawabanKode ? 1 : 0;
+                    if ($jawaban == $jawabanKode) {
+                       
+                        $score = 1;
+                    } else {
                         $score = 0;
-                        break;
+                    }
+                } else {
+                    switch ($jawabanKode) {
+                        case 'STS':
+                            $score = ($kuisonerItem == 'pos') ? 5 : 1;
+                            break;
+                        case 'TS':
+                            $score = ($kuisonerItem == 'pos') ? 4 : 2;
+                            break;
+                        case 'N':
+                            $score = 3;
+                            break;
+                        case 'S':
+                            $score =  ($kuisonerItem == 'pos') ? 2 : 4;
+                            break;
+                        case 'SS':
+                            $score = ($kuisonerItem == 'pos') ? 1 : 5;
+                            break;
+                        default:
+                            $score = 0;
+                            break;
+                    }
                 }
+
 
                 $results[] = [
                     'kode_sekala' => $kuisoner->kode_sekala,
+                    'jawaban' => $jawaban,
                     'jawaban_kode' => $jawabanKode,
                     'kuisoner_item' => $kuisonerItem,
                     'score' => $score,
@@ -478,6 +493,7 @@ class PenilaianSiswaController extends Controller
             }
 
             $groupedResults = collect($results)->groupBy('kode_sekala');
+            // dd($groupedResults);
             $averageScores = [];
             foreach ($groupedResults as $kode_sekala => $items) {
                 $totalScore = $items->sum('score');
@@ -497,14 +513,17 @@ class PenilaianSiswaController extends Controller
             }
 
             $totalAverageScore = collect($averageScores)->sum('total_score') / count($averageScores);
+            $totalNilai = collect($averageScores)->sum('total_score');
             return [
                 'average_scores' => $averageScores,
-                'total_average_score' => number_format($totalAverageScore, 2)
+                'total_average_score' => number_format($totalAverageScore, 2),
+                'totalNilai' => number_format($totalNilai, 2)
             ];
         } else {
             return [
                 'average_scores' => [],
-                'total_average_score' => 0
+                'total_average_score' => 0,
+                'totalNilai' => 0,
             ];
         }
     }
