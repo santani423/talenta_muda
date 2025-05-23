@@ -254,6 +254,7 @@ Route::get('/siswa/pg/{siswa_id}/{kode}', [PenilaianSiswaController::class, 'uja
 Route::get('/siswa/visual/{siswa_id}/{kode}', [PenilaianSiswaController::class, 'ujan_visual']);
 Route::get('/siswa/essay/{siswa_id}/{kode}', [PenilaianSiswaController::class, 'ujan_essay']);
 Route::get('/siswa/kuisoner/{siswa_id}/{kode}', [PenilaianSiswaController::class, 'ujan_kuisoner']);
+Route::get('/siswa/kuisoner/sekala/{siswa_id}/{kode}', [PenilaianSiswaController::class, 'ujan_kuisoner_sekala']);
 
 Route::get('/tscore', [TScoreController::class, 'index']);
 

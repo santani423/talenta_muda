@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailKuisoner;
+use App\Models\DetailKuisonerSekala;
 use App\Models\Domain;
 use App\Models\EssaySiswa;
 use App\Models\Facet;
+use App\Models\IntruksiUjian;
 use App\Models\JawabanEssay;
 use App\Models\KuesionerSiswa;
 use App\Models\PgSiswa;
+use App\Models\Sekala;
 use App\Models\Ujian;
 use App\Models\VisualSiswa;
 use Illuminate\Http\Request;
@@ -94,9 +97,10 @@ class PenilaianSiswaController extends Controller
             $totalNilai += $kuisonersBenarSalah->nilai;
         }
 
-        // dd($totalNilai);
+
         $facet = $this->facet($id, $kode);
         $sekala = $this->sekala($id, $kode);
+        // dd($sekala);
 
         try {
             $kuisonerItem = KuesionerSiswa::where('kuesioner_siswa.siswa_id', $id)
@@ -117,6 +121,109 @@ class PenilaianSiswaController extends Controller
                     'kuisoner' => $kuisonerItem,
                     'sekala' => $sekala,
                     'facet' => $facet,
+                    'skorNilai' => $skorNilai,
+                    'kuisonersBenarSalah' => [
+                        'totalNilai' => $totalNilai,
+                        'kuisoner' =>  $kuisonersBenarSalah,
+                    ],
+                ],
+                'message' => 'Data retrieved successfully',
+                'code' => 200
+            ];
+            $status = 200;
+        } catch (\Exception $e) {
+            $response = [
+                'status' => 'error',
+                'message' => 'An error occurred: ' . $e->getMessage(),
+                'code' => 500
+            ];
+            $status = 500;
+        }
+        return response()->json($response, $status);
+    }
+
+    public function ujan_kuisoner_sekala($id, $kode)
+    {
+
+
+        $totalNilai = 0;
+        $skorNilai = false;
+        $kuisonersBenarSalah = [];
+        $kuisoner = [];
+        $sekala = Sekala::get();
+
+        foreach ($sekala as $key => $value) {
+            $kuisoners = KuesionerSiswa::where('kuesioner_siswa.siswa_id', $id)
+                ->rightJoin('detail_kuisoner', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner.id')
+                ->leftJoin('detail_jawaban_kuesioner', 'kuesioner_siswa.detail_jawaban_kuesioner_id', '=', 'detail_jawaban_kuesioner.id')
+                ->join('detail_kuisoner_sekalas', 'detail_kuisoner.id', '=', 'detail_kuisoner_sekalas.detail_kuisoner_id')
+                ->join('sekalas', 'detail_kuisoner_sekalas.kode_sekala', '=', 'sekalas.kode')
+                ->where('kuesioner_siswa.kode', $kode)
+                ->where('sekalas.kode', $value->kode)
+                ->select(
+                    'kuesioner_siswa.*',
+                    'detail_jawaban_kuesioner.kode as jawaban',
+                    'detail_kuisoner.item as kuisoner_item',
+                    'detail_jawaban_kuesioner.pilihan_kuesioner',
+                    'detail_kuisoner_sekalas.kode_sekala',
+                )
+                ->get();
+
+            $nilai = 0;
+
+            foreach ($kuisoners as $k) {
+                $itemType = $k->kuisoner_item;
+                $jawaban = $k->jawaban;
+
+                switch ($jawaban) {
+                    case 'STS':
+                        $nilai += ($itemType === 'pos') ? 5 : 1;
+                        break;
+                    case 'TS':
+                        $nilai += ($itemType === 'pos') ? 4 : 2;
+                        break;
+                    case 'N':
+                        $nilai += 3;
+                        break;
+                    case 'S':
+                        $nilai += ($itemType === 'pos') ? 2 : 4;
+                        break;
+                    case 'SS':
+                        $nilai += ($itemType === 'pos') ? 1 : 5;
+                        break;
+                    default:
+                        $nilai += 0;
+                        break;
+                }
+            }
+
+            $kuisoner[] = [
+                'kode_sekala' => $value->kode,
+                'sekala' => $value->sekala,
+                'nilai' => $nilai,
+            ];
+        }
+ 
+
+        try {
+            $kuisonerItem = KuesionerSiswa::where('kuesioner_siswa.siswa_id', $id)
+                ->rightJoin('detail_kuisoner', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner.id')
+                ->leftJoin('detail_jawaban_kuesioner', 'kuesioner_siswa.detail_jawaban_kuesioner_id', '=', 'detail_jawaban_kuesioner.id')
+                ->where('kuesioner_siswa.kode', $kode)
+                ->select('kuesioner_siswa.*', 'detail_jawaban_kuesioner.kode as jawaban', 'detail_kuisoner.jenis_jawaban_kuesioner_id as jenis_jawaban_kuesioner_id')
+                ->get()
+                ->chunk(20)
+                ->toArray();
+            $ujian = Ujian::where('ujian.kode', $kode)
+                ->leftJoin('detail_kuisoner', 'detail_kuisoner.kode', '=', 'ujian.kode')
+                ->first();
+            $response = [
+                'status' => 'success',
+                'data' => [
+                    'ujian' => $ujian,
+                    'kuisoner' => $kuisonerItem,
+                    'sekala' => $sekala,
+                    // 'facet' => $facet,
                     'skorNilai' => $skorNilai,
                     'kuisonersBenarSalah' => [
                         'totalNilai' => $totalNilai,
@@ -389,7 +496,7 @@ class PenilaianSiswaController extends Controller
                 ];
             }
 
-            $totalAverageScore = collect($averageScores)->sum('average_score') / count($averageScores);
+            $totalAverageScore = collect($averageScores)->sum('total_score') / count($averageScores);
             return [
                 'average_scores' => $averageScores,
                 'total_average_score' => number_format($totalAverageScore, 2)

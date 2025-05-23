@@ -315,7 +315,7 @@
                             } else {
                                 data?.sekala?.average_scores?.forEach((sekala, ndxsekala) => {
                                     htmlContent +=
-                                        `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.average_score}</div>`;
+                                        `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.total_score}</div>`;
                                 });
                                 htmlContent +=
                                     `   
