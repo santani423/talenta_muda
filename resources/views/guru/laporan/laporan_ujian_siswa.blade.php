@@ -348,7 +348,7 @@
                         if (data.facet.some(facet => facet?.totalScore != 0)) {
                             data.facet.forEach((facet, ndxFacet) => {
                                 htmlContent +=
-                                    `     <div class="col-md-6" style="color: black;">${facet?.domain}: ${facet?.totalScore}--</div>`;
+                                    `     <div class="col-md-6" style="color: black;">${facet?.domain}: ${facet?.totalScore}</div>`;
                             });
                         }
                         htmlContent += `   </div>`;
