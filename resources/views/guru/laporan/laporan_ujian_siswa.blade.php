@@ -383,121 +383,123 @@
                         }
                         htmlContent += `   </div>`;
                         htmlContent += `    </div>`; // penutup div yang kurang
-    //                     results.forEach((subData) => {
-    //                         console.log('facetfacetwertyui', subData?.ujian?.kode);
+                        results.forEach((subData) => {
+                            console.log('facetfacetwertyui', subData?.ujian?.kode);
 
-    //                         if (subData.typeUjian == 2 && data?.ujian?.kode == "part5_1") {
-    //                             if (subData.facet.some(facet => facet?.totalScore != 0)) {
-    //                                 subData.facet.forEach((facet, ndxFacet) => {
-    //                                     // ID unik untuk setiap chart
-    //                                     const canvasId = `pointStyleChart_${ndxFacet}`;
+                            if (subData.typeUjian == 2 && data?.ujian?.kode == "part5_1") {
+                                if (subData.facet.some(facet => facet?.totalScore != 0)) {
+                                    subData.facet.forEach((facet, ndxFacet) => {
+                                        //   ID unik untuk setiap chart
+                                        const canvasId = `pointStyleChart_${ndxFacet}`;
+                                        console.log('subDatafacet', facet?.subdomain);
 
-    //                                     htmlContent += `
-    //     <div class="mt-4" style="page-break-before: always;">
-    //         <p class="mt-4" style="color: black;">${subData?.ujian?.nama} - ${facet?.domain}</p>
-    //         <canvas id="${canvasId}" width="400" height="200"></canvas>
-    //         <canvas id="${canvasId}google" width="400" height="200"></canvas>
-    //     </div>
+                                        htmlContent += `
+     <div class="mt-4" style="page-break-before: always;">
+         <p class="mt-4" style="color: black;">${subData?.ujian?.nama} - ${facet?.domain}</p>
+         <canvas id="${canvasId}"  ></canvas> 
+     </div>
+ `;
+
+htmlContent += `<table border="1">
+    <thead></thead>`;
+                                        Object.values(facet?.subdomain).forEach(f => {
+                                            htmlContent += `
+        <tr>
+            <th colspan="6" style="text-align:left">Deskripsi Facet: ${f.deskripsi_facet} | Total Score: ${f.total_score}</th>
+        </tr>
+    `;
+
+    //                                         htmlContent += `
+    //     <tr>
+    //         <th>Deskripsi Facet</th>
+    //         <th>Total Score</th>
+    //         <th>Facet Code</th>
+    //         <th>Jawaban Kode</th>
+    //         <th>Kuesioner Item</th>
+    //         <th>Score</th>
+    //     </tr>
     // `;
 
-    //                                     google.charts.load('current', {
-    //                                         'packages': ['corechart']
-    //                                     });
-    //                                     google.charts.setOnLoadCallback(drawChart);
+    //                                         f.items.forEach(item => {
+    //                                             htmlContent += `
+    //         <tr>
+    //             <td>${item.deskripsi_facet}</td>
+    //             <td>${f.total_score}</td>
+    //             <td>${item.facet_code}</td>
+    //             <td>${item.jawaban_kode}</td>
+    //             <td>${item.kuisoner_item}</td>
+    //             <td>${item.score}</td>
+    //         </tr>
+    //     `;
+    //                                         });
+                                        });
 
-    //                                     function drawChart() {
-    //                                         var data = google.visualization
-    //                                             .arrayToDataTable([
-    //                                                 ['Year', 'Sales', 'Expenses'],
-    //                                                 ['2013', 1000, 400],
-    //                                                 ['2014', 1170, 460],
-    //                                                 ['2015', 660, 1120],
-    //                                                 ['2016', 1030, 540]
-    //                                             ]);
+htmlContent += `<tbody id="your-table-body-id"></tbody>
+</table>`;
 
-    //                                         var options = {
-    //                                             title: 'Company Performance',
-    //                                             hAxis: {
-    //                                                 title: 'Year',
-    //                                                 titleTextStyle: {
-    //                                                     color: '#333'
-    //                                                 }
-    //                                             },
-    //                                             vAxis: {
-    //                                                 minValue: 0
-    //                                             }
-    //                                         };
+                                        // Pastikan script Chart.js dijalankan setelah elemen dimasukkan ke DOM
+                                        setTimeout(() => {
+                                                //  const ctx = document.getElementById(
+                                                //      canvasId)?.getContext('2d');
+                                                if (ctx) {
+                                                    new Chart(ctx, {
+                                                        type: 'line',
+                                                        data: {
+                                                            labels: facet
+                                                                ?.labels ||
+                                                                ['Senin',
+                                                                    'Selasa',
+                                                                    'Rabu',
+                                                                    'Kamis',
+                                                                    'Jumat',
+                                                                    'Sabtu',
+                                                                    'Minggu'
+                                                                ],
+                                                            datasets: [{
+                                                                label: 'Nilai Siswa',
+                                                                data: facet
+                                                                    ?.nilai ||
+                                                                    [65, 59,
+                                                                        80,
+                                                                        81,
+                                                                        56,
+                                                                        55,
+                                                                        40
+                                                                    ],
+                                                                fill: false,
+                                                                borderColor: 'rgb(75, 192, 192)',
+                                                                tension: 0.1,
+                                                                pointStyle: 'rectRot',
+                                                                pointRadius: 8,
+                                                                pointBorderColor: 'rgb(75, 192, 192)',
+                                                                pointBackgroundColor: 'rgb(255, 99, 132)'
+                                                            }]
+                                                        },
+                                                        options: {
+                                                            plugins: {
+                                                                legend: {
+                                                                    display: true
+                                                                }
+                                                            },
+                                                            scales: {
+                                                                y: {
+                                                                    beginAtZero: true
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            },
+                                            100
+                                        ); // beri jeda agar canvas sudah tersedia di DOM
+                                    });
 
-    //                                         var chart = new google.visualization
-    //                                             .AreaChart(document.getElementById(
-    //                                                 `${canvasId}google`));
-    //                                         chart.draw(data, options);
-    //                                     }
+                                }
+                            }
 
-
-    //                                     // Pastikan script Chart.js dijalankan setelah elemen dimasukkan ke DOM
-    //                                     setTimeout(() => {
-    //                                             const ctx = document.getElementById(
-    //                                                 canvasId)?.getContext('2d');
-    //                                             if (ctx) {
-    //                                                 new Chart(ctx, {
-    //                                                     type: 'line',
-    //                                                     data: {
-    //                                                         labels: facet
-    //                                                             ?.labels ||
-    //                                                             ['Senin',
-    //                                                                 'Selasa',
-    //                                                                 'Rabu',
-    //                                                                 'Kamis',
-    //                                                                 'Jumat',
-    //                                                                 'Sabtu',
-    //                                                                 'Minggu'
-    //                                                             ],
-    //                                                         datasets: [{
-    //                                                             label: 'Nilai Siswa',
-    //                                                             data: facet
-    //                                                                 ?.nilai ||
-    //                                                                 [65, 59,
-    //                                                                     80,
-    //                                                                     81,
-    //                                                                     56,
-    //                                                                     55,
-    //                                                                     40
-    //                                                                 ],
-    //                                                             fill: false,
-    //                                                             borderColor: 'rgb(75, 192, 192)',
-    //                                                             tension: 0.1,
-    //                                                             pointStyle: 'rectRot',
-    //                                                             pointRadius: 8,
-    //                                                             pointBorderColor: 'rgb(75, 192, 192)',
-    //                                                             pointBackgroundColor: 'rgb(255, 99, 132)'
-    //                                                         }]
-    //                                                     },
-    //                                                     options: {
-    //                                                         plugins: {
-    //                                                             legend: {
-    //                                                                 display: true
-    //                                                             }
-    //                                                         },
-    //                                                         scales: {
-    //                                                             y: {
-    //                                                                 beginAtZero: true
-    //                                                             }
-    //                                                         }
-    //                                                     }
-    //                                                 });
-    //                                             }
-    //                                         },
-    //                                         100
-    //                                         ); // beri jeda agar canvas sudah tersedia di DOM
-    //                                 });
-
-    //                             }
-    //                         }
-
-    //                     });
+                        });
                     }
-                    // facet
+                    //  facet
 
                 });
 
