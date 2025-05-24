@@ -99,8 +99,8 @@ class PenilaianSiswaController extends Controller
         // dd($totalNilai);
 
         $facet = $this->facet($id, $kode);
-        // dd($facet);
         $sekala = $this->sekala($id, $kode);
+        // dd($facet);
 
         try {
             $kuisonerItem = KuesionerSiswa::where('kuesioner_siswa.siswa_id', $id)
@@ -457,6 +457,8 @@ class PenilaianSiswaController extends Controller
             ->join('detail_kuisoner_sekalas', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner_sekalas.detail_kuisoner_id')
             ->join('sekalas', 'detail_kuisoner_sekalas.kode_sekala', '=', 'sekalas.kode')
             ->where('kuesioner_siswa.kode', $kode)
+            // ->where('detail_kuisoner_sekalas.kode_sekala', "TRT/TRT1")
+            // ->where('detail_kuisoner.id', 331)
             ->select(
                 'kuesioner_siswa.*',
                 'detail_jawaban_kuesioner.kode as jawaban',
