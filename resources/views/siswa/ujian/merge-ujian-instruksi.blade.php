@@ -247,7 +247,7 @@
                                                                 @endif
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
-                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit</button>
+                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit--</button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
                                                                 style="font-weight: bold; color: red;"></p>
                                                         </div>
@@ -307,9 +307,9 @@
                                             resultElement.textContent = 'Simulasi selesai!'
                                                 .toUpperCase();
                                             resultElement.style.color = 'green';
-                                            setTimeout(() => {
-                                                window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
-                                            }, 1000);
+                                            // setTimeout(() => {
+                                            //     window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
+                                            // }, 1000);
 
                                         } else {
                                             resultElement.textContent = 'Jawaban Anda Benar!'
