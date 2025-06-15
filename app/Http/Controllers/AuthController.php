@@ -249,15 +249,8 @@ class AuthController extends Controller
         $siswa = Siswa::create($validate);
         Token::create($tokens);
         $siswa->update(['is_active' => 0]);
-        return redirect('/login')->with('pesan', "
-                <script>
-                    swal({
-                        title: 'Berhasil!',
-                        text: 'Registrasi berhasil silahkan cek email untuk validasi',
-                        type: 'success',
-                        padding: '2em'
-                    })
-                </script>
+        return redirect('/login')->with('pesanRegis', "
+               Registrasi berhasil silahkan cek email untuk validasi
             ");
     }
 

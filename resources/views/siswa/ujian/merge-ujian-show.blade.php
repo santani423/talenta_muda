@@ -221,6 +221,9 @@
                     const timeLeft = targetTime - currentTime;
 
                     if (timeLeft > 0) {
+                         if (timeLeft <= 30000) {
+                            $('.jam_ujin_skearan').closest('.d-flex').removeClass('hidden');
+                        }
                         // Calculate hours, minutes, and seconds remaining, ensuring each is 2 digits
                         const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
                             '0');

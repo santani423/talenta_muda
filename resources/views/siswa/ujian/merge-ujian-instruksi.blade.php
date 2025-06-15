@@ -51,14 +51,13 @@
                                             <p class="card-text" style="color: white; font-size: 30px; font-weight: bold;">
                                                 {!! $intr->intruksi !!}
                                             </p>
-                                           
+
                                             <div class="d-grid gap-2 col-6 mx-auto">
 
                                                 @if ($index < count($IntruksiUjian) - 1)
                                                     <button class="btn btn-warning"
                                                         onclick="showNextInstruksi({{ $index }})">Next</button>
                                                 @else
-                                                    
                                                     @if (count($simulasiPg) > 0 || count($simulasiVisual) > 0 || count($simulasiEssay) > 0 || count($simulasiKuesioner) > 0)
                                                         <button class="btn btn-warning"
                                                             onclick="showExampleQuestions()">Contoh
@@ -72,10 +71,10 @@
                                                                 class="btn btn-warning">Mulai Ujian</a>
                                                         @elseif($mergeUjian->jenis_ujian == 2)
                                                             <a href="{{ url('siswa/ujian_kuesioner/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian</a>                                                                       
+                                                                class="btn btn-warning">Mulai Ujian</a>
                                                         @elseif($mergeUjian->jenis_ujian == 3)
                                                             <a href="{{ url('siswa/ujian_visual/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian</a>                                                                       
+                                                                class="btn btn-warning">Mulai Ujian</a>
                                                         @endif
                                                     @endif
                                                 @endif
@@ -104,7 +103,7 @@
                 </script>
 
 
-{{-- {{dd($simulasiPg)}} --}}
+                {{-- {{dd($simulasiPg)}} --}}
 
                 <!-- Tambahkan tombol Next di bawah banner -->
                 <div class="container-fluid mt-3" id="showExampleQuestions" style="display: none;">
@@ -112,14 +111,14 @@
                         <div class="col-lg-12">
                             <form id="examwizard-question" action="{{ url('/siswa/ujian') }}" method="POST">
                                 @csrf
-                               
+
                                 <div class="widget shadow p-2">
 
                                     <div>
                                         @php
                                             $no = 1;
                                             $soal_hidden = '';
-                                   
+
                                         @endphp
                                         @foreach ($simulasiPg as $keySG => $itemSG)
                                             <div class="question {{ $soal_hidden }} question-{{ $no }}"
@@ -140,7 +139,7 @@
                                                             style="word-wrap: break-word">
                                                             <center>
                                                                 <img src="{{ url($itemSG->soal) }}" class="img-fluid"
-                                                                style="width: auto; height: 35vh;">
+                                                                    style="width: auto; height: 35vh;">
                                                             </center>
 
                                                         </h6>
@@ -155,16 +154,19 @@
                                                             </h5>
                                                         </div>
 
-                                                      
+
 
                                                         <div class="green-radio color-green">
                                                             <div class="row answer-list">
-                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                <div
+                                                                    class="@if ($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
                                                                     <li class="answer-number d-flex align-items-center">
                                                                         <input type="radio"
                                                                             name="{{ $keySG }}simulasi_ujian"
-                                                                            value="a" id="{{ $keySG }}soal{{ $no }}-A" />
-                                                                        <label for="{{ $keySG }}soal{{ $no }}-A"
+                                                                            value="a"
+                                                                            id="{{ $keySG }}soal{{ $no }}-A" />
+                                                                        <label
+                                                                            for="{{ $keySG }}soal{{ $no }}-A"
                                                                             class="d-flex align-items-center ml-2">
                                                                             <span>A </span>
                                                                             <img src="{{ url($itemSG->pg_1) }}"
@@ -173,12 +175,15 @@
                                                                         </label>
                                                                     </li>
                                                                 </div>
-                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                <div
+                                                                    class="@if ($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
                                                                     <li class="answer-number d-flex align-items-center">
                                                                         <input type="radio"
                                                                             name="{{ $keySG }}simulasi_ujian"
-                                                                            value="b" id="{{ $keySG }}soal{{ $no }}-B" />
-                                                                        <label for="{{ $keySG }}soal{{ $no }}-B"
+                                                                            value="b"
+                                                                            id="{{ $keySG }}soal{{ $no }}-B" />
+                                                                        <label
+                                                                            for="{{ $keySG }}soal{{ $no }}-B"
                                                                             class="d-flex align-items-center ml-2">
                                                                             <span>B</span>
                                                                             <img src="{{ url($itemSG->pg_2) }}"
@@ -187,12 +192,15 @@
                                                                         </label>
                                                                     </li>
                                                                 </div>
-                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                <div
+                                                                    class="@if ($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
                                                                     <li class="answer-number d-flex align-items-center">
                                                                         <input type="radio"
                                                                             name="{{ $keySG }}simulasi_ujian"
-                                                                            value="c" id="{{ $keySG }}soal{{ $no }}-C" />
-                                                                        <label for="{{ $keySG }}soal{{ $no }}-C"
+                                                                            value="c"
+                                                                            id="{{ $keySG }}soal{{ $no }}-C" />
+                                                                        <label
+                                                                            for="{{ $keySG }}soal{{ $no }}-C"
                                                                             class="d-flex align-items-center ml-2">
                                                                             <span>C</span>
                                                                             <img src="{{ url($itemSG->pg_3) }}"
@@ -201,12 +209,15 @@
                                                                         </label>
                                                                     </li>
                                                                 </div>
-                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                <div
+                                                                    class="@if ($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
                                                                     <li class="answer-number d-flex align-items-center">
                                                                         <input type="radio"
                                                                             name="{{ $keySG }}simulasi_ujian"
-                                                                            value="d" id="{{ $keySG }}soal{{ $no }}-D" />
-                                                                        <label for="{{ $keySG }}soal{{ $no }}-D"
+                                                                            value="d"
+                                                                            id="{{ $keySG }}soal{{ $no }}-D" />
+                                                                        <label
+                                                                            for="{{ $keySG }}soal{{ $no }}-D"
                                                                             class="d-flex align-items-center ml-2">
                                                                             <span>D</span>
                                                                             <img src="{{ url($itemSG->pg_4) }}"
@@ -215,12 +226,15 @@
                                                                         </label>
                                                                     </li>
                                                                 </div>
-                                                                <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                <div
+                                                                    class="@if ($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
                                                                     <li class="answer-number d-flex align-items-center">
                                                                         <input type="radio"
                                                                             name="{{ $keySG }}simulasi_ujian"
-                                                                            value="e" id="{{ $keySG }}soal{{ $no }}-E" />
-                                                                        <label for="{{ $keySG }}soal{{ $no }}-E"
+                                                                            value="e"
+                                                                            id="{{ $keySG }}soal{{ $no }}-E" />
+                                                                        <label
+                                                                            for="{{ $keySG }}soal{{ $no }}-E"
                                                                             class="d-flex align-items-center ml-2">
                                                                             <span>E</span>
                                                                             <img src="{{ url($itemSG->pg_5) }}"
@@ -230,12 +244,16 @@
                                                                     </li>
                                                                 </div>
                                                                 @if ($itemSG->pg_6)
-                                                                    <div class="@if($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
-                                                                        <li class="answer-number d-flex align-items-center">
+                                                                    <div
+                                                                        class="@if ($mergeUjian->kode == 'part2') col @else col-md-4 @endif">
+                                                                        <li
+                                                                            class="answer-number d-flex align-items-center">
                                                                             <input type="radio"
                                                                                 name="{{ $keySG }}simulasi_ujian"
-                                                                                value="f" id="{{ $keySG }}soal{{ $no }}-F" />
-                                                                            <label for="{{ $keySG }}soal{{ $no }}-F"
+                                                                                value="f"
+                                                                                id="{{ $keySG }}soal{{ $no }}-F" />
+                                                                            <label
+                                                                                for="{{ $keySG }}soal{{ $no }}-F"
                                                                                 class="d-flex align-items-center ml-2">
                                                                                 <span>F</span>
                                                                                 <img src="{{ url($itemSG->pg_6) }}"
@@ -247,7 +265,8 @@
                                                                 @endif
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
-                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit   1</button>
+                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit
+                                                                1</button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
                                                                 style="font-weight: bold; color: red;"></p>
                                                         </div>
@@ -305,11 +324,14 @@
 
                                         if (nextQuestion == totalSoal) {
                                             let countdown = 5;
-                                            resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                            resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
+                                                .toUpperCase();
                                             resultElement.style.color = 'green';
                                             const interval = setInterval(() => {
                                                 countdown--;
-                                                resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                                resultElement.textContent =
+                                                    `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
+                                                .toUpperCase();
                                                 if (countdown === 0) {
                                                     clearInterval(interval);
                                                     window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
@@ -345,7 +367,7 @@
                         </script>
                     @elseif($mergeUjian->jenis_ujian == 1)
                         @foreach ($simulasiEssay as $keySG => $sv)
-                            <div class="question " id="soalDemoSoal{{ $keySG }}" >
+                            <div class="question " id="soalDemoSoal{{ $keySG }}">
                                 <div class="widget p-3 mt-3">
                                     <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
                                         <div class="">
@@ -355,9 +377,8 @@
                                     </div>
                                     <div class="widget-content mt-3" style="position: relative;">
                                         <div class="widget-heading" style="border-bottom: 1px solid #e0e6ed;">
-                                            <h6 class="question-title color-green"
-                                                style="word-wrap: break-word">
-                                                 {!! $sv->soal !!}
+                                            <h6 class="question-title color-green" style="word-wrap: break-word">
+                                                {!! $sv->soal !!}
                                             </h6>
                                         </div>
                                         <div class="timer-check hidden"
@@ -369,12 +390,15 @@
                                         </div>
                                         <div class="row"></div>
                                         <div class="green-radio color-green">
-                                            <input type="text" name="{{ $keySG }}simulasi_ujian" class="form-control">
+                                            <input type="text" name="{{ $keySG }}simulasi_ujian"
+                                                class="form-control">
                                             <button type="button" class="btn btn-primary mt-2"
-                                                onclick="checkJawabanEssay({{ count($simulasiEssay) }},{{ $keySG }},1, ['{{ $sv->jawaban }}'])">Submit  2</button>
+                                                onclick="checkJawabanEssay({{ count($simulasiEssay) }},{{ $keySG }},1, ['{{ $sv->jawaban }}'])">Submit
+                                                2</button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
-                                            <p id="{{ $keySG }}validation-1" style="font-weight: bold; color: orange;">
+                                            <p id="{{ $keySG }}validation-1"
+                                                style="font-weight: bold; color: orange;">
                                             </p>
                                         </div>
                                     </div>
@@ -398,10 +422,20 @@
                                         resultElement.innerText = "Jawaban Benar!";
                                         resultElement.style.color = "green";
                                         if (keySG == count - 1) {
-                                            resultElement.textContent = 'Simulasi selesai!'.toUpperCase();
+                                            let countdown = 5;
+                                            resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
+                                                .toUpperCase();
                                             resultElement.style.color = 'green';
-                                            setTimeout(() => {
-                                                window.location.href = "{{ url('siswa/ujian_essay/' . $ujian) }}";
+                                            const interval = setInterval(() => {
+                                                countdown--;
+                                                resultElement.textContent =
+                                                    `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                                if (countdown === 0) {
+                                                    clearInterval(interval);
+                                                    // alert("Waktu sekarang: " + new Date().toLocaleString());
+                                                    // window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
+                                                    window.location.href = "{{ url('siswa/ujian_essay/' . $ujian) }}";
+                                                }
                                             }, 1000);
                                         } else {
                                             setTimeout(() => {
@@ -504,7 +538,8 @@
                                                 @endforeach
                                             </ol>
                                             <button type="button" class="btn btn-primary"
-                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit 3</button>
+                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit
+                                                3</button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
                                         </div>
@@ -539,13 +574,17 @@
                                     resultElement.style.color = "green";
                                     if (keySG == count - 1) {
                                         let countdown = 5;
-                                        resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                        resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
+                                            .toUpperCase();
                                         resultElement.style.color = 'green';
                                         const interval = setInterval(() => {
                                             countdown--;
-                                            resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                            resultElement.textContent =
+                                                `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
                                             if (countdown === 0) {
                                                 clearInterval(interval);
+                                                // alert("Waktu sekarang: " + new Date().toLocaleString());
+                                                // window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
                                                 window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
                                             }
                                         }, 1000);

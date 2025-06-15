@@ -44,7 +44,7 @@
                                         <tbody>
                                             @foreach ($MergeUjianSiswa as $key => $bs)
                                                 <tr>
-                                                    <td>{{ ++$key }}</td>
+                                                    <td>{{ $key + $currentPage + 1 }}</td>
                                                     <td>
                                                         {{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}
                                                     </td>
@@ -400,7 +400,7 @@
      </div>
  `;
 
-htmlContent += `<table border="1">
+                                        htmlContent += `<table border="1">
     <thead></thead>`;
                                         Object.values(facet?.subdomain).forEach(f => {
                                             htmlContent += `
@@ -409,32 +409,32 @@ htmlContent += `<table border="1">
         </tr>
     `;
 
-    //                                         htmlContent += `
-    //     <tr>
-    //         <th>Deskripsi Facet</th>
-    //         <th>Total Score</th>
-    //         <th>Facet Code</th>
-    //         <th>Jawaban Kode</th>
-    //         <th>Kuesioner Item</th>
-    //         <th>Score</th>
-    //     </tr>
-    // `;
+                                            //                                         htmlContent += `
+                                        //     <tr>
+                                        //         <th>Deskripsi Facet</th>
+                                        //         <th>Total Score</th>
+                                        //         <th>Facet Code</th>
+                                        //         <th>Jawaban Kode</th>
+                                        //         <th>Kuesioner Item</th>
+                                        //         <th>Score</th>
+                                        //     </tr>
+                                        // `;
 
-    //                                         f.items.forEach(item => {
-    //                                             htmlContent += `
-    //         <tr>
-    //             <td>${item.deskripsi_facet}</td>
-    //             <td>${f.total_score}</td>
-    //             <td>${item.facet_code}</td>
-    //             <td>${item.jawaban_kode}</td>
-    //             <td>${item.kuisoner_item}</td>
-    //             <td>${item.score}</td>
-    //         </tr>
-    //     `;
-    //                                         });
+                                            //                                         f.items.forEach(item => {
+                                            //                                             htmlContent += `
+                                        //         <tr>
+                                        //             <td>${item.deskripsi_facet}</td>
+                                        //             <td>${f.total_score}</td>
+                                        //             <td>${item.facet_code}</td>
+                                        //             <td>${item.jawaban_kode}</td>
+                                        //             <td>${item.kuisoner_item}</td>
+                                        //             <td>${item.score}</td>
+                                        //         </tr>
+                                        //     `;
+                                            //                                         });
                                         });
 
-htmlContent += `<tbody id="your-table-body-id"></tbody>
+                                        htmlContent += `<tbody id="your-table-body-id"></tbody>
 </table>`;
 
                                         // Pastikan script Chart.js dijalankan setelah elemen dimasukkan ke DOM

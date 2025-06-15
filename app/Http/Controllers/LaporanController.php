@@ -66,6 +66,7 @@ class LaporanController extends Controller
         $MergeUjianSiswa = Siswa::when($search, function ($query, $search) {
             return $query->where('nama_siswa', 'like', "%{$search}%");
             })
+            ->orderBy('id', 'asc')
             ->paginate($perPage, ['*'], 'page', $page);
         // dd($MergeUjianSiswa);
 
@@ -84,7 +85,8 @@ class LaporanController extends Controller
             'guru' => Guru::firstWhere('id', session()->get('id')),
             'guru_kelas' => Gurukelas::where('guru_id', session()->get('id'))->get(),
             'merge_ujian' => MergeUjian::join('kelas', 'kelas.id', '=', 'merge_ujian.kelas_id')->get(),
-            'MergeUjianSiswa' => $MergeUjianSiswa
+            'MergeUjianSiswa' => $MergeUjianSiswa,
+            'currentPage' => ($MergeUjianSiswa->currentPage()-1)*10,
         ]);
     }
 }
