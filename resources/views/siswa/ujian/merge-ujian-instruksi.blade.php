@@ -247,7 +247,7 @@
                                                                 @endif
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
-                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit--</button>
+                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit   1</button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
                                                                 style="font-weight: bold; color: red;"></p>
                                                         </div>
@@ -304,13 +304,17 @@
 
 
                                         if (nextQuestion == totalSoal) {
-                                            resultElement.textContent = 'Simulasi selesai!'
-                                                .toUpperCase();
+                                            let countdown = 5;
+                                            resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
                                             resultElement.style.color = 'green';
-                                            // setTimeout(() => {
-                                            //     window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
-                                            // }, 1000);
-
+                                            const interval = setInterval(() => {
+                                                countdown--;
+                                                resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                                if (countdown === 0) {
+                                                    clearInterval(interval);
+                                                    window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
+                                                }
+                                            }, 1000);
                                         } else {
                                             resultElement.textContent = 'Jawaban Anda Benar!'
                                                 .toUpperCase();
@@ -367,7 +371,7 @@
                                         <div class="green-radio color-green">
                                             <input type="text" name="{{ $keySG }}simulasi_ujian" class="form-control">
                                             <button type="button" class="btn btn-primary mt-2"
-                                                onclick="checkJawabanEssay({{ count($simulasiEssay) }},{{ $keySG }},1, ['{{ $sv->jawaban }}'])">Submit</button>
+                                                onclick="checkJawabanEssay({{ count($simulasiEssay) }},{{ $keySG }},1, ['{{ $sv->jawaban }}'])">Submit  2</button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
                                             <p id="{{ $keySG }}validation-1" style="font-weight: bold; color: orange;">
@@ -500,7 +504,7 @@
                                                 @endforeach
                                             </ol>
                                             <button type="button" class="btn btn-primary"
-                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit</button>
+                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit 3</button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
                                         </div>
@@ -512,7 +516,7 @@
                             function checkAnswers(count, keySG, no, correctAnswers) {
                                 // Ambil semua checkbox yang dipilih untuk pertanyaan ini
                                 const selected = document.querySelectorAll(`input[name='${keySG}simulasi_ujian[]']:checked`);
-                                console.log(selected);
+                                // console.log(selected);
 
                                 // Ambil nilai dari checkbox yang dipilih
                                 const selectedValues = Array.from(selected).map(input => input.value);
@@ -534,13 +538,17 @@
                                     resultElement.innerText = "Jawaban Benar!";
                                     resultElement.style.color = "green";
                                     if (keySG == count - 1) {
-                                        resultElement.textContent = 'Simulasi selesai!'
-                                            .toUpperCase();
+                                        let countdown = 5;
+                                        resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
                                         resultElement.style.color = 'green';
-                                        setTimeout(() => {
-                                            window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
+                                        const interval = setInterval(() => {
+                                            countdown--;
+                                            resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                            if (countdown === 0) {
+                                                clearInterval(interval);
+                                                window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
+                                            }
                                         }, 1000);
-
                                     } else {
                                         setTimeout(() => {
                                             document.getElementById('soalDemoSoal' + keySG).style.display = "none";
