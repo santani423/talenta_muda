@@ -355,7 +355,7 @@
                                                     .toUpperCase();
                                                 if (countdown <= 0) {
                                                     // clearInterval(interval);
-                                                    window.location.href = "{{ url('siswa/ujian/' . $ujian) }}"; 
+                                                    // window.location.href = "{{ url('siswa/ujian/' . $ujian) }}"; 
                                                 }
                                             }, 1000);
                                         } else {
