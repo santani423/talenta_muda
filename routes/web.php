@@ -49,6 +49,7 @@ Route::get('/logout', [AuthController::class, 'logout']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/install', [AuthController::class, 'install_']);
 Route::post('/register', [AuthController::class, 'register_']);
+Route::post('/email_send', [AuthController::class, 'emailSend']);
 Route::post('/recovery', [AuthController::class, 'recovery_']);
 Route::get('/aktivasi/{token:token}', [AuthController::class, 'aktivasi']);
 Route::post('/change_password/{token:token}', [AuthController::class, 'change_password_']);

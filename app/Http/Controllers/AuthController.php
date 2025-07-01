@@ -249,9 +249,31 @@ class AuthController extends Controller
         $siswa = Siswa::create($validate);
         Token::create($tokens);
         $siswa->update(['is_active' => 0]);
-        return redirect('/login')->with('pesanRegis', "
-               Registrasi berhasil silahkan cek email untuk validasi
-            ");
+        return redirect('/login')->with([
+            'pesanRegis' => "Registrasi berhasil silahkan cek email untuk validasi",
+            'nama' => $request->nama,
+            'password' => $request->password,
+            'token' => $tokens['token'],
+            'email' => $request->email
+        ]);
+    }
+
+    public function emailSend(Request $request)
+    {
+        $details = [
+            'nama' => $request->nama,
+            'password' => $request->password,
+            'token' => $request->token,
+            'email' => $request->email
+        ];
+        Mail::to("$request->email")->send(new VerifikasiAkun($details));
+        return redirect('/login')->with([
+            'pesanRegis' => "Email berhasil di kirim ulang silahkan cek email untuk validasi",
+            'nama' => $request->nama,
+            'password' => $request->password,
+            'token' => $request->token,
+            'email' => $request->email
+        ]);
     }
 
     public function aktivasi(Token $token)
