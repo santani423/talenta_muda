@@ -63,18 +63,19 @@
                                                             onclick="showExampleQuestions()">Contoh
                                                             Soal</button>
                                                     @else
+                                                    
                                                         @if ($mergeUjian->jenis_ujian == 0)
                                                             <a href="{{ url('siswa/ujian/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian</a>
+                                                                class="btn btn-warning">Mulai Ujian 1</a>
                                                         @elseif($mergeUjian->jenis_ujian == 1)
                                                             <a href="{{ url('siswa/ujian_essay/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian</a>
+                                                                class="btn btn-warning">Mulai Ujian 2</a>
                                                         @elseif($mergeUjian->jenis_ujian == 2)
                                                             <a href="{{ url('siswa/ujian_kuesioner/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian</a>
+                                                                class="btn btn-warning">Mulai Ujian 3</a>
                                                         @elseif($mergeUjian->jenis_ujian == 3)
                                                             <a href="{{ url('siswa/ujian_visual/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian</a>
+                                                                class="btn btn-warning">Mulai Ujian 4</a>
                                                         @endif
                                                     @endif
                                                 @endif
