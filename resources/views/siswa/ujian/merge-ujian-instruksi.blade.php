@@ -63,19 +63,100 @@
                                                             onclick="showExampleQuestions()">Contoh
                                                             Soal</button>
                                                     @else
-                                                    
                                                         @if ($mergeUjian->jenis_ujian == 0)
                                                             <a href="{{ url('siswa/ujian/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian 1</a>
+                                                                class="btn btn-warning">Mulai Ujian </a>
                                                         @elseif($mergeUjian->jenis_ujian == 1)
-                                                            <a href="{{ url('siswa/ujian_essay/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian 2</a>
+                                                            <button class="btn btn-warning" onclick="ujianEsay()">Mulai
+                                                                Ujian 2</button>
+                                                            <div id="countdown-essay"
+                                                                style="color: yellow; font-weight: bold; font-size: 20px; margin-top: 10px; display: none;">
+                                                            </div>
+                                                            <script>
+                                                                function ujianEsay() {
+                                                                    fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                                            method: "POST",
+                                                                            headers: {
+                                                                                "Content-Type": "application/json",
+                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                                                                    'content')
+                                                                            },
+                                                                            body: JSON.stringify({
+                                                                                kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                                                time: new Date()
+                                                                            })
+                                                                        })
+                                                                        .then(response => response.json())
+                                                                        .then(data => {
+                                                                            console.log('Simulasi selesai:', data);
+                                                                        })
+                                                                        .catch(error => {
+                                                                            console.error('Error:', error);
+                                                                        });
+
+                                                                    var countdown = 5;
+                                                                    var countdownDiv = document.getElementById('countdown-essay');
+                                                                    countdownDiv.style.display = 'block';
+                                                                    countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
+                                                                    var interval = setInterval(function() {
+                                                                        countdown--;
+                                                                        countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
+                                                                        if (countdown <= 0) {
+                                                                            clearInterval(interval);
+                                                                            window.location.href = "{{ url('siswa/ujian_essay/' . $ujian) }}";
+                                                                        }
+                                                                    }, 1000);
+                                                                }
+                                                            </script>
+                                                            {{-- <a href="{{ url('siswa/ujian_essay/' . $ujian) }}"
+                                                                ></a> --}}
                                                         @elseif($mergeUjian->jenis_ujian == 2)
-                                                            <a href="{{ url('siswa/ujian_kuesioner/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian 3</a>
+                                                            {{-- <a href="{{ url('siswa/ujian_kuesioner/' . $ujian) }}"
+                                                                class="btn btn-warning">Mulai Ujian 3</a> --}}
+                                                            <button class="btn btn-warning" onclick="ujianEsay()">Mulai
+                                                                Ujian </button>
+                                                            <div id="countdown-essay"
+                                                                style="color: yellow; font-weight: bold; font-size: 20px; margin-top: 10px; display: none;">
+                                                            </div>
+                                                            <script>
+                                                                function ujianEsay() {
+                                                                    fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                                            method: "POST",
+                                                                            headers: {
+                                                                                "Content-Type": "application/json",
+                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                                                                    'content')
+                                                                            },
+                                                                            body: JSON.stringify({
+                                                                                kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                                                time: new Date()
+                                                                            })
+                                                                        })
+                                                                        .then(response => response.json())
+                                                                        .then(data => {
+                                                                            console.log('Simulasi selesai:', data);
+                                                                        })
+                                                                        .catch(error => {
+                                                                            console.error('Error:', error);
+                                                                        });
+
+                                                                    var countdown = 5;
+                                                                    var countdownDiv = document.getElementById('countdown-essay');
+                                                                    countdownDiv.style.display = 'block';
+                                                                    countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
+                                                                    var interval = setInterval(function() {
+                                                                        countdown--;
+                                                                        countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
+                                                                        if (countdown <= 0) {
+                                                                            clearInterval(interval);
+                                                                            window.location.href = "{{ url('siswa/ujian_kuesioner/' . $ujian) }}";
+                                                                        }
+                                                                    }, 1000);
+                                                                }
+                                                            </script>
                                                         @elseif($mergeUjian->jenis_ujian == 3)
                                                             <a href="{{ url('siswa/ujian_visual/' . $ujian) }}"
-                                                                class="btn btn-warning">Mulai Ujian 4</a>
+                                                                class="btn btn-warning">Mulai Ujian </a>
                                                         @endif
                                                     @endif
                                                 @endif
@@ -267,7 +348,7 @@
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
                                                                 onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit
-                                                                1 <div id="jam"></div></button>
+                                                                 <div id="jam"></div></button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
                                                                 style="font-weight: bold; color: red;"></p>
                                                         </div>
@@ -356,7 +437,7 @@
                                                     .toUpperCase();
                                                 if (countdown <= 0) {
                                                     // clearInterval(interval);
-                                                    window.location.href = "{{ url('siswa/ujian/' . $ujian) }}"; 
+                                                    window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
                                                 }
                                             }, 1000);
                                         } else {
@@ -416,7 +497,7 @@
                                                 class="form-control">
                                             <button type="button" class="btn btn-primary mt-2"
                                                 onclick="checkJawabanEssay({{ count($simulasiEssay) }},{{ $keySG }},1, ['{{ $sv->jawaban }}'])">Submit
-                                                2</button>
+                                                </button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
                                             <p id="{{ $keySG }}validation-1"
@@ -599,8 +680,7 @@
                                                 @endforeach
                                             </ol>
                                             <button type="button" class="btn btn-primary"
-                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit
-                                                3</button>
+                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit </button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
                                         </div>
