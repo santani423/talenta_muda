@@ -126,6 +126,7 @@ class UjianSiswaController extends Controller
             </script>
         ");
     }
+
     public function store_essay(Request $request)
     {
         $essay_siswa = EssaySiswa::where('kode', $request->kode)->where('siswa_id', session()->get('id'))->get();
@@ -202,12 +203,13 @@ class UjianSiswaController extends Controller
         $notif_tugas = TugasSiswa::where('siswa_id', session()->get('id'))
             ->where('date_send', null)
             ->get();
+
         $notif_ujian = WaktuUjian::where('siswa_id', session()->get('id'))
             ->where('selesai', null)
             ->get();
 
 
-        UjianServiceController::startUJian($ujian->kode,$kodeMergeUjian);
+        // UjianServiceController::startUJian($ujian->kode,$kodeMergeUjian);
         // dd(7);
 
         $waktu_ujian = WaktuUjian::where('kode', $ujian->kode)
@@ -394,7 +396,7 @@ class UjianSiswaController extends Controller
             }
             EssaySiswa::insert($data_essay_siswa);
         }
-        UjianServiceController::startUJian($mergeUjian->kode_ujian, $ujian);
+        // UjianServiceController::startUJian($mergeUjian->kode_ujian, $ujian);
 
         $waktu_ujian = WaktuUjian::where('kode', $mergeUjian->kode_ujian)
             ->where('siswa_id', session()->get('id'))
@@ -460,7 +462,7 @@ class UjianSiswaController extends Controller
         }
 
 
-        UjianServiceController::startUJian($mergeUjian->kode_ujian,$kodeMergeUjian);
+        // UjianServiceController::startUJian($mergeUjian->kode_ujian,$kodeMergeUjian);
 
 
 
@@ -593,7 +595,7 @@ class UjianSiswaController extends Controller
             ->get();
 
         UjianServiceController::setEndTimeForExam($kodeMergeUjian);
-        UjianServiceController::startUJian($mergeUjian->kode_ujian,$kodeMergeUjian);
+        // UjianServiceController::startUJian($mergeUjian->kode_ujian,$kodeMergeUjian);
 
         $waktu_ujian = WaktuUjian::where('kode', $mergeUjian->kode_ujian)
             ->where('siswa_id', session()->get('id'))

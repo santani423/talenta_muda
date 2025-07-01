@@ -216,6 +216,7 @@ class UjianServiceController extends Controller
 
         return $ujian;
     }
+    
     public static function createOrRetrieveVisualSiswa($kode_ujian)
     {
         // Retrieve existing records of PgSiswa for the specific exam and student
