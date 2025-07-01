@@ -68,7 +68,7 @@
                                                                 class="btn btn-warning">Mulai Ujian </a>
                                                         @elseif($mergeUjian->jenis_ujian == 1)
                                                             <button class="btn btn-warning" onclick="ujianEsay()">Mulai
-                                                                Ujian 2</button>
+                                                                Ujian </button>
                                                             <div id="countdown-essay"
                                                                 style="color: yellow; font-weight: bold; font-size: 20px; margin-top: 10px; display: none;">
                                                             </div>
