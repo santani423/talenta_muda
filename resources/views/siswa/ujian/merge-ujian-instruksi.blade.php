@@ -347,8 +347,7 @@
                                                                 @endif
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
-                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit
-                                                                 <div id="jam"></div></button>
+                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit   <div id="jam"></div></button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
                                                                 style="font-weight: bold; color: red;"></p>
                                                         </div>
