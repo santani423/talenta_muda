@@ -173,6 +173,10 @@
                         @if (session('pesanRegis'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('pesanRegis') }}
+                                <form action="" method="POST" style="display:inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-link p-0 m-0 align-baseline">Kirim Ulang Email Konfirmasi</button>
+                                </form>
                             </div>
                         @endif 
 

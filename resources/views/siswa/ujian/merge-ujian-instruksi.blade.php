@@ -266,7 +266,7 @@
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
                                                                 onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit
-                                                                1</button>
+                                                                1 <div id="jam"></div></button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
                                                                 style="font-weight: bold; color: red;"></p>
                                                         </div>
@@ -323,6 +323,27 @@
 
 
                                         if (nextQuestion == totalSoal) {
+
+
+                                            fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                    method: "POST",
+                                                    headers: {
+                                                        "Content-Type": "application/json",
+                                                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                                            'content')
+                                                    },
+                                                    body: JSON.stringify({
+                                                        kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                        time: new Date()
+                                                    })
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    console.log('Simulasi selesai:', data);
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                });
                                             let countdown = 5;
                                             resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
                                                 .toUpperCase();
@@ -331,10 +352,10 @@
                                                 countdown--;
                                                 resultElement.textContent =
                                                     `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
-                                                .toUpperCase();
-                                                if (countdown === 0) {
-                                                    clearInterval(interval);
-                                                    window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
+                                                    .toUpperCase();
+                                                if (countdown <= 0) {
+                                                    // clearInterval(interval);
+                                                    window.location.href = "{{ url('siswa/ujian/' . $ujian) }}"; 
                                                 }
                                             }, 1000);
                                         } else {
@@ -422,6 +443,26 @@
                                         resultElement.innerText = "Jawaban Benar!";
                                         resultElement.style.color = "green";
                                         if (keySG == count - 1) {
+                                            fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                    method: "POST",
+                                                    headers: {
+                                                        "Content-Type": "application/json",
+                                                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                                            'content')
+                                                    },
+                                                    body: JSON.stringify({
+                                                        kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                        time: new Date()
+                                                    })
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    console.log('Simulasi selesai:', data);
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                });
+
                                             let countdown = 5;
                                             resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
                                                 .toUpperCase();
@@ -476,6 +517,25 @@
                                     resultElement.innerText = "Jawaban Benar!";
                                     resultElement.style.color = "green";
                                     if (keySG == count - 1) {
+                                        fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                method: "POST",
+                                                headers: {
+                                                    "Content-Type": "application/json",
+                                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                                        'content')
+                                                },
+                                                body: JSON.stringify({
+                                                    kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                    time: new Date()
+                                                })
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                console.log('Simulasi selesai:', data);
+                                            })
+                                            .catch(error => {
+                                                console.error('Error:', error);
+                                            });
                                         resultElement.textContent = 'Simulasi selesai!'
                                             .toUpperCase();
                                         resultElement.style.color = 'green';
@@ -573,6 +633,26 @@
                                     resultElement.innerText = "Jawaban Benar!";
                                     resultElement.style.color = "green";
                                     if (keySG == count - 1) {
+                                        fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                method: "POST",
+                                                headers: {
+                                                    "Content-Type": "application/json",
+                                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                                        'content')
+                                                },
+                                                body: JSON.stringify({
+                                                    kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                    time: new Date()
+                                                })
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                console.log('Simulasi selesai:', data);
+                                            })
+                                            .catch(error => {
+                                                console.error('Error:', error);
+                                            });
+
                                         let countdown = 5;
                                         resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
                                             .toUpperCase();

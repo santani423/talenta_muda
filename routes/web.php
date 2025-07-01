@@ -256,5 +256,13 @@ Route::get('/siswa/essay/{siswa_id}/{kode}', [PenilaianSiswaController::class, '
 Route::get('/siswa/kuisoner/{siswa_id}/{kode}', [PenilaianSiswaController::class, 'ujan_kuisoner']);
 Route::get('/siswa/kuisoner/sekala/{siswa_id}/{kode}', [PenilaianSiswaController::class, 'ujan_kuisoner_sekala']);
 
+
+
+Route::post('/siswa/ujian/simulasi-finish', [UjianSiswaController::class, 'simulasiUjian']);
+
+
+
+
+
 Route::get('/tscore', [TScoreController::class, 'index']);
 

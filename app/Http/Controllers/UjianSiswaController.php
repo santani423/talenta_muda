@@ -1107,4 +1107,15 @@ class UjianSiswaController extends Controller
             'request' => $request->all(),
         ], 200);
     }
+
+    
+    public function simulasiUjian(Request $request)
+    {
+        UjianServiceController::startUJian($request->kode_ujian,$request->time);
+
+        return response()->json([
+            'message' => 'Soal berhasil diupload',
+            'request' => $request->all(),
+        ], 200);
+    }
 }

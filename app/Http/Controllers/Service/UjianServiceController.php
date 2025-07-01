@@ -105,7 +105,7 @@ class UjianServiceController extends Controller
         return $dataEndTime;
     }
 
-    public static function startUJian($kodeUjian, $kodeMergeUjian)
+    public static function startUJian($kodeUjian, $waktuMulaiParam)
     {
         $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
             ->where('siswa_id', session()->get('id'))
@@ -118,7 +118,7 @@ class UjianServiceController extends Controller
 
         $hours = $ujian->jam;
         $minutes = $ujian->menit;
-        $timestamp = strtotime(now());
+        $timestamp = strtotime($waktuMulaiParam);
         $endTime = date('Y-m-d H:i', strtotime("+$hours hour +$minutes minute", $timestamp));
 
         $dataEndTime = [
