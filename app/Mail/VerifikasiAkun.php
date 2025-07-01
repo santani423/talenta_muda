@@ -38,6 +38,7 @@ class VerifikasiAkun extends Mailable implements ShouldQueue
     public function failed(Throwable $exception)
     {
         // Send user notification of failure, etc...
-        dd($exception);
+        // dd($exception);
+        return back();
     }
 }
