@@ -173,7 +173,15 @@
                         @if (session('pesanRegis'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('pesanRegis') }}
-                                <form action="{{ url('/email_send') }}" method="POST" style="display:inline;">
+
+                                <!-- Alert countdown -->
+                                <div id="countdownAlert" class="alert alert-info mt-2">
+                                    Anda dapat mengirim ulang email dalam <span id="countdown"></span> detik...
+                                </div>
+
+                                <!-- Form Kirim Ulang (sembunyi dulu) -->
+                                <form id="resendForm" action="{{ url('/email_send') }}" method="POST"
+                                    style="display: none;">
                                     @csrf
                                     <input type="hidden" name="email" value="{{ session('email') }}">
                                     <input type="hidden" name="password" value="{{ session('password') }}">
@@ -183,7 +191,28 @@
                                         Konfirmasi</button>
                                 </form>
                             </div>
+ 
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        let countdown = 60;
+                                        const countdownSpan = document.getElementById('countdown');
+                                        const countdownAlert = document.getElementById('countdownAlert');
+                                        const resendForm = document.getElementById('resendForm');
+
+                                        const interval = setInterval(() => {
+                                            countdown--;
+                                            countdownSpan.textContent = countdown;
+                                            if (countdown <= 0) {
+                                                clearInterval(interval);
+                                                countdownAlert.style.display = 'none';
+                                                resendForm.style.display = 'inline';
+                                            }
+                                        }, 1000);
+                                    });
+                                </script>
                         @endif
+
+
 
                         <form action="{{ url('/login') }}" method="POST" class="text-left">
                             <div class="form">
