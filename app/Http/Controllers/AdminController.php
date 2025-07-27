@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class AdminController extends Controller
 {
@@ -78,6 +79,7 @@ class AdminController extends Controller
             'email_settings' => EmailSettings::first()
         ]);
     }
+
     public function edit_profile(Request $request, Admin $admin)
     {
         $rules = [
@@ -88,27 +90,40 @@ class AdminController extends Controller
         $validatedData = $request->validate($rules);
 
         if ($request->file('avatar')) {
-            if ($request->gambar_lama) {
-                if ($request->gambar_lama != 'default.png') {
-                    Storage::delete('assets/user-profile/' . $request->gambar_lama);
+            $avatarFile = $request->file('avatar');
+            $fileName = time() . '_' . $avatarFile->getClientOriginalName();
+
+            // Path tujuan: public/assets/user-profile
+            $destinationPath = public_path('assets/user-profile');
+
+            // Hapus gambar lama jika bukan default
+            if ($request->gambar_lama && $request->gambar_lama !== 'default.png') {
+                $oldImagePath = $destinationPath . '/' . $request->gambar_lama;
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
                 }
             }
-            $validatedData['avatar'] = str_replace('assets/user-profile/', '', $request->file('avatar')->store('assets/user-profile'));
+
+            // Pindahkan file baru ke folder public/assets/user-profile
+            $avatarFile->move($destinationPath, $fileName);
+
+            $validatedData['avatar'] = $fileName;
         }
-        Admin::where('id', $admin->id)
-            ->update($validatedData);
+
+        Admin::where('id', $admin->id)->update($validatedData);
 
         return redirect('/admin/profile')->with('pesan', "
-            <script>
-                swal({
-                    title: 'Success!',
-                    text: 'profile updated!',
-                    type: 'success',
-                    padding: '2em'
-                })
-            </script>
-        ");
+        <script>
+            swal({
+                title: 'Success!',
+                text: 'Profile updated!',
+                type: 'success',
+                padding: '2em'
+            })
+        </script>
+    ");
     }
+
     public function edit_password(Request $request, Admin $admin)
     {
         if (Hash::check($request->current_password, $admin->password)) {
