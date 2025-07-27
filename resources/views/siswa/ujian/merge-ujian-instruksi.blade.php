@@ -72,14 +72,26 @@
                                                             <div id="countdown-essay"
                                                                 style="color: yellow; font-weight: bold; font-size: 20px; margin-top: 10px; display: none;">
                                                             </div>
+                                                            <!-- Modal Countdown Essay -->
+                                                            <div id="countdownEssayModal" class="modal"
+                                                                style="display: none; position: fixed; z-index: 9999; background: rgba(0,0,0,0.7); top: 0; left: 0; width: 100%; height: 100%;">
+                                                                <div
+                                                                    style="background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: 20% auto; text-align: center;">
+                                                                    {{-- <h4> selesai!</h4> --}}
+                                                                    <p id="countdownEssayText">Halaman akan dialihkan dalam
+                                                                        <span id="countdownEssaySeconds">5</span> detik...
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
                                                             <script>
                                                                 function ujianEsay() {
+                                                                    // Kirim data bahwa simulasi selesai
                                                                     fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
                                                                             method: "POST",
                                                                             headers: {
                                                                                 "Content-Type": "application/json",
-                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                                                                    'content')
+                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                                                                             },
                                                                             body: JSON.stringify({
                                                                                 kode_ujian: "{{ $mergeUjian->kode_ujian }}",
@@ -94,13 +106,19 @@
                                                                             console.error('Error:', error);
                                                                         });
 
-                                                                    var countdown = 5;
-                                                                    var countdownDiv = document.getElementById('countdown-essay');
-                                                                    countdownDiv.style.display = 'block';
-                                                                    countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
-                                                                    var interval = setInterval(function() {
+                                                                    // Tampilkan modal countdown
+                                                                    const modal = document.getElementById('countdownEssayModal');
+                                                                    const countdownText = document.getElementById('countdownEssayText');
+                                                                    const countdownSeconds = document.getElementById('countdownEssaySeconds');
+
+                                                                    modal.style.display = 'block';
+
+                                                                    let countdown = 5;
+                                                                    countdownSeconds.textContent = countdown;
+
+                                                                    const interval = setInterval(() => {
                                                                         countdown--;
-                                                                        countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
+                                                                        countdownSeconds.textContent = countdown;
                                                                         if (countdown <= 0) {
                                                                             clearInterval(interval);
                                                                             window.location.href = "{{ url('siswa/ujian_essay/' . $ujian) }}";
@@ -118,14 +136,26 @@
                                                             <div id="countdown-essay"
                                                                 style="color: yellow; font-weight: bold; font-size: 20px; margin-top: 10px; display: none;">
                                                             </div>
+                                                            <!-- Modal Countdown Essay -->
+                                                            <div id="countdownEssayModal" class="modal"
+                                                                style="display: none; position: fixed; z-index: 9999; background: rgba(0,0,0,0.7); top: 0; left: 0; width: 100%; height: 100%;">
+                                                                <div
+                                                                    style="background: #fff; padding: 20px 30px; border-radius: 10px; max-width: 400px; margin: 20% auto; text-align: center;">
+                                                                    {{-- <h4>Simulasi selesai!</h4> --}}
+                                                                    <p id="countdownEssayText">Halaman akan dialihkan dalam
+                                                                        <span id="countdownEssaySeconds">5</span> detik...
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
                                                             <script>
                                                                 function ujianEsay() {
+                                                                    // Kirim data ke server bahwa simulasi selesai
                                                                     fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
                                                                             method: "POST",
                                                                             headers: {
                                                                                 "Content-Type": "application/json",
-                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                                                                    'content')
+                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                                                                             },
                                                                             body: JSON.stringify({
                                                                                 kode_ujian: "{{ $mergeUjian->kode_ujian }}",
@@ -140,13 +170,20 @@
                                                                             console.error('Error:', error);
                                                                         });
 
-                                                                    var countdown = 5;
-                                                                    var countdownDiv = document.getElementById('countdown-essay');
-                                                                    countdownDiv.style.display = 'block';
-                                                                    countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
-                                                                    var interval = setInterval(function() {
+                                                                    // Tampilkan modal countdown
+                                                                    const modal = document.getElementById('countdownEssayModal');
+                                                                    const countdownText = document.getElementById('countdownEssayText');
+                                                                    const countdownSeconds = document.getElementById('countdownEssaySeconds');
+
+                                                                    modal.style.display = 'block';
+
+                                                                    let countdown = 5;
+                                                                    countdownSeconds.textContent = countdown;
+
+                                                                    const interval = setInterval(() => {
                                                                         countdown--;
-                                                                        countdownDiv.textContent = `Halaman akan dialihkan dalam ${countdown} detik...`;
+                                                                        countdownSeconds.textContent = countdown;
+
                                                                         if (countdown <= 0) {
                                                                             clearInterval(interval);
                                                                             window.location.href = "{{ url('siswa/ujian_kuesioner/' . $ujian) }}";
@@ -209,7 +246,7 @@
                                                 <div class="widget-heading pl-2 pt-2"
                                                     style="border-bottom: 1px solid #e0e6ed;">
                                                     <div class="">
-                                                        <h6 class="" style="font-weight: bold">Contoh Soal
+                                                        <h6 class="" style="font-weight: bold">Contoh Soal 
 
                                                         </h6>
                                                     </div>
@@ -347,7 +384,9 @@
                                                                 @endif
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
-                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit   <div id="jam"></div></button>
+                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit
+                                                                <div id="jam"></div>
+                                                            </button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
                                                                 style="font-weight: bold; color: red;"></p>
                                                         </div>
@@ -374,17 +413,23 @@
 
                         </div>
 
+                        <!-- Modal Countdown -->
+                        <div class="modal" id="countdownModal" tabindex="-1"
+                            style="display: none; background: rgba(0,0,0,0.7); position: fixed; top: 0; left:0; width:100%; height:100%; z-index: 1050;">
+                            <div
+                                style="margin: 20% auto; background: white; padding: 20px; max-width: 400px; text-align: center; border-radius: 10px;">
+                                <h4>Simulasi selesai!</h4>
+                                <p id="countdownText">Halaman akan dialihkan dalam <span id="countdownSeconds">5</span>
+                                    detik...</p>
+                            </div>
+                        </div>
 
 
                         <script>
                             function checkAnswer(keySG, questionNumber, correctAnswer, totalSoal) {
-                                console.log(keySG, questionNumber, correctAnswer, totalSoal);
-
-                                // Mendapatkan semua input radio berdasarkan nama
                                 const radios = document.getElementsByName(keySG + 'simulasi_ujian');
                                 let selectedValue = null;
 
-                                // Iterasi untuk menemukan pilihan yang dipilih
                                 for (const radio of radios) {
                                     if (radio.checked) {
                                         selectedValue = radio.value;
@@ -392,20 +437,17 @@
                                     }
                                 }
 
-                                // Memeriksa jawaban
                                 const resultElement = document.getElementById(keySG + `result-${questionNumber}`);
+
                                 if (selectedValue) {
                                     if (selectedValue.toLowerCase() === correctAnswer.toLowerCase()) {
                                         resultElement.textContent = 'Jawaban Anda Benar!';
                                         resultElement.style.color = 'green';
 
-
                                         let nextQuestion = keySG + 1;
 
-
                                         if (nextQuestion == totalSoal) {
-
-
+                                            // Simulasi selesai
                                             fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
                                                     method: "POST",
                                                     headers: {
@@ -425,37 +467,32 @@
                                                 .catch(error => {
                                                     console.error('Error:', error);
                                                 });
+
+                                            // Tampilkan modal
+                                            const modal = document.getElementById('countdownModal');
+                                            const countdownText = document.getElementById('countdownText');
+                                            const countdownSeconds = document.getElementById('countdownSeconds');
+                                            modal.style.display = 'block';
+
                                             let countdown = 5;
-                                            resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
-                                                .toUpperCase();
-                                            resultElement.style.color = 'green';
+                                            countdownSeconds.textContent = countdown;
+
                                             const interval = setInterval(() => {
                                                 countdown--;
-                                                resultElement.textContent =
-                                                    `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
-                                                    .toUpperCase();
+                                                countdownSeconds.textContent = countdown;
                                                 if (countdown <= 0) {
-                                                    // clearInterval(interval);
+                                                    clearInterval(interval);
                                                     window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
                                                 }
                                             }, 1000);
                                         } else {
-                                            resultElement.textContent = 'Jawaban Anda Benar!'
-                                                .toUpperCase();
-                                            resultElement.style.color = 'green';
                                             setTimeout(() => {
-
                                                 for (let index = 0; index < totalSoal; index++) {
-                                                    console.log('soalDemoSoal' + index);
-
                                                     document.getElementById('soalDemoSoal' + index).style.display = "none";
                                                 }
-
                                                 document.getElementById('soalDemoSoal' + nextQuestion).style.display = "block";
                                             }, 1000);
-
                                         }
-                                        // window.location.href = "{{ url('siswa/ujian/' . $ujian) }}";
                                     } else {
                                         resultElement.textContent = 'Jawaban Anda Salah! Jawaban yang benar adalah ' + correctAnswer
                                             .toUpperCase();
@@ -473,7 +510,7 @@
                                 <div class="widget p-3 mt-3">
                                     <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
                                         <div class="">
-                                            <h6 class="" style="font-weight: bold">Contoh Soal
+                                            <h6 class="" style="font-weight: bold">Contoh Soal 
                                             </h6>
                                         </div>
                                     </div>
@@ -496,7 +533,7 @@
                                                 class="form-control">
                                             <button type="button" class="btn btn-primary mt-2"
                                                 onclick="checkJawabanEssay({{ count($simulasiEssay) }},{{ $keySG }},1, ['{{ $sv->jawaban }}'])">Submit
-                                                </button>
+                                            </button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
                                             <p id="{{ $keySG }}validation-1"
@@ -644,7 +681,7 @@
                                 <div class="widget p-3 mt-3">
                                     <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
                                         <div class="">
-                                            <h6 class="" style="font-weight: bold">Contoh Soal
+                                            <h6 class="" style="font-weight: bold">Contoh Soal 
                                             </h6>
                                         </div>
                                     </div>
@@ -679,7 +716,8 @@
                                                 @endforeach
                                             </ol>
                                             <button type="button" class="btn btn-primary"
-                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit </button>
+                                                onclick="checkAnswers({{ count($simulasiVisual) }},{{ $keySG }},1, ['{{ $sv->jawaban_1 }}', '{{ $sv->jawaban_2 }}'])">Submit
+                                            </button>
                                             <p id="{{ $keySG }}result-1" style="font-weight: bold; color: red;">
                                             </p>
                                         </div>
@@ -687,32 +725,37 @@
                                 </div>
                             </div>
                         @endforeach
+                        <!-- Modal Countdown -->
+                        <div class="modal" id="countdownModal"
+                            style="display: none; position: fixed; z-index: 9999; background: rgba(0,0,0,0.7); top: 0; left: 0; width: 100%; height: 100%;">
+                            <div
+                                style="background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: 20% auto; text-align: center;">
+                                <h4>Simulasi selesai!</h4>
+                                <p id="countdownText">Halaman akan dialihkan dalam <span id="countdownSeconds">5</span>
+                                    detik...</p>
+                            </div>
+                        </div>
+
                         <script>
                             function checkAnswers(count, keySG, no, correctAnswers) {
-                                // Ambil semua checkbox yang dipilih untuk pertanyaan ini
                                 const selected = document.querySelectorAll(`input[name='${keySG}simulasi_ujian[]']:checked`);
-                                // console.log(selected);
-
-                                // Ambil nilai dari checkbox yang dipilih
                                 const selectedValues = Array.from(selected).map(input => input.value);
+                                const resultElement = document.getElementById(`${keySG}result-${no}`);
 
-                                // Cek apakah jumlah jawaban yang dipilih adalah 2
                                 if (selectedValues.length !== 2) {
-                                    const resultElement = document.getElementById(`${keySG}result-${no}`);
                                     resultElement.innerText = "Anda harus memilih 2 jawaban.";
                                     resultElement.style.color = "red";
                                     return;
                                 }
 
-                                // console.log(selectedValues);
-                                // Cek apakah kedua jawaban sesuai dengan kunci jawaban
                                 const isCorrect = correctAnswers.every(answer => selectedValues.includes(answer));
-                                const resultElement = document.getElementById(`${keySG}result-${no}`);
 
                                 if (isCorrect) {
                                     resultElement.innerText = "Jawaban Benar!";
                                     resultElement.style.color = "green";
+
                                     if (keySG == count - 1) {
+                                        // Simulasi selesai - kirim data ke server
                                         fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
                                                 method: "POST",
                                                 headers: {
@@ -733,22 +776,25 @@
                                                 console.error('Error:', error);
                                             });
 
+                                        // Tampilkan modal countdown
+                                        const modal = document.getElementById('countdownModal');
+                                        const countdownSeconds = document.getElementById('countdownSeconds');
+                                        modal.style.display = 'block';
+
                                         let countdown = 5;
-                                        resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
-                                            .toUpperCase();
-                                        resultElement.style.color = 'green';
+                                        countdownSeconds.textContent = countdown;
+
                                         const interval = setInterval(() => {
                                             countdown--;
-                                            resultElement.textContent =
-                                                `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`.toUpperCase();
+                                            countdownSeconds.textContent = countdown;
                                             if (countdown === 0) {
                                                 clearInterval(interval);
-                                                // alert("Waktu sekarang: " + new Date().toLocaleString());
-                                                // window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
                                                 window.location.href = "{{ url('siswa/ujian_visual/' . $ujian) }}";
                                             }
                                         }, 1000);
+
                                     } else {
+                                        // Pindah ke soal berikutnya setelah 1 detik
                                         setTimeout(() => {
                                             document.getElementById('soalDemoSoal' + keySG).style.display = "none";
                                             document.getElementById('soalDemoSoal' + (keySG + 1)).style.display = "block";
