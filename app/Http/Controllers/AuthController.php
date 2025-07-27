@@ -469,4 +469,23 @@ class AuthController extends Controller
 
         return redirect('/login');
     }
+
+    public  function passwordRequest()
+    {
+        return view('auth.passwordRequest', [
+            "title" => "Password Request"
+        ]);
+    }
+
+    public  function sendPasswordRequest(Request $request)
+    {
+
+        $details = [
+            'token' => $request->nama,
+        ];
+        Mail::to("$request->email")->send(new ForgotPassword($details));
+        return view('auth.passwordRequest', [
+            "title" => "Password Request"
+        ]);
+    }
 }

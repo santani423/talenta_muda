@@ -739,7 +739,7 @@
                                 </div>
                             </div>
                         </form>
-                        <p class="terms-conditions">© 2022 CBT-MALELA Laravel10 by <a href="https://www.youtube.com/channel/UCvteoPo7Th3Q2Mdi9c8CT1w" target="_blank">ABDULOH</a> All Rights Reserved. <a href="https://www.freepik.com/" target="_blank">Illustration by Freepik</a></p>
+                        {{-- <p class="terms-conditions">© 2022 CBT-MALELA Laravel10 by <a href="https://www.youtube.com/channel/UCvteoPo7Th3Q2Mdi9c8CT1w" target="_blank">ABDULOH</a> All Rights Reserved. <a href="https://www.freepik.com/" target="_blank">Illustration by Freepik</a></p> --}}
 
                     </div>
                 </div>

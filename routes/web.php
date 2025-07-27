@@ -42,9 +42,11 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/login', [AuthController::class, 'index']);
 Route::get('/install', [AuthController::class, 'install']);
 Route::get('/register', [AuthController::class, 'register']);
-Route::get('/recovery', [AuthController::class, 'recovery']);
+Route::get('/recovery', [AuthController::class, 'recovery'])->name('recovery');
 Route::get('/change_password/{token:token}', [AuthController::class, 'change_password']);
 Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/password/request', [AuthController::class, 'passwordRequest'])->name('password.request');
+Route::post('/password/email', [AuthController::class, 'sendPasswordRequest'])->name('password.email');
 // ==>Function
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/install', [AuthController::class, 'install_']);

@@ -163,29 +163,11 @@
             <div class="form-form-wrap">
                 <div class="form-container">
                     <div class="form-content">
-                        <h1 class="">Log In</h1>
-                        @if (count($admin) == 0)
-                            <p class="signup-link">Admin belum ada. <a href="{{ url('/install') }}">Buat akun Admin
-                                    dulu</a></p>
-                        @else
-                            <p class="signup-link">Daftar Akun. <a href="{{ url('/register') }}">Klik Disini!</a></p>
-                        @endif
-                        @if (session('pesanRegis'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('pesanRegis') }}
-                                <form action="{{ url('/email_send') }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <input type="hidden" name="email" value="{{ session('email') }}">
-                                    <input type="hidden" name="password" value="{{ session('password') }}">
-                                    <input type="hidden" name="token" value="{{ session('token') }}">
-                                    <input type="hidden" name="nama" value="{{ session('nama') }}">
-                                    <button type="submit" class="btn btn-link p-0 m-0 align-baseline">Kirim Ulang Email
-                                        Konfirmasi</button>
-                                </form>
-                            </div>
-                        @endif
+                        <h1 class="">Password Request</h1>
 
-                        <form action="{{ url('/login') }}" method="POST" class="text-left">
+
+
+                        <form action="{{ url('/password/email') }}" method="POST" class="text-left">
                             <div class="form">
                                 @csrf
                                 <div id="username-field" class="field-wrapper input">
@@ -198,36 +180,9 @@
                                     <input type="email" id="username" name="email" class="form-control"
                                         value="{{ old('email') }}" placeholder="Email" required>
                                 </div>
-
-                                <div id="password-field" class="field-wrapper input mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock">
-                                        <rect x="3" y="11" width="18" height="11" rx="2"
-                                            ry="2"></rect>
-                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                    </svg>
-                                    <input type="password" id="password" name="password" class="form-control"
-                                        placeholder="Password" required>
-                                </div>
-
-                                <div class="d-sm-flex justify-content-between align-items-center mb-3">
-                                    <div class="field-wrapper toggle-pass">
-                                        <p class="d-inline-block">Show Password</p>
-                                        <label class="switch s-primary">
-                                            <input type="checkbox" id="toggle-password" class="d-none">
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
-
-                                    <div>
-                                        <a href="{{ route('recovery') }}" class="text-primary">Lupa
-                                            Password?</a>
-                                    </div>
-                                </div>
-
                                 <div class="field-wrapper">
-                                    <button type="submit" class="btn btn-primary w-100">Log In</button>
+                                    <button type="submit" class="btn btn-primary w-100">Kirim Link Reset
+                                        Password</button>
                                 </div>
                             </div>
                         </form>

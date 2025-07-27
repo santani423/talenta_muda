@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             DetailJawabanKuisoner::class,
             FacetSeeder::class,
             DomainSeeder::class,
+            EmailSettingsSeeder::class,
         ]);
 
         $this->call([
