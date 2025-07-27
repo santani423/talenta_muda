@@ -173,6 +173,56 @@
             }
         });
     </script>
+    
+  <script>
+    // Inisialisasi Chart.js
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [{
+          label: 'Penjualan',
+          data: [12, 19, 3, 5, 2],
+          backgroundColor: 'rgba(75, 192, 192, 0.7)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false
+      }
+    });
+
+    // Fungsi cetak PDF
+    async function printPDF() {
+      const chartElement = document.getElementById('chart-container');
+
+      // Render canvas ke gambar
+      const canvas = await html2canvas(chartElement, {
+        backgroundColor: "#ffffff"
+      });
+
+      const imageData = canvas.toDataURL("image/png");
+
+      // Gunakan jsPDF versi UMD
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      // Tambahkan gambar ke PDF (disesuaikan ukurannya)
+      const imgProps = pdf.getImageProperties(imageData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imageData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+      pdf.save('laporan-penjualan.pdf');
+    }
+  </script>
     <!-- MODAL -->
     <script>
         let itemPrint = '';
@@ -383,6 +433,38 @@
                         }
                         htmlContent += `   </div>`;
                         htmlContent += `    </div>`; // penutup div yang kurang
+                        // Tambahkan chart untuk facet ini
+                        const chartId = `facetChart_${data?.ujian?.kode}_${Math.random().toString(36).substr(2, 9)}`;
+                        // htmlContent += `<div class="mt-4"><canvas id="${chartId}" width="600" height="300"></canvas></div>`;
+
+                        // Data chart: gunakan facet?.labels dan facet?.nilai jika tersedia, fallback ke dummy data
+                        setTimeout(() => {
+                            const chartElem = document.getElementById(chartId);
+                            if (chartElem) {
+                                new Chart(chartElem.getContext('2d'), {
+                                    type: 'bar',
+                                    data: {
+                                        labels: data?.facet?.[0]?.labels || ['A', 'B', 'C', 'D'],
+                                        datasets: [{
+                                            label: 'Nilai Facet',
+                                            data: data?.facet?.[0]?.nilai || [10, 20, 30, 40],
+                                            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: false,
+                                        maintainAspectRatio: false,
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }, 200);
                         results.forEach((subData) => {
                             console.log('facetfacetwertyui', subData?.ujian?.kode);
 
@@ -395,7 +477,7 @@
 
                                         htmlContent += `
      <div class="mt-4" style="page-break-before: always;">
-         <p class="mt-4" style="color: black;">${subData?.ujian?.nama} - ${facet?.domain}</p>
+         <p class="mt-4" style="color: black;">${subData?.ujian?.nama} - ${facet?.domain} </p>
          <canvas id="${canvasId}"  ></canvas> 
      </div>
  `;

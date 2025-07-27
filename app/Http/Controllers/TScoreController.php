@@ -92,7 +92,7 @@ class TScoreController extends Controller
      */
     public function show(TScore $tScore)
     {
-        //
+        return view('tespirnt');
     }
 
     /**
