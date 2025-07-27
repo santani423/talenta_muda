@@ -9,11 +9,30 @@
         .hidden {
             display: none;
         }
+
+        .timer-fixed {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background-color: #1b55e2;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- BEGIN CONTENT AREA -->
     <div class="layout-px-spacing">
+
+        <!-- TIMER -->
+        <div class="d-flex timer-fixed hidden">
+            <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
+                <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">
@@ -22,11 +41,6 @@
                     <input type="hidden" name="kode" value="{{ $ujian->kode }}">
                     <input type="hidden" name="kode_merge_ujian" value="{{ $kode_merge_ujian }}">
                     <div class="widget shadow p-2">
-                        <div class="d-flex float-right hidden">
-                            <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
-                                <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
-                            </div>
-                        </div>
                         <div>
                             @php
                                 $no = 1;
@@ -44,7 +58,6 @@
                                         <div class="widget-heading" style="border-bottom: 1px solid #e0e6ed;">
                                             <h6 class="question-title color-green text-center"
                                                 style="word-wrap: break-word">
-
                                                 <img src="{{ url($soal->detailujian->soal) }}" alt=""
                                                     style="width: 70Wh; height: 30vh;">
                                             </h6>
@@ -53,87 +66,27 @@
                                         <div class="widget-content mt-3">
                                             <div class="alert alert-danger hidden"></div>
                                             <div class="green-radio color-green">
-                                                <ol type="A"
-                                                    style="color: #000; margin-left: -20px; list-style-type: none;">
+                                                <ol type="A" style="color: #000; margin-left: -20px; list-style-type: none;">
                                                     <div class="row">
-                                                        <div
-                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
-                                                            <li class="answer-number d-flex align-items-center">
-                                                                <input type="radio"
-                                                                    name="pilihan-{{ $soal->detailujian->id }}"
-                                                                    value="a" id="soal{{ $no }}-a" />
-                                                                <label for="soal{{ $no }}-a"
-                                                                    class="d-flex align-items-center ml-2">
-                                                                    <span>A</span>
-                                                                    <img src="{{ url($soal->detailujian->pg_1) }}"
-                                                                        alt=""
-                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
-                                                                </label>
-                                                            </li>
-                                                        </div>
-                                                        <div
-                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
-                                                            <li class="answer-number d-flex align-items-center">
-                                                                <input type="radio"
-                                                                    name="pilihan-{{ $soal->detailujian->id }}"
-                                                                    value="b" id="soal{{ $no }}-b" />
-                                                                <label for="soal{{ $no }}-b"
-                                                                    class="d-flex align-items-center ml-2">
-                                                                    <span>B </span>
-                                                                    <img src="{{ url($soal->detailujian->pg_2) }}"
-                                                                        alt=""
-                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
-                                                                </label>
-                                                            </li>
-                                                        </div>
-                                                        <div
-                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
-                                                            <li class="answer-number d-flex align-items-center">
-                                                                <input type="radio"
-                                                                    name="pilihan-{{ $soal->detailujian->id }}"
-                                                                    value="c" id="soal{{ $no }}-c" />
-                                                                <label for="soal{{ $no }}-c"
-                                                                    class="d-flex align-items-center ml-2">
-                                                                    <span>C </span>
-                                                                    <img src="{{ url($soal->detailujian->pg_3) }}"
-                                                                        alt=""
-                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
-                                                                </label>
-                                                            </li>
-                                                        </div>
-                                                        <div
-                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
-                                                            <li class="answer-number d-flex align-items-center">
-                                                                <input type="radio"
-                                                                    name="pilihan-{{ $soal->detailujian->id }}"
-                                                                    value="d" id="soal{{ $no }}-d" />
-                                                                <label for="soal{{ $no }}-d"
-                                                                    class="d-flex align-items-center ml-2">
-                                                                    <span>D </span>
-                                                                    <img src="{{ url($soal->detailujian->pg_4) }}"
-                                                                        alt=""
-                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
-                                                                </label>
-                                                            </li>
-                                                        </div>
-                                                        <div
-                                                            class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
-                                                            <li class="answer-number d-flex align-items-center">
-                                                                <input type="radio"
-                                                                    name="pilihan-{{ $soal->detailujian->id }}"
-                                                                    value="e" id="soal{{ $no }}-e" />
-                                                                <label for="soal{{ $no }}-e"
-                                                                    class="d-flex align-items-center ml-2">
-                                                                    <span>E </span>
-                                                                    <img src="{{ url($soal->detailujian->pg_5) }}"
-                                                                        alt=""
-                                                                        style="width: auto; height: 20vh; margin-left: 10px;">
-                                                                </label>
-                                                            </li>
-                                                        </div>
-                                                        @if ($soal->detailujian->pg_6 != null && $soal->detailujian->pg_6 != '' && $soal->detailujian->pg_6 != 'f')
-                                                            <div
-                                                                class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
+                                                        @foreach (['a', 'b', 'c', 'd', 'e'] as $opt)
+                                                            <div class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
+                                                                <li class="answer-number d-flex align-items-center">
+                                                                    <input type="radio"
+                                                                        name="pilihan-{{ $soal->detailujian->id }}"
+                                                                        value="{{ $opt }}" id="soal{{ $no }}-{{ $opt }}" />
+                                                                    <label for="soal{{ $no }}-{{ $opt }}"
+                                                                        class="d-flex align-items-center ml-2">
+                                                                        <span>{{ strtoupper($opt) }}</span>
+                                                                        <img src="{{ url($soal->detailujian->{'pg_' . (array_search($opt, ['a', 'b', 'c', 'd', 'e']) + 1)}) }}"
+                                                                            alt=""
+                                                                            style="width: auto; height: 20vh; margin-left: 10px;">
+                                                                    </label>
+                                                                </li>
+                                                            </div>
+                                                        @endforeach
+
+                                                        @if (!empty($soal->detailujian->pg_6) && $soal->detailujian->pg_6 != 'f')
+                                                            <div class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                                 <li class="answer-number d-flex align-items-center">
                                                                     <input type="radio"
                                                                         name="pilihan-{{ $soal->detailujian->id }}"
@@ -168,7 +121,7 @@
                     </div>
                 </form>
 
-                <!-- Exams Footer - Multi Step Pages Footer -->
+                <!-- Exams Footer -->
                 <div class="row">
                     <div class="col-lg-12 exams-footer">
                         <div class="row pb-3">
@@ -184,10 +137,9 @@
                                     <span id="current-question-number-label">1</span>
                                     <span>Dari <b>{{ $ujian->detailujian->count() }}</b></span>
                                 </div>
-                                <div>
-                                    Nomor Soal
-                                </div>
+                                <div>Nomor Soal</div>
                             </div>
+
                             <div class="col-sm-1 go-to-next-question-pg-wrapper text-center mt-3">
                                 <a href="javascript:void(0);" id="go-to-next-question-pg" class="btn btn-primary">
                                     Next
@@ -201,8 +153,6 @@
 
     </div>
 
-    <!-- END CONTENT AREA -->
-
     {!! session('pesan') !!}
     @include('error.ew-s-p')
 
@@ -210,10 +160,8 @@
         $(document).ready(function() {
             var currentQuestionNumber = 1;
             var totalOfQuestion = $('#totalOfQuestion').val();
-            var interval;
 
             function startTimer(endDate, display) {
-                // Convert end date to a timestamp
                 const targetTime = new Date(endDate).getTime();
 
                 const interval = setInterval(() => {
@@ -221,19 +169,14 @@
                     const timeLeft = targetTime - currentTime;
 
                     if (timeLeft > 0) {
-                         if (timeLeft <= 30000) {
-                            $('.jam_ujin_skearan').closest('.d-flex').removeClass('hidden');
-                        }
-                        // Calculate hours, minutes, and seconds remaining, ensuring each is 2 digits
-                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
-                            '0');
+                        $('.jam_ujin_skearan').closest('.timer-fixed').removeClass('hidden');
+
+                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2, '0');
                         const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
                         const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
 
-                        // Display the formatted time
                         display.text(`${hours}:${minutes}:${seconds}`);
                     } else {
-                        // Stop the timer and show 00:00:00
                         clearInterval(interval);
                         display.text("00:00:00");
                         alert("Waktu Ujian Habis");
@@ -242,14 +185,11 @@
                 }, 1000);
             }
 
-
             $(function() {
-                // Assign PHP variable to JavaScript variable and start the countdown
-                const endDate = "{{ $waktu_ujian->waktu_berakhir }}"; // Output example: "2024-12-06 14:04"
+                const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
                 const display = $('.jam_ujin_skearan');
                 startTimer(endDate, display);
             });
-
 
             $('#go-to-next-question-pg').on('click', function() {
                 if (currentQuestionNumber < totalOfQuestion) {
@@ -258,7 +198,6 @@
                 } else {
                     saveAnswer(currentQuestionNumber);
                     $('#examwizard-question').submit();
-
                 }
             });
 
@@ -274,7 +213,6 @@
                 $('.question-' + questionNumber).removeClass('hidden');
                 $('#current-question-number-label').text(questionNumber);
                 $('#back-to-prev-question').toggleClass('disabled', questionNumber === 1);
-                // $('#go-to-next-question-essay').toggleClass('disabled', questionNumber === totalOfQuestion);
             }
 
             function saveAnswer(questionNumber) {

@@ -9,8 +9,28 @@
         .hidden {
             display: none;
         }
+
+        #fixed-timer {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 9999;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            display: none;
+        }
     </style>
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Fixed Countdown Timer -->
+    <div id="fixed-timer">
+        <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
+    </div>
 
     <div class="row">
         <div class="col-lg-12">
@@ -19,11 +39,7 @@
                 <input type="hidden" name="kode" value="{{ $ujian->kode }}">
                 <input type="hidden" name="kode_merge_ujian" value="{{ $kode_merge_ujian }}">
                 <div class="widget shadow p-2">
-                    <div class="d-flex float-right hidden">
-                        <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
-                            <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
-                        </div>
-                    </div>
+
                     <div>
                         @php
                             $no = 1;
@@ -31,8 +47,7 @@
                             $soal_hidden = '';
                         @endphp
                         @foreach ($detail_siswa as $kuisoner)
-                            <div class="question {{ $soal_hidden }} question-{{ $no }}"
-                                data-question="{{ $no }}">
+                            <div class="question {{ $soal_hidden }} question-{{ $no }}" data-question="{{ $no }}">
                                 <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
                                     <h6 style="font-weight: bold">Soal No. <span class="badge badge-primary no-soal"
                                             style="font-size: 1rem">{{ $no }}</span></h6>
@@ -46,15 +61,14 @@
                                                 <tr>
                                                     <th scope="col">No</th>
                                                     <th scope="col">Pernyataan</th>
-                                                    <th scope="col"  colspan="2">Pilihan Anda</th>
+                                                    <th scope="col" colspan="2">Pilihan Anda</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                 
                                                 @foreach ($kuisoner as $ku)
                                                     <tr>
                                                         <th scope="row">{{ $noSoal }}</th>
-                                                        <td>{!! $ku['soal'] !!} </td>
+                                                        <td>{!! $ku['soal'] !!}</td>
                                                         <td>
                                                             <div class="row">
                                                                 @foreach ($ku['detail_jawaban_kuisoner'] as $djk)
@@ -74,21 +88,10 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                    @php
-                                                        $noSoal++;
-                                                    @endphp
+                                                    @php $noSoal++; @endphp
                                                 @endforeach
                                             </tbody>
                                         </table>
-
-
-                                    </div>
-
-                                    <div class="widget-content mt-3">
-                                        <div class="alert alert-danger hidden"></div>
-                                        <div class="green-checkbox color-green">
-
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -113,15 +116,12 @@
                                 Back
                             </a>
                         </div>
-
                         <div class="col-sm-2 footer-question-number-wrapper text-center mt-3">
                             <div>
                                 <span id="current-question-number-label">1</span>
                                 <span>Dari <b>{{ count($detail_siswa) }}</b></span>
                             </div>
-                            <div>
-                                Nomor Soal
-                            </div>
+                            <div>Nomor Soal</div>
                         </div>
                         <div class="col-sm-1 go-to-next-question-pg-wrapper text-center mt-3">
                             <a href="javascript:void(0);" id="go-to-next-question-pg" class="btn btn-primary">
@@ -138,10 +138,8 @@
         $(document).ready(function() {
             var currentQuestionNumber = 1;
             var totalOfQuestion = $('#totalOfQuestion').val();
-            var interval;
 
             function startTimer(endDate, display) {
-                // Convert end date to a timestamp
                 const targetTime = new Date(endDate).getTime();
 
                 const interval = setInterval(() => {
@@ -149,12 +147,11 @@
                     const timeLeft = targetTime - currentTime;
 
                     if (timeLeft > 0) {
-                          if (timeLeft <= 30000) {
-                            $('.jam_ujin_skearan').closest('.d-flex').removeClass('hidden');
+                        if (timeLeft <= 30000) {
+                            $('#fixed-timer').fadeIn();
                         }
-                        // Calculate hours, minutes, and seconds remaining
-                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
-                            '0');
+
+                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2, '0');
                         const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
                         const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
 
@@ -169,8 +166,7 @@
             }
 
             $(function() {
-                // Assign PHP variable to JavaScript variable and start the countdown
-                const endDate = "{{ $waktu_ujian->waktu_berakhir }}"; // Output example: "2024-12-06 14:04"
+                const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
                 const display = $('.jam_ujin_skearan');
                 startTimer(endDate, display);
             });

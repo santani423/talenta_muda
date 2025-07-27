@@ -10,8 +10,29 @@
         .hidden {
             display: none;
         }
+
+        #fixed-timer {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 9999;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            display: none;
+        }
     </style>
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Fixed Countdown Timer -->
+    <div id="fixed-timer">
+        <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
+    </div>
+
     <div>
         <div class="layout-px-spacing">
             <div class="row">
@@ -21,11 +42,6 @@
                         <input type="hidden" name="kode" value="{{ $ujian->kode }}">
                         <input type="hidden" name="kode_merge_ujian" value="{{ $kode_merge_ujian }}">
                         <div class="widget shadow p-2">
-                            <div class="d-flex float-right hidden">
-                                <div class="badge badge-primary " style="font-size: 18px; font-weight: bold;">
-                                    <span data-feather="clock"></span> | <span class="jam_ujin_skearan">00:00:00</span>
-                                </div>
-                            </div>
                             <div>
                                 @php
                                     $no = 1;
@@ -63,10 +79,9 @@
                                                         });
                                                     </script>
                                                 @else
-                                                    
-                                                <div class="green-radio color-green">
-                                                    <textarea name="jawaban-{{ $soal->id }}" id="soal{{ $no }}-{{ $soal->id }}" data-essay_siswa="{{ $soal->id }}" data-noSoal="{{ $no }}" class="form-control" placeholder="tuliskan jawaban...">@if($soal->jawaban !== null) {{ $soal->jawaban }} @endif</textarea>
-                                                </div>
+                                                    <div class="green-radio color-green">
+                                                        <textarea name="jawaban-{{ $soal->id }}" id="soal{{ $no }}-{{ $soal->id }}" data-essay_siswa="{{ $soal->id }}" data-noSoal="{{ $no }}" class="form-control" placeholder="tuliskan jawaban...">@if($soal->jawaban !== null) {{ $soal->jawaban }} @endif</textarea>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
@@ -108,7 +123,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     {!! session('pesan') !!}
     @include('error.ew-s-e')
@@ -119,10 +134,8 @@
     $(document).ready(function () {
         var currentQuestionNumber = 1;
         var totalOfQuestion = $('#totalOfQuestion').val();
-        var interval;
 
         function startTimer(endDate, display) {
-            // Convert end date to a timestamp
             const targetTime = new Date(endDate).getTime();
 
             const interval = setInterval(() => {
@@ -130,10 +143,10 @@
                 const timeLeft = targetTime - currentTime;
 
                 if (timeLeft > 0) {
-                      if (timeLeft <= 30000) {
-                            $('.jam_ujin_skearan').closest('.d-flex').removeClass('hidden');
-                        }
-                    // Calculate hours, minutes, and seconds remaining
+                    if (timeLeft <= 30000) {
+                        $('#fixed-timer').fadeIn();
+                    }
+
                     const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2, '0');
                     const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
                     const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
@@ -149,8 +162,7 @@
         }
 
         $(function() {
-            // Assign PHP variable to JavaScript variable and start the countdown
-            const endDate = "{{ $waktu_ujian->waktu_berakhir }}"; // Output example: "2024-12-06 14:04"
+            const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
             const display = $('.jam_ujin_skearan');
             startTimer(endDate, display);
         });
@@ -162,7 +174,6 @@
             } else {
                 saveAnswer(currentQuestionNumber);
                 $('#examwizard-question').submit();
-                 
             }
         });
 
@@ -177,8 +188,6 @@
             $('.question').addClass('hidden');
             $('.question-' + questionNumber).removeClass('hidden');
             $('#current-question-number-label').text(questionNumber);
-            $('#back-to-prev-question').toggleClass('disabled', questionNumber === 1);
-            // $('#go-to-next-question-essay').toggleClass('disabled', questionNumber === totalOfQuestion);
         }
 
         function saveAnswer(questionNumber) {
