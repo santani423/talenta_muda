@@ -46,7 +46,7 @@
                                                 style="word-wrap: break-word">
 
                                                 <img src="{{ url($soal->detailujian->soal) }}" alt=""
-                                                    style="width: auto; height: 35vh;">
+                                                    style="width: auto; height: 50vh;">
                                             </h6>
                                         </div>
 
