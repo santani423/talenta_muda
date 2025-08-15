@@ -110,6 +110,7 @@
                                                 <th>Sex</th>
                                                 <th>Usia</th>
                                                 <th>IQ CFIT</th>
+                                                <th>scroe IQ</th>
                                                 <th>Norma</th>
                                                 <th>MR</th>
                                                 <th>Norma</th>
@@ -199,6 +200,12 @@
                                                     <td>
                                                         <span id="nilaiIQ{{ $key }}"
                                                             data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span>
+                                                    </td>
+                                                    <td>
+                                                        <span id="scoreIQ{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span>
                                                     </td>
 
@@ -215,7 +222,7 @@
                                                     <td>Norma</td>
                                                     <td><span id="SIM{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-                                                     
+
                                                     <td>5.1. N</td>
                                                     <td>E</td>
                                                     <td>O</td>
@@ -279,6 +286,7 @@
                                                 el.innerHTML = '<span class="spinner"></span>';
 
                                                 const studentId = el.getAttribute('data-id');
+                                                const studentName = el.getAttribute('data-name');
                                                 const kode = el.getAttribute('data-kode') || '';
                                                 const tanggalLahir = el.getAttribute('data-tanggal-lahir') || '';
 
@@ -286,7 +294,7 @@
                                                     // Ambil nilai IQ dasar
                                                     if (!isNorma) {
                                                         const iqRes = await fetch(
-                                                            `/api/siswa/ujian/IQCFIT?studentId=${studentId}&kode=${kode}`);
+                                                        `/api/siswa/ujian/IQCFIT?studentId=${studentId}&kode=${kode}`);
                                                         const iqData = await iqRes.json();
                                                         if (iqData.status === 'success') {
                                                             el.textContent = iqData.nilai;
@@ -330,6 +338,7 @@
                                                         const mrEl = document.getElementById('MR' + studentId);
                                                         const artdEl = document.getElementById('ARTd' + studentId);
                                                         const SIMEl = document.getElementById('SIM' + studentId);
+                                                        const scoreIQEl = document.getElementById('scoreIQ' + studentId);
 
                                                         try {
                                                             const tScoreResponse = await tScore(nilaiTscore, tanggalLahir);
@@ -337,15 +346,17 @@
                                                             const kualifikasiIq = tScoreResponse?.klasifikasi?.klasifikasi ?? '-';
 
                                                             normaEl.textContent = kualifikasiIq;
-                                                            // mrEl.textContent = kualifikasiIq;
+                                                            mrEl.textContent = nilaiTscore; // perbaikan
                                                             artdEl.textContent = nilaiARTd;
                                                             SIMEl.textContent = nilaiSIM;
+                                                            scoreIQEl.textContent = skorIq; // perbaikan
                                                         } catch (err) {
                                                             console.error('Error tScore:', err);
                                                             normaEl.textContent = 'Gagal';
                                                             mrEl.textContent = 'Gagal';
                                                             artdEl.textContent = 'Gagal';
                                                             SIMEl.textContent = 'Gagal';
+                                                            scoreIQEl.textContent = 'Gagal';
                                                         }
                                                     }
                                                 } catch (error) {
@@ -355,6 +366,7 @@
                                                         document.getElementById('MR' + studentId).textContent = 'Error';
                                                         document.getElementById('ARTd' + studentId).textContent = 'Error';
                                                         document.getElementById('SIM' + studentId).textContent = 'Error';
+                                                        document.getElementById('scoreIQ' + studentId).textContent = 'Error';
                                                     } else {
                                                         el.textContent = 'Error';
                                                     }
@@ -370,8 +382,10 @@
                                             document.querySelectorAll('[id^="norma"]').forEach(el => {
                                                 loadStudentScore(el, true);
                                             });
+
                                         });
                                     </script>
+
                                     <nav aria-label="Page navigation example" class="d-flex justify-content-end">
                                         <ul class="pagination">
                                             <!-- Pagination items will be added here by JavaScript -->
