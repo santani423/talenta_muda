@@ -117,11 +117,11 @@
                                                 <th>ARTH</th>
                                                 <th>Norma</th>
                                                 <th>SIM</th>
-                                                <th>5.1. N</th>
-                                                <th>E</th>
-                                                <th>O</th>
-                                                <th>A</th>
-                                                <th>C</th>
+                                                <th>5.1. NEUROTICISM</th>
+                                                <th>EXTRAVERSION:</th>
+                                                <th>OPENESS TO EXPERIENCE</th>
+                                                <th>AGREEABLENESS</th>
+                                                <th>CONSCIENTIOUSNESS</th>
                                                 <th>Anxiety</th>
                                                 <th>Angry Hostility</th>
                                                 <th>Depression</th>
@@ -346,10 +346,10 @@
                                                             const kualifikasiIq = tScoreResponse?.klasifikasi?.klasifikasi ?? '-';
 
                                                             normaEl.textContent = kualifikasiIq;
-                                                            mrEl.textContent = nilaiTscore; // perbaikan
+                                                            mrEl.textContent = nilaiTscore;  
                                                             artdEl.textContent = nilaiARTd;
                                                             SIMEl.textContent = nilaiSIM;
-                                                            scoreIQEl.textContent = skorIq; // perbaikan
+                                                            scoreIQEl.textContent = skorIq;  
                                                         } catch (err) {
                                                             console.error('Error tScore:', err);
                                                             normaEl.textContent = 'Gagal';
