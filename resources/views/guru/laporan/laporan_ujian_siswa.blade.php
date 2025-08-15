@@ -206,28 +206,50 @@
                                                     <td>
                                                         <span id="scoreIQ{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span>
                                                     </td>
 
 
 
                                                     <td><span id="norma{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
                                                     <td><span id="MR{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
                                                     <td>Norma</td>
                                                     <td><span id="ARTd{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
                                                     <td>Norma</td>
+
                                                     <td><span id="SIM{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="NEUROTICISM{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="EXTRAVERSION{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="OPENESSTOEXPERIENCE{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="AGREEABLENESS{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="CONSCIENTIOUSNESS{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
-                                                    <td>5.1. N</td>
-                                                    <td>E</td>
-                                                    <td>O</td>
-                                                    <td>A</td>
-                                                    <td>C</td>
+                                                     
+                                                  
                                                     <td>Anxiety</td>
                                                     <td>Angry Hostility</td>
                                                     <td>Depression</td>
@@ -294,7 +316,7 @@
                                                     // Ambil nilai IQ dasar
                                                     if (!isNorma) {
                                                         const iqRes = await fetch(
-                                                        `/api/siswa/ujian/IQCFIT?studentId=${studentId}&kode=${kode}`);
+                                                            `/api/siswa/ujian/IQCFIT?studentId=${studentId}&kode=${kode}`);
                                                         const iqData = await iqRes.json();
                                                         if (iqData.status === 'success') {
                                                             el.textContent = iqData.nilai;
@@ -320,6 +342,7 @@
                                                     let nilaiTscore = 0;
                                                     let nilaiARTd = 0;
                                                     let nilaiSIM = 0;
+                                                    let facet = [];
 
                                                     results.forEach(data => {
                                                         if (['part1_1', 'part1_2', 'part1_3', 'part1_4'].includes(data.codeUjian)) {
@@ -331,6 +354,14 @@
                                                         if (data.codeUjian === 'part1_4') {
                                                             nilaiSIM = parseInt(data?.nilai ?? 0);
                                                         }
+                                                        if (data.typeUjian == 2) {
+                                                            if (data.facet.some(facet => facet?.totalScore != 0)) {
+                                                                facet = data.facet;
+                                                                data.facet.forEach((facet, ndxFacet) => {
+
+                                                                });
+                                                            }
+                                                        }
                                                     });
 
                                                     if (isNorma) {
@@ -339,17 +370,46 @@
                                                         const artdEl = document.getElementById('ARTd' + studentId);
                                                         const SIMEl = document.getElementById('SIM' + studentId);
                                                         const scoreIQEl = document.getElementById('scoreIQ' + studentId);
+                                                        console.log(`facetstudentName ${studentName}`, facet);
+                                                        facet.map((itm) => {
+                                                            switch (itm?.domain) {
+                                                                case 'NEUROTICISM':
+                                                                    document.getElementById('NEUROTICISM' + studentId).textContent = itm
+                                                                        ?.totalScore;
+                                                                    break;
+                                                                case 'EXTRAVERSION':
+                                                                    document.getElementById('EXTRAVERSION' + studentId).textContent = itm
+                                                                        ?.totalScore;
+                                                                    break;
+                                                                case 'OPENESS TO EXPERIENCE':
+                                                                    document.getElementById('OPENESSTOEXPERIENCE' + studentId).textContent = itm
+                                                                        ?.totalScore;
+                                                                    break;
+                                                                case 'AGREEABLENESS':
+                                                                    document.getElementById('AGREEABLENESS' + studentId).textContent = itm
+                                                                        ?.totalScore;
+                                                                    break;
+                                                                case 'CONSCIENTIOUSNESS':
+                                                                    document.getElementById('CONSCIENTIOUSNESS' + studentId).textContent = itm
+                                                                        ?.totalScore;
+                                                                    break;
+
+                                                                default:
+                                                                    break;
+                                                            }
+                                                        })
 
                                                         try {
+
+                                                            mrEl.textContent = nilaiTscore;
                                                             const tScoreResponse = await tScore(nilaiTscore, tanggalLahir);
                                                             const skorIq = tScoreResponse?.kalenderScore?.nilai ?? '-';
                                                             const kualifikasiIq = tScoreResponse?.klasifikasi?.klasifikasi ?? '-';
 
                                                             normaEl.textContent = kualifikasiIq;
-                                                            mrEl.textContent = nilaiTscore;  
                                                             artdEl.textContent = nilaiARTd;
                                                             SIMEl.textContent = nilaiSIM;
-                                                            scoreIQEl.textContent = skorIq;  
+                                                            scoreIQEl.textContent = skorIq;
                                                         } catch (err) {
                                                             console.error('Error tScore:', err);
                                                             normaEl.textContent = 'Gagal';
@@ -436,7 +496,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hail Tes</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Hasil Tes</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -717,7 +777,7 @@
                         if (data.facet.some(facet => facet?.totalScore != 0)) {
                             data.facet.forEach((facet, ndxFacet) => {
                                 htmlContent +=
-                                    `     <div class="col-md-6" style="color: black;">${facet?.domain}: ${facet?.totalScore}</div>`;
+                                    `<div class="col-md-6" style="color: black;">${facet?.domain}: ${facet?.totalScore}</div>`;
                             });
                         }
                         htmlContent += `   </div>`;
