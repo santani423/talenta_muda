@@ -247,15 +247,39 @@
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="anxiety{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="angry_hostility{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="depression{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="self_consciousness{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="impulsiveness{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="vulnerability{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
-                                                     
+
+
+
+
                                                   
-                                                    <td>Anxiety</td>
-                                                    <td>Angry Hostility</td>
-                                                    <td>Depression</td>
-                                                    <td>Self Consciouseness</td>
-                                                    <td>Impulsiveness</td>
-                                                    <td>Vulnerability</td>
+                                                   
+                                                    
+                                                     
                                                     <td>Warmtd</td>
                                                     <td>Gregariousness</td>
                                                     <td>Assertiveness</td>
@@ -278,25 +302,81 @@
                                                     <td>Achievment Striving</td>
                                                     <td>Self-discipline</td>
                                                     <td>Deliberation</td>
-                                                    <td>5.2. Crudelia</td>
-                                                    <td>Egoism</td>
-                                                    <td>Machiavellianism</td>
-                                                    <td>Narcissism</td>
-                                                    <td>Frustalia</td>
-                                                    <td>Greed</td>
-                                                    <td>Moral Disengagement</td>
-                                                    <td>Psychological Entitlement</td>
-                                                    <td>Psychopatdy</td>
-                                                    <td>Sadism</td>
-                                                    <td>Self Centeredness</td>
-                                                    <td>Spitefulness</td>
-                                                    <td>5.3. College Maladjustment (Mt)</td>
-                                                    <td>Lie Scale (L)</td>
-                                                    <td>Neg Treatment Indicator (TRT)</td>
-                                                    <td>lack of self motivation (TRT1)</td>
-                                                    <td>Lack of self disclosure (TRT2)</td>
-                                                    <td>CATATAN</td>
-                                                    <td>REKOMENDASI</td>
+                                                    <td><span id="CRUD{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="EGO{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="MACH{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="NARC{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="FRUST{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="GRD{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="MD{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="PE{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="PSY{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="SAD{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="SC{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="SPITE{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+
+
+
+                                                    <td><span id="Mt{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="L{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="TRT{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+
+                                                    <td><span id="TRT1{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="TRT2{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -343,6 +423,7 @@
                                                     let nilaiARTd = 0;
                                                     let nilaiSIM = 0;
                                                     let facet = [];
+                                                    let sekala = [];
 
                                                     results.forEach(data => {
                                                         if (['part1_1', 'part1_2', 'part1_3', 'part1_4'].includes(data.codeUjian)) {
@@ -361,6 +442,92 @@
 
                                                                 });
                                                             }
+
+
+                                                            if (data?.sekala?.average_scores?.some(sekala => sekala?.average_score !=
+                                                                    0)) {
+                                                                console.log(`sekala ${studentName}`, data?.sekala?.average_scores);
+
+                                                                data?.sekala?.average_scores?.map((itm) => {
+                                                                    switch (itm?.kode_sekala) {
+                                                                        case 'CRUD':
+                                                                            document.getElementById('CRUD' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'EGO':
+                                                                            document.getElementById('EGO' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'MACH':
+                                                                            document.getElementById('MACH' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'MACH':
+                                                                            document.getElementById('MACH' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'NARC':
+                                                                            document.getElementById('NARC' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'FRUST':
+                                                                            document.getElementById('FRUST' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'GRD':
+                                                                            document.getElementById('GRD' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'MD':
+                                                                            document.getElementById('MD' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'PE':
+                                                                            document.getElementById('PE' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'PSY':
+                                                                            document.getElementById('PSY' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'SAD':
+                                                                            document.getElementById('SAD' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'SC':
+                                                                            document.getElementById('SC' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'SPITE':
+                                                                            document.getElementById('SPITE' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'Mt':
+                                                                            document.getElementById('Mt' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'L':
+                                                                            document.getElementById('L' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'TRT':
+                                                                            document.getElementById('TRT' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'TRT1':
+                                                                            document.getElementById('TRT1' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+                                                                        case 'TRT2':
+                                                                            document.getElementById('TRT2' + studentId)
+                                                                                .textContent = itm?.average_score;
+                                                                            break;
+
+                                                                        default:
+                                                                            break;
+                                                                    }
+                                                                });
+                                                            }
                                                         }
                                                     });
 
@@ -370,33 +537,76 @@
                                                         const artdEl = document.getElementById('ARTd' + studentId);
                                                         const SIMEl = document.getElementById('SIM' + studentId);
                                                         const scoreIQEl = document.getElementById('scoreIQ' + studentId);
-                                                        console.log(`facetstudentName ${studentName}`, facet);
                                                         facet.map((itm) => {
+                                                            console.log(`facetstudentName ${studentName}`, itm?.subdomain?.anxiety);
                                                             switch (itm?.domain) {
                                                                 case 'NEUROTICISM':
                                                                     document.getElementById('NEUROTICISM' + studentId).textContent = itm
                                                                         ?.totalScore;
                                                                     break;
                                                                 case 'EXTRAVERSION':
-                                                                    document.getElementById('EXTRAVERSION' + studentId).textContent = itm
+                                                                    document.getElementById('EXTRAVERSION' + studentId).textContent =
+                                                                        itm
                                                                         ?.totalScore;
                                                                     break;
                                                                 case 'OPENESS TO EXPERIENCE':
-                                                                    document.getElementById('OPENESSTOEXPERIENCE' + studentId).textContent = itm
+                                                                    document.getElementById('OPENESSTOEXPERIENCE' + studentId)
+                                                                        .textContent = itm
                                                                         ?.totalScore;
                                                                     break;
                                                                 case 'AGREEABLENESS':
-                                                                    document.getElementById('AGREEABLENESS' + studentId).textContent = itm
+                                                                    document.getElementById('AGREEABLENESS' + studentId).textContent =
+                                                                        itm
                                                                         ?.totalScore;
                                                                     break;
                                                                 case 'CONSCIENTIOUSNESS':
-                                                                    document.getElementById('CONSCIENTIOUSNESS' + studentId).textContent = itm
+                                                                    document.getElementById('CONSCIENTIOUSNESS' + studentId)
+                                                                        .textContent = itm
                                                                         ?.totalScore;
                                                                     break;
 
                                                                 default:
                                                                     break;
                                                             }
+
+                                                            if (itm?.subdomain?.anxiety) {
+
+                                                                document.getElementById('anxiety' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.anxiety?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.["angry hostility"]) {
+
+                                                                document.getElementById('angry_hostility' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.["angry hostility"]?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.["depression"]) {
+
+                                                                document.getElementById('depression' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.["depression"]?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.["self consciousness"]) {
+
+                                                                document.getElementById('self_consciousness' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.["self consciousness"]?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.["impulsiveness"]) {
+
+                                                                document.getElementById('impulsiveness' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.["impulsiveness"]?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.["vulnerability"]) {
+
+                                                                document.getElementById('vulnerability' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.["vulnerability"]?.total_score || '-';
+                                                            }
+
+
                                                         })
 
                                                         try {
@@ -455,10 +665,12 @@
                                         <ul class="pagination">
                                             {{-- Previous Page Link --}}
                                             @if ($MergeUjianSiswa->onFirstPage())
-                                                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                                                <li class="page-item disabled"><span class="page-link">Previous</span>
+                                                </li>
                                             @else
                                                 <li class="page-item"><a class="page-link"
-                                                        href="{{ $MergeUjianSiswa->previousPageUrl() }}">Previous</a></li>
+                                                        href="{{ $MergeUjianSiswa->previousPageUrl() }}">Previous</a>
+                                                </li>
                                             @endif
 
                                             {{-- Pagination Elements --}}
@@ -796,7 +1008,7 @@
                             } else {
                                 data?.sekala?.average_scores?.forEach((sekala, ndxsekala) => {
                                     htmlContent +=
-                                        `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.total_score}</div>`;
+                                        `    <div class="col-md-6" style="color: black;">${sekala?.keterangan}  : ${Math.ceil((sekala?.total_score / sekala?.count) * 10) / 10}</div>`;
                                 });
                                 htmlContent +=
                                     `   
