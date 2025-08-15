@@ -3,7 +3,24 @@
 
 @section('content')
     @include('template.navbar.guru')
+    <style>
+        /* Spinner kecil */
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ccc;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
 
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
     <!--  BEGIN CONTENT AREA  -->
     <div id="content" class="main-content">
         <div class="layout-px-spacing">
@@ -11,7 +28,7 @@
                 <div class="col-lg-12 layout-spacing">
                     <div class="widget shadow p-3" style="min-height: 500px;">
                         <div class="row">
-                            <div class="col-lg-7">
+                            <div class="col-lg-12">
                                 <div class="widget-heading">
                                     <h5 class="">Laporan Ujian Peserta</h5>
                                 </div>
@@ -29,14 +46,128 @@
                                 <div class="mt-3">
                                     <p>Total Data: <span id="totalData">{{ count($MergeUjianSiswa) }}</span></p>
                                 </div>
+
                                 <div class="table-responsive mt-3" style="overflow-x: scroll;">
+                                    <button class="btn btn-success mb-2"
+                                        onclick="downloadTableWithoutHasil('datatable-table', 'Data_Ujian_Siswa')">
+                                        Download Excel
+                                    </button>
+
+                                    <script>
+                                        function downloadTableWithoutHasil(tableId, filename = '') {
+                                            // Ambil tabel asli
+                                            let originalTable = document.getElementById(tableId);
+
+                                            // Clone tabel supaya tidak mengubah tampilan asli
+                                            let table = originalTable.cloneNode(true);
+
+                                            // Cari index kolom "Hasil Ujian"
+                                            let headerCells = table.querySelectorAll("thead tr th");
+                                            let hasilIndex = -1;
+                                            headerCells.forEach((th, idx) => {
+                                                if (th.textContent.trim().toLowerCase() === "hasil ujian") {
+                                                    hasilIndex = idx;
+                                                }
+                                            });
+
+                                            // Hapus kolom hasil ujian dari thead
+                                            if (hasilIndex > -1) {
+                                                table.querySelectorAll("tr").forEach(row => {
+                                                    if (row.cells.length > hasilIndex) {
+                                                        row.deleteCell(hasilIndex);
+                                                    }
+                                                });
+                                            }
+
+                                            // Konversi ke HTML untuk Excel
+                                            let tableHTML = table.outerHTML.replace(/ /g, '%20');
+                                            filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+                                            // Buat link download
+                                            let downloadLink = document.createElement("a");
+                                            document.body.appendChild(downloadLink);
+
+                                            if (navigator.msSaveOrOpenBlob) {
+                                                let blob = new Blob(['\ufeff', tableHTML], {
+                                                    type: 'application/vnd.ms-excel'
+                                                });
+                                                navigator.msSaveOrOpenBlob(blob, filename);
+                                            } else {
+                                                downloadLink.href = 'data:application/vnd.ms-excel, ' + tableHTML;
+                                                downloadLink.download = filename;
+                                                downloadLink.click();
+                                            }
+                                        }
+                                    </script>
+
                                     <table id="datatable-table" class="table text-center text-nowrap">
                                         <thead>
                                             <tr>
+                                                <th>Hasil Ujian</th>
                                                 <th>No</th>
-                                                <th>Nama</th>
-                                                <th>Tempat Lahir</th>
-                                                {{-- <th>Total Soal</th> --}}
+                                                <th>Nama Lengkap</th>
+                                                <th>Tanggal Lahir</th>
+                                                <th>Sex</th>
+                                                <th>Usia</th>
+                                                <th>IQ CFIT</th>
+                                                <th>Norma</th>
+                                                <th>MR</th>
+                                                <th>Norma</th>
+                                                <th>ARTH</th>
+                                                <th>Norma</th>
+                                                <th>SIM</th>
+                                                <th>5.1. N</th>
+                                                <th>E</th>
+                                                <th>O</th>
+                                                <th>A</th>
+                                                <th>C</th>
+                                                <th>Anxiety</th>
+                                                <th>Angry Hostility</th>
+                                                <th>Depression</th>
+                                                <th>Self Consciouseness</th>
+                                                <th>Impulsiveness</th>
+                                                <th>Vulnerability</th>
+                                                <th>Warmth</th>
+                                                <th>Gregariousness</th>
+                                                <th>Assertiveness</th>
+                                                <th>Activity</th>
+                                                <th>Excitement Seeking</th>
+                                                <th>Positive Emotions</th>
+                                                <th>Fantasy</th>
+                                                <th>Aesthetic</th>
+                                                <th>Feelings</th>
+                                                <th>Actions</th>
+                                                <th>Ideas</th>
+                                                <th>Values</th>
+                                                <th>Trust</th>
+                                                <th>Straightforwardness</th>
+                                                <th>Altruism</th>
+                                                <th>Compliance</th>
+                                                <th>Tender-mindedness</th>
+                                                <th>Order</th>
+                                                <th>Dutifulnes</th>
+                                                <th>Achievment Striving</th>
+                                                <th>Self-discipline</th>
+                                                <th>Deliberation</th>
+                                                <th>5.2. Crudelia</th>
+                                                <th>Egoism</th>
+                                                <th>Machiavellianism</th>
+                                                <th>Narcissism</th>
+                                                <th>Frustalia</th>
+                                                <th>Greed</th>
+                                                <th>Moral Disengagement</th>
+                                                <th>Psychological Entitlement</th>
+                                                <th>Psychopathy</th>
+                                                <th>Sadism</th>
+                                                <th>Self Centeredness</th>
+                                                <th>Spitefulness</th>
+                                                <th>5.3. College Maladjustment (Mt)</th>
+                                                <th>Lie Scale (L)</th>
+                                                <th>Neg Treatment Indicator (TRT)</th>
+                                                <th>lack of self motivation (TRT1)</th>
+                                                <th>Lack of self disclosure (TRT2)</th>
+                                                <th>CATATAN</th>
+                                                <th>REKOMENDASI</th>
                                                 {{-- <th>Opsi</th> --}}
                                             </tr>
                                         </thead>
@@ -44,13 +175,6 @@
                                         <tbody>
                                             @foreach ($MergeUjianSiswa as $key => $bs)
                                                 <tr>
-                                                    <td>{{ $key + $currentPage + 1 }}</td>
-                                                    <td>
-                                                        {{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}
-                                                    </td>
-                                                    {{-- <td>
-                                                        {{ $bs->tempat_lahir_pg ?? 'Tempat lahir siswa tidak tersedia' }}
-                                                    </td> --}}
                                                     <td>
                                                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                                             data-target="#exampleModal"
@@ -63,10 +187,191 @@
                                                             Hasil Tes
                                                         </button>
                                                     </td>
+                                                    <td>{{ $key + $currentPage + 1 }}</td>
+                                                    <td>
+                                                        {{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $bs->tanggal_lahir ?? 'Tempat lahir siswa tidak tersedia' }}
+                                                    </td>
+                                                    <td>{{ $bs->gender }}</td>
+                                                    <td>{{ $bs->umur }}</td>
+                                                    <td>
+                                                        <span id="nilaiIQ{{ $key }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span>
+                                                    </td>
+
+
+
+                                                    <td><span id="norma{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="MR{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td>Norma</td>
+                                                    <td><span id="ARTd{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+
+                                                    <td>Norma</td>
+                                                    <td><span id="SIM{{ $bs->id }}" data-id="{{ $bs->id }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                     
+                                                    <td>5.1. N</td>
+                                                    <td>E</td>
+                                                    <td>O</td>
+                                                    <td>A</td>
+                                                    <td>C</td>
+                                                    <td>Anxiety</td>
+                                                    <td>Angry Hostility</td>
+                                                    <td>Depression</td>
+                                                    <td>Self Consciouseness</td>
+                                                    <td>Impulsiveness</td>
+                                                    <td>Vulnerability</td>
+                                                    <td>Warmtd</td>
+                                                    <td>Gregariousness</td>
+                                                    <td>Assertiveness</td>
+                                                    <td>Activity</td>
+                                                    <td>Excitement Seeking</td>
+                                                    <td>Positive Emotions</td>
+                                                    <td>Fantasy</td>
+                                                    <td>Aestdetic</td>
+                                                    <td>Feelings</td>
+                                                    <td>Actions</td>
+                                                    <td>Ideas</td>
+                                                    <td>Values</td>
+                                                    <td>Trust</td>
+                                                    <td>Straightforwardness</td>
+                                                    <td>Altruism</td>
+                                                    <td>Compliance</td>
+                                                    <td>Tender-mindedness</td>
+                                                    <td>Order</td>
+                                                    <td>Dutifulnes</td>
+                                                    <td>Achievment Striving</td>
+                                                    <td>Self-discipline</td>
+                                                    <td>Deliberation</td>
+                                                    <td>5.2. Crudelia</td>
+                                                    <td>Egoism</td>
+                                                    <td>Machiavellianism</td>
+                                                    <td>Narcissism</td>
+                                                    <td>Frustalia</td>
+                                                    <td>Greed</td>
+                                                    <td>Moral Disengagement</td>
+                                                    <td>Psychological Entitlement</td>
+                                                    <td>Psychopatdy</td>
+                                                    <td>Sadism</td>
+                                                    <td>Self Centeredness</td>
+                                                    <td>Spitefulness</td>
+                                                    <td>5.3. College Maladjustment (Mt)</td>
+                                                    <td>Lie Scale (L)</td>
+                                                    <td>Neg Treatment Indicator (TRT)</td>
+                                                    <td>lack of self motivation (TRT1)</td>
+                                                    <td>Lack of self disclosure (TRT2)</td>
+                                                    <td>CATATAN</td>
+                                                    <td>REKOMENDASI</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function() {
+
+                                            async function loadStudentScore(el, isNorma = false) {
+                                                el.innerHTML = '<span class="spinner"></span>';
+
+                                                const studentId = el.getAttribute('data-id');
+                                                const kode = el.getAttribute('data-kode') || '';
+                                                const tanggalLahir = el.getAttribute('data-tanggal-lahir') || '';
+
+                                                try {
+                                                    // Ambil nilai IQ dasar
+                                                    if (!isNorma) {
+                                                        const iqRes = await fetch(
+                                                            `/api/siswa/ujian/IQCFIT?studentId=${studentId}&kode=${kode}`);
+                                                        const iqData = await iqRes.json();
+                                                        if (iqData.status === 'success') {
+                                                            el.textContent = iqData.nilai;
+                                                        } else {
+                                                            el.textContent = '-';
+                                                        }
+                                                    }
+
+                                                    // Ambil data untuk perhitungan t-score
+                                                    const results = await Promise.all([
+                                                        fetchStudentData(studentId, 'part1_1', 0),
+                                                        fetchStudentData(studentId, 'part1_2', 3),
+                                                        fetchStudentData(studentId, 'part1_3', 0),
+                                                        fetchStudentData(studentId, 'part1_4', 0),
+                                                        fetchStudentData(studentId, 'part2', 0),
+                                                        fetchStudentData(studentId, 'part3', 1),
+                                                        fetchStudentData(studentId, 'part4', 1),
+                                                        fetchStudentData(studentId, 'part5_1', 2),
+                                                        fetchStudentData(studentId, 'part5_2', 2),
+                                                        fetchStudentData(studentId, 'part5_3', 2),
+                                                    ]);
+
+                                                    let nilaiTscore = 0;
+                                                    let nilaiARTd = 0;
+                                                    let nilaiSIM = 0;
+
+                                                    results.forEach(data => {
+                                                        if (['part1_1', 'part1_2', 'part1_3', 'part1_4'].includes(data.codeUjian)) {
+                                                            nilaiTscore += parseInt(data?.nilai ?? 0);
+                                                        }
+                                                        if (data.codeUjian === 'part1_3') {
+                                                            nilaiARTd = parseInt(data?.nilai ?? 0);
+                                                        }
+                                                        if (data.codeUjian === 'part1_4') {
+                                                            nilaiSIM = parseInt(data?.nilai ?? 0);
+                                                        }
+                                                    });
+
+                                                    if (isNorma) {
+                                                        const normaEl = document.getElementById('norma' + studentId);
+                                                        const mrEl = document.getElementById('MR' + studentId);
+                                                        const artdEl = document.getElementById('ARTd' + studentId);
+                                                        const SIMEl = document.getElementById('SIM' + studentId);
+
+                                                        try {
+                                                            const tScoreResponse = await tScore(nilaiTscore, tanggalLahir);
+                                                            const skorIq = tScoreResponse?.kalenderScore?.nilai ?? '-';
+                                                            const kualifikasiIq = tScoreResponse?.klasifikasi?.klasifikasi ?? '-';
+
+                                                            normaEl.textContent = kualifikasiIq;
+                                                            // mrEl.textContent = kualifikasiIq;
+                                                            artdEl.textContent = nilaiARTd;
+                                                            SIMEl.textContent = nilaiSIM;
+                                                        } catch (err) {
+                                                            console.error('Error tScore:', err);
+                                                            normaEl.textContent = 'Gagal';
+                                                            mrEl.textContent = 'Gagal';
+                                                            artdEl.textContent = 'Gagal';
+                                                            SIMEl.textContent = 'Gagal';
+                                                        }
+                                                    }
+                                                } catch (error) {
+                                                    console.error('Error loadStudentScore:', error);
+                                                    if (isNorma) {
+                                                        document.getElementById('norma' + studentId).textContent = 'Error';
+                                                        document.getElementById('MR' + studentId).textContent = 'Error';
+                                                        document.getElementById('ARTd' + studentId).textContent = 'Error';
+                                                        document.getElementById('SIM' + studentId).textContent = 'Error';
+                                                    } else {
+                                                        el.textContent = 'Error';
+                                                    }
+                                                }
+                                            }
+
+                                            // Proses semua elemen nilai IQ
+                                            document.querySelectorAll('[id^="nilaiIQ"]').forEach(el => {
+                                                loadStudentScore(el, false);
+                                            });
+
+                                            // Proses semua elemen norma
+                                            document.querySelectorAll('[id^="norma"]').forEach(el => {
+                                                loadStudentScore(el, true);
+                                            });
+                                        });
+                                    </script>
                                     <nav aria-label="Page navigation example" class="d-flex justify-content-end">
                                         <ul class="pagination">
                                             <!-- Pagination items will be added here by JavaScript -->
@@ -102,9 +407,6 @@
                                     </nav>
 
                                 </div>
-                            </div>
-                            <div class="col-lg-5 d-flex">
-                                <img src="{{ url('/assets/img') }}/bank-soal.svg" style="width: 100%;">
                             </div>
                         </div>
                     </div>
@@ -173,56 +475,58 @@
             }
         });
     </script>
-    
-  <script>
-    // Inisialisasi Chart.js
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-        datasets: [{
-          label: 'Penjualan',
-          data: [12, 19, 3, 5, 2],
-          backgroundColor: 'rgba(75, 192, 192, 0.7)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: false,
-        maintainAspectRatio: false
-      }
-    });
 
-    // Fungsi cetak PDF
-    async function printPDF() {
-      const chartElement = document.getElementById('chart-container');
+    <script>
+        // Inisialisasi Chart.js
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Penjualan',
+                    data: [12, 19, 3, 5, 2],
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false
+            }
+        });
 
-      // Render canvas ke gambar
-      const canvas = await html2canvas(chartElement, {
-        backgroundColor: "#ffffff"
-      });
+        // Fungsi cetak PDF
+        async function printPDF() {
+            const chartElement = document.getElementById('chart-container');
 
-      const imageData = canvas.toDataURL("image/png");
+            // Render canvas ke gambar
+            const canvas = await html2canvas(chartElement, {
+                backgroundColor: "#ffffff"
+            });
 
-      // Gunakan jsPDF versi UMD
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: 'a4'
-      });
+            const imageData = canvas.toDataURL("image/png");
 
-      // Tambahkan gambar ke PDF (disesuaikan ukurannya)
-      const imgProps = pdf.getImageProperties(imageData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            // Gunakan jsPDF versi UMD
+            const {
+                jsPDF
+            } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm',
+                format: 'a4'
+            });
 
-      pdf.addImage(imageData, 'PNG', 0, 10, pdfWidth, pdfHeight);
-      pdf.save('laporan-penjualan.pdf');
-    }
-  </script>
+            // Tambahkan gambar ke PDF (disesuaikan ukurannya)
+            const imgProps = pdf.getImageProperties(imageData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imageData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+            pdf.save('laporan-penjualan.pdf');
+        }
+    </script>
     <!-- MODAL -->
     <script>
         let itemPrint = '';
@@ -290,6 +594,7 @@
                 fetchStudentData(studentId, 'part5_2', 2),
                 fetchStudentData(studentId, 'part5_3', 2),
             ]).then(async results => {
+                console.log("Data fetched successfully", results);
 
                 let jumlahKolom = 0;
                 let jumlahKolom2 = 0;
@@ -434,7 +739,8 @@
                         htmlContent += `   </div>`;
                         htmlContent += `    </div>`; // penutup div yang kurang
                         // Tambahkan chart untuk facet ini
-                        const chartId = `facetChart_${data?.ujian?.kode}_${Math.random().toString(36).substr(2, 9)}`;
+                        const chartId =
+                            `facetChart_${data?.ujian?.kode}_${Math.random().toString(36).substr(2, 9)}`;
                         // htmlContent += `<div class="mt-4"><canvas id="${chartId}" width="600" height="300"></canvas></div>`;
 
                         // Data chart: gunakan facet?.labels dan facet?.nilai jika tersedia, fallback ke dummy data
@@ -444,10 +750,14 @@
                                 new Chart(chartElem.getContext('2d'), {
                                     type: 'bar',
                                     data: {
-                                        labels: data?.facet?.[0]?.labels || ['A', 'B', 'C', 'D'],
+                                        labels: data?.facet?.[0]?.labels || ['A', 'B',
+                                            'C', 'D'
+                                        ],
                                         datasets: [{
                                             label: 'Nilai Facet',
-                                            data: data?.facet?.[0]?.nilai || [10, 20, 30, 40],
+                                            data: data?.facet?.[0]?.nilai || [
+                                                10, 20, 30, 40
+                                            ],
                                             backgroundColor: 'rgba(75, 192, 192, 0.7)',
                                             borderColor: 'rgba(75, 192, 192, 1)',
                                             borderWidth: 1
@@ -476,20 +786,20 @@
                                         console.log('subDatafacet', facet?.subdomain);
 
                                         htmlContent += `
-     <div class="mt-4" style="page-break-before: always;">
-         <p class="mt-4" style="color: black;">${subData?.ujian?.nama} - ${facet?.domain} </p>
-         <canvas id="${canvasId}"  ></canvas> 
-     </div>
- `;
+                                    <div class="mt-4" style="page-break-before: always;">
+                                                        <p class="mt-4" style="color: black;">${subData?.ujian?.nama} - ${facet?.domain} </p>
+                                                        <canvas id="${canvasId}"  ></canvas> 
+                                                    </div>
+                                                `;
 
                                         htmlContent += `<table border="1">
-    <thead></thead>`;
+                                                    <thead></thead>`;
                                         Object.values(facet?.subdomain).forEach(f => {
                                             htmlContent += `
-        <tr>
-            <th colspan="6" style="text-align:left">Deskripsi Facet: ${f.deskripsi_facet} | Total Score: ${f.total_score}</th>
-        </tr>
-    `;
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:left">Deskripsi Facet: ${f.deskripsi_facet} | Total Score: ${f.total_score}</th>
+                                                        </tr>
+                                                    `;
 
                                             //                                         htmlContent += `
                                         //     <tr>
@@ -517,7 +827,7 @@
                                         });
 
                                         htmlContent += `<tbody id="your-table-body-id"></tbody>
-</table>`;
+                                                                                    </table>`;
 
                                         // Pastikan script Chart.js dijalankan setelah elemen dimasukkan ke DOM
                                         setTimeout(() => {

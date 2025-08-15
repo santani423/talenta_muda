@@ -267,6 +267,12 @@ Route::post('/siswa/ujian/simulasi-finish', [UjianSiswaController::class, 'simul
 
 
 
+
+
+
+
+
+
 Route::get('/tscore', [TScoreController::class, 'index']);
 Route::get('/tscore/print', [TScoreController::class, 'show']);
 

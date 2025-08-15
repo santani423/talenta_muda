@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon; // Tambahkan ini
 
 class Siswa extends Model
 {
@@ -47,5 +48,17 @@ class Siswa extends Model
     public function getRouteKeyName()
     {
         return 'nis';
+    }
+
+    /**
+     * Hitung umur dari tanggal_lahir
+     *
+     * @return int|null
+     */
+    public function getUmurAttribute()
+    {
+        return $this->tanggal_lahir
+            ? Carbon::parse($this->tanggal_lahir)->age
+            : null;
     }
 }

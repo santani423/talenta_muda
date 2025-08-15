@@ -1110,14 +1110,88 @@ class UjianSiswaController extends Controller
         ], 200);
     }
 
-    
+
     public function simulasiUjian(Request $request)
     {
-        UjianServiceController::startUJian($request->kode_ujian,$request->time);
+        UjianServiceController::startUJian($request->kode_ujian, $request->time);
 
         return response()->json([
             'message' => 'Soal berhasil diupload',
             'request' => $request->all(),
         ], 200);
+    }
+
+
+    public function IQCFIT(Request $request)
+    {
+        $nilaiPg = 0;
+        $nilaiVs = 0;
+
+        try {
+            // Array kode yang mau dicari
+            $code = ['part1_1', 'part1_3', 'part1_4'];
+            $codeVisual = ['part1_2'];
+
+            /** ================== PG SISWA ================== **/
+            $pgSiswa = PgSiswa::where('siswa_id', $request->studentId)
+                ->whereIn('kode', $code)
+                ->get();
+
+            foreach ($pgSiswa as $value) {
+                if (!$value->nilai || $value->nilai == 0) {
+                    $value->nilai = (strtolower($value->jawaban) == strtolower($value->detailujian->jawaban)) ? 1 : 0;
+                    $value->save();
+                }
+            }
+
+            // Hitung total nilai PG
+            $nilaiPg = PgSiswa::where('siswa_id', $request->studentId)
+                ->whereIn('kode', $code)
+                ->sum('nilai');
+
+            /** ================== VISUAL SISWA ================== **/
+            $visualSiswa = VisualSiswa::where('siswa_id', $request->studentId)
+                ->whereIn('kode', $codeVisual)
+                ->get();
+
+            foreach ($visualSiswa as $value) {
+                if (!$value->nilai || $value->nilai == 0 || $value->nilai == null) {
+                    $isCorrect =
+                        (strtolower($value->jawaban_1) == strtolower($value->detailVisual->jawaban_1) ||
+                            strtolower($value->jawaban_1) == strtolower($value->detailVisual->jawaban_2))
+                        &&
+                        (strtolower($value->jawaban_2) == strtolower($value->detailVisual->jawaban_1) ||
+                            strtolower($value->jawaban_2) == strtolower($value->detailVisual->jawaban_2));
+
+                    $value->nilai = $isCorrect ? 1 : 0;
+                    $value->save();
+                }
+            }
+
+            // Hitung total nilai Visual
+            $nilaiVs = VisualSiswa::where('siswa_id', $request->studentId)
+                ->whereIn('kode', $codeVisual)
+                ->sum('nilai');
+
+            /** ================== RESPONSE ================== **/
+            $response = [
+                'status' => 'success',
+                'nilai_pg' => $nilaiPg,
+                'nilai_visual' => $nilaiVs,
+                'nilai' => $nilaiPg + $nilaiVs,
+                'message' => 'Data retrieved successfully',
+                'code' => 200
+            ];
+            $status = 200;
+        } catch (\Exception $e) {
+            $response = [
+                'status' => 'error',
+                'message' => 'An error occurred: ' . $e->getMessage(),
+                'code' => 500
+            ];
+            $status = 500;
+        }
+
+        return response()->json($response, $status);
     }
 }
