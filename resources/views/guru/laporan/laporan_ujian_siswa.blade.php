@@ -128,12 +128,14 @@
                                                 <th>Self Consciouseness</th>
                                                 <th>Impulsiveness</th>
                                                 <th>Vulnerability</th>
+
                                                 <th>Warmth</th>
                                                 <th>Gregariousness</th>
                                                 <th>Assertiveness</th>
                                                 <th>Activity</th>
                                                 <th>Excitement Seeking</th>
                                                 <th>Positive Emotions</th>
+
                                                 <th>Fantasy</th>
                                                 <th>Aesthetic</th>
                                                 <th>Feelings</th>
@@ -271,11 +273,6 @@
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-                                                    <td><span id="vulnerability{{ $bs->id }}"
-                                                            data-id="{{ $bs->id }}"
-                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
-                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-
 
                                                     <td><span id="warmth{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
@@ -297,8 +294,11 @@
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="positive_emotions{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>        
 
-                                                    <td>Positive Emotions</td>
                                                     <td>Fantasy</td>
                                                     <td>Aestdetic</td>
                                                     <td>Feelings</td>
@@ -652,7 +652,12 @@
                                                                     .textContent = itm
                                                                     ?.subdomain?.["excitement seeking"]?.total_score || '-';
                                                             }
-                                                            
+                                                             if (itm?.subdomain?.["positive emotions"]) {
+
+                                                                document.getElementById('positive_emotions' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.["positive emotions"]?.total_score || '-';
+                                                            }
                                                             
 
 
