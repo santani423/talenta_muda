@@ -271,21 +271,33 @@
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="vulnerability{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
 
-
-
-
-                                                  
-                                                   
-                                                    
-                                                     
-                                                    <td>Warmtd</td>
-                                                    <td>Gregariousness</td>
-                                                    <td>Assertiveness</td>
-                                                    <td>Activity</td>
-                                                    <td>Excitement Seeking</td>
-                                                    <td>Positive Emotions</td>
+                                                    <td><span id="warmth{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="gregariousness{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="assertiveness{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="activity{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td><span id="excitement_seeking{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                            
                                                     <td>Fantasy</td>
                                                     <td>Aestdetic</td>
                                                     <td>Feelings</td>
@@ -538,7 +550,7 @@
                                                         const SIMEl = document.getElementById('SIM' + studentId);
                                                         const scoreIQEl = document.getElementById('scoreIQ' + studentId);
                                                         facet.map((itm) => {
-                                                            console.log(`facetstudentName ${studentName}`, itm?.subdomain?.anxiety);
+                                                            console.log(`facetstudentName ${studentName}`, itm?.subdomain);
                                                             switch (itm?.domain) {
                                                                 case 'NEUROTICISM':
                                                                     document.getElementById('NEUROTICISM' + studentId).textContent = itm
@@ -606,6 +618,37 @@
                                                                     ?.subdomain?.["vulnerability"]?.total_score || '-';
                                                             }
 
+                                                            
+                                                            if (itm?.subdomain?.warmth) {
+
+                                                                document.getElementById('warmth' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.warmth?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.gregariousness) {
+
+                                                                document.getElementById('gregariousness' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.gregariousness?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.assertiveness) {
+
+                                                                document.getElementById('assertiveness' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.assertiveness?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.activity) {
+
+                                                                document.getElementById('activity' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.activity?.total_score || '-';
+                                                            }
+                                                            if (itm?.subdomain?.["excitement seeking"]) {
+
+                                                                document.getElementById('excitement_seeking' + studentId)
+                                                                    .textContent = itm
+                                                                    ?.subdomain?.["excitement seeking"]?.total_ score || '-';
+                                                            }
 
                                                         })
 
