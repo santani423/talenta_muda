@@ -297,7 +297,8 @@
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-                                                            
+
+                                                    <td>Positive Emotions</td>
                                                     <td>Fantasy</td>
                                                     <td>Aestdetic</td>
                                                     <td>Feelings</td>
@@ -393,9 +394,11 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                  
                                     <script>
-                                        document.addEventListener("DOMContentLoaded", function() {
 
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            console.log('DOMContentLoaded');
                                             async function loadStudentScore(el, isNorma = false) {
                                                 el.innerHTML = '<span class="spinner"></span>';
 
@@ -647,8 +650,11 @@
 
                                                                 document.getElementById('excitement_seeking' + studentId)
                                                                     .textContent = itm
-                                                                    ?.subdomain?.["excitement seeking"]?.total_ score || '-';
+                                                                    ?.subdomain?.["excitement seeking"]?.total_score || '-';
                                                             }
+                                                            
+                                                            
+
 
                                                         })
 
