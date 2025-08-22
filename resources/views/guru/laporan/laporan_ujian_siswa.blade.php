@@ -75,10 +75,52 @@
                                 </div> --}}
 
                                 <div class="table-responsive mt-3" style="overflow-x: scroll;">
-                                    <button class="btn btn-success mb-2"
+                                    <button id="downloadBtn" class="btn btn-success mb-2"
                                         onclick="downloadTableWithoutHasil('datatable-table', 'Data_Ujian_Siswa')">
                                         Download Excel
                                     </button>
+
+                                    <script>
+                                        (function() {
+                                            let activeRequests = 0;
+                                            const btn = document.getElementById("downloadBtn");
+
+                                            // helper untuk update status tombol
+                                            function updateButtonState() {
+                                                if (activeRequests > 0) {
+                                                    btn.disabled = true;
+                                                    btn.innerText = "Menunggu proses...";
+                                                } else {
+                                                    btn.disabled = false;
+                                                    btn.innerText = "Download Excel";
+                                                }
+                                            }
+
+                                            // Intercept fetch
+                                            const origFetch = window.fetch;
+                                            window.fetch = function(...args) {
+                                                activeRequests++;
+                                                updateButtonState();
+                                                return origFetch(...args).finally(() => {
+                                                    activeRequests--;
+                                                    updateButtonState();
+                                                });
+                                            };
+
+                                            // Intercept XMLHttpRequest
+                                            const origOpen = XMLHttpRequest.prototype.open;
+                                            XMLHttpRequest.prototype.open = function(...args) {
+                                                this.addEventListener("loadend", function() {
+                                                    activeRequests--;
+                                                    updateButtonState();
+                                                });
+                                                activeRequests++;
+                                                updateButtonState();
+                                                return origOpen.apply(this, args);
+                                            };
+                                        })();
+                                    </script>
+
 
                                     <script>
                                         function downloadTableWithoutHasil(tableId, filename = '') {
