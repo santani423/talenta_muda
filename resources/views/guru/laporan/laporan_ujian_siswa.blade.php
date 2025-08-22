@@ -756,11 +756,11 @@
                                                                     .textContent = itm
                                                                     ?.subdomain?.anxiety?.total_score || '-';
                                                             }
-                                                            if (itm?.subdomain?.["angry hostility"]) {
+                                                            if (itm?.subdomain?.angry) {
 
                                                                 document.getElementById('angry_hostility' + studentId)
                                                                     .textContent = itm
-                                                                    ?.subdomain?.["angry hostility"]?.total_score || '-';
+                                                                    ?.subdomain?.angry?.total_score || '-';
                                                             }
                                                             if (itm?.subdomain?.["depression"]) {
 
@@ -768,11 +768,11 @@
                                                                     .textContent = itm
                                                                     ?.subdomain?.["depression"]?.total_score || '-';
                                                             }
-                                                            if (itm?.subdomain?.["self consciousness"]) {
+                                                            if (itm?.subdomain?.self) {
 
                                                                 document.getElementById('self_consciousness' + studentId)
                                                                     .textContent = itm
-                                                                    ?.subdomain?.["self consciousness"]?.total_score || '-';
+                                                                    ?.subdomain?.self?.total_score || '-';
                                                             }
                                                             if (itm?.subdomain?.["impulsiveness"]) {
 
@@ -812,17 +812,17 @@
                                                                     .textContent = itm
                                                                     ?.subdomain?.activity?.total_score || '-';
                                                             }
-                                                            if (itm?.subdomain?.["excitement seeking"]) {
+                                                            if (itm?.subdomain?.excitement) {
 
                                                                 document.getElementById('excitement_seeking' + studentId)
                                                                     .textContent = itm
-                                                                    ?.subdomain?.["excitement seeking"]?.total_score || '-';
+                                                                    ?.subdomain?.excitement?.total_score || '-';
                                                             }
-                                                            if (itm?.subdomain?.["positive emotions"]) {
+                                                            if (itm?.subdomain?.positive) {
 
                                                                 document.getElementById('positive_emotions' + studentId)
                                                                     .textContent = itm
-                                                                    ?.subdomain?.["positive emotions"]?.total_score || '-';
+                                                                    ?.subdomain?.positive?.total_score || '-';
                                                             }
 
 
