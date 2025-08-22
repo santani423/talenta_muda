@@ -413,12 +413,24 @@ class PenilaianSiswaController extends Controller
             $filteredResults = array_filter($results, function ($result) use ($value) {
                 return in_array($result['facet_code'], $value['facet']);
             });
-            
+
 
             $grouped = [];
 
             foreach ($filteredResults as $item) {
                 $facetData = $item['deskripsi_facet'];
+                // Ubah ke lowercase semua huruf dulu
+                $facetData = strtolower($facetData);
+
+                // Pisahkan berdasarkan spasi atau tanda minus
+                $parts = preg_split('/[\s-]+/', $facetData);
+
+                // Ambil kata pertama tetap lowercase
+                $camelCase = array_shift($parts);
+                $facetData = $camelCase;
+
+                // Ubah kata-kata berikutnya menjadi kapital huruf pertama
+                $camelCase .= implode('', array_map('ucfirst', $parts));
                 $score = $item['score'];
 
                 if (!isset($grouped[$facetData])) {
@@ -430,10 +442,14 @@ class PenilaianSiswaController extends Controller
                 }
 
                 $grouped[$facetData]['total_score'] += $score;
+                $grouped[$facetData]['total_count_score'] = count($grouped[$facetData]['items']) > 0
+                    ? number_format(ceil(($grouped[$facetData]['total_score'] / count($grouped[$facetData]['items'])) * 100) / 100, 2)
+                    : 0;
+
                 $grouped[$facetData]['items'][] = $item;
             }
 
-            
+            $totalItems = count($filteredResults);
             $totalScore = array_reduce($filteredResults, function ($carry, $item) {
                 return $carry + $item['score'];
             }, 0);
@@ -443,6 +459,7 @@ class PenilaianSiswaController extends Controller
                 'subdomain' => $grouped,
                 'results' => $filteredResults,
                 'totalScore' => $totalScore,
+                'totalCountScore' => $totalItems > 0 ? $totalScore / $totalItems : 0,
             ];
         }
 

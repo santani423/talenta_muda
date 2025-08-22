@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Guru;
 use App\Models\Gurukelas;
+use App\Models\Kelas;
 use App\Models\MergeUjian;
 use App\Models\Siswa;
+use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -13,62 +15,22 @@ class LaporanController extends Controller
     public function laporan_ujian_siswa(Request $request)
     {
         $search = $request->input('search');
-        $perPage = 10;
+        $kelas_id = $request->input('batch');
+        $perPage = $request->input('limit', 10);
         $page = $request->input('page', 1);
 
-        // $MergeUjianSiswa = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', '=', 'merge_ujian.kode')
-        //     ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
-        //     ->join('detail_ujian', 'detail_ujian.kode', '=', 'ujian.kode')
-        //     ->leftJoin('pg_siswa', 'pg_siswa.detail_ujian_id', '=', 'detail_ujian.id')
-        //     ->leftJoin('siswa as siswa_pg', 'siswa_pg.id', '=', 'pg_siswa.siswa_id')
-        //     ->leftJoin('detail_visual', 'detail_visual.kode', '=', 'ujian.kode')
-        //     ->leftJoin('visual_siswa', 'visual_siswa.detail_visual_id', '=', 'detail_visual.id')
-        //     ->leftJoin('siswa as siswa_visual', 'siswa_visual.id', '=', 'visual_siswa.siswa_id')
-        //     ->leftJoin('detail_essay', 'detail_essay.kode', '=', 'ujian.kode')
-        //     ->leftJoin('essay_siswa', 'essay_siswa.detail_ujian_id', '=', 'detail_essay.id')
-        //     ->leftJoin('siswa as siswa_essay', 'siswa_essay.id', '=', 'essay_siswa.siswa_id')
-        //     ->leftJoin('detail_kuisoner', 'detail_kuisoner.kode', '=', 'ujian.kode')
-        //     ->leftJoin('kuesioner_siswa', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner.id')
-        //     ->leftJoin('siswa as siswa_kuesioner', 'siswa_kuesioner.id', '=', 'kuesioner_siswa.siswa_id')
-        //     ->select(
-        //         'merge_ujian.*',
-        //         'siswa_pg.nama_siswa as nama_siswa_pg',
-        //         'siswa_pg.tempat_lahir as tempat_lahir_pg',
-        //         'siswa_pg.tanggal_lahir as tanggal_lahir_pg',
-        //         'siswa_pg.gender as gender_pg',
-        //         'siswa_pg.tempat_lahir as tempat_lahir_pg',
-        //         'siswa_visual.nama_siswa as nama_siswa_visual',
-        //         'siswa_essay.nama_siswa as nama_siswa_essay',
-        //         'siswa_kuesioner.nama_siswa as nama_siswa_kuesioner',
-        //         'siswa_pg.id as id_siswa_pg',
-        //         'siswa_visual.id as id_siswa_visual',
-        //         'siswa_essay.id as id_siswa_essay',
-        //         'siswa_kuesioner.id as id_siswa_kuesioner'
-        //     )
-        //     ->where(function ($query) {
-        //         $query->whereNotNull('siswa_pg.nama_siswa')
-        //             ->orWhereNotNull('siswa_visual.nama_siswa')
-        //             ->orWhereNotNull('siswa_essay.nama_siswa')
-        //             ->orWhereNotNull('siswa_kuesioner.nama_siswa');
-        //     })
-        //     // ->when($search, function ($query, $search) {
-        //     //     return $query->where(function ($query) use ($search) {
-        //     //         $query->where('siswa_pg.nama_siswa', 'like', "%{$search}%")
-        //     //             ->orWhere('siswa_visual.nama_siswa', 'like', "%{$search}%")
-        //     //             ->orWhere('siswa_essay.nama_siswa', 'like', "%{$search}%")
-        //     //             ->orWhere('siswa_kuesioner.nama_siswa', 'like', "%{$search}%");
-        //     //     });
-        //     // })
-        //     ->distinct();
-
-        // $MergeUjianSiswa = Siswa::get();
 
         $MergeUjianSiswa = Siswa::when($search, function ($query, $search) {
             return $query->where('nama_siswa', 'like', "%{$search}%");
+        })
+            ->when($kelas_id, function ($query, $kelas_id) {
+                return $query->where('kelas_id', $kelas_id);
             })
             ->orderBy('id', 'asc')
             ->paginate($perPage, ['*'], 'page', $page);
-        // dd($MergeUjianSiswa);
+
+        $batch = Kelas::all();
+        // dd($batch);
 
         return view('guru.laporan.laporan_ujian_siswa', [
             'title' => 'Data Tes',
@@ -85,8 +47,9 @@ class LaporanController extends Controller
             'guru' => Guru::firstWhere('id', session()->get('id')),
             'guru_kelas' => Gurukelas::where('guru_id', session()->get('id'))->get(),
             'merge_ujian' => MergeUjian::join('kelas', 'kelas.id', '=', 'merge_ujian.kelas_id')->get(),
+            'batch' => $batch,
             'MergeUjianSiswa' => $MergeUjianSiswa,
-            'currentPage' => ($MergeUjianSiswa->currentPage()-1)*10,
+            'currentPage' => ($MergeUjianSiswa->currentPage() - 1) * 10,
         ]);
     }
 }
