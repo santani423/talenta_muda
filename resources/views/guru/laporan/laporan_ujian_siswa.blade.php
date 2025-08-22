@@ -680,11 +680,10 @@
                                                                     facet?.subdomain?.compliance && (document.getElementById(
                                                                             'compliance' + studentId).textContent = facet
                                                                         ?.subdomain?.compliance?.total_count_score || '-');
-                                                                    facet?.subdomain?.tenderMindedness && (document
+                                                                    facet?.subdomain?.tender && (document
                                                                         .getElementById('tenderMindedness' + studentId)
-                                                                        .textContent = facet?.subdomain?.[
-                                                                            'tender-mindedness'
-                                                                        ]?.total_count_score || '-');
+                                                                        .textContent = facet?.subdomain?.tender
+                                                                        ?.total_count_score || '-');
                                                                     facet?.subdomain?.order && (document.getElementById(
                                                                             'order' + studentId).textContent = facet
                                                                         ?.subdomain?.order?.total_count_score || '-');
@@ -702,7 +701,8 @@
 
                                                                     facet?.subdomain?.deliberation && (document
                                                                         .getElementById('deliberation' + studentId)
-                                                                        .textContent = facet?.subdomain?.deliberation?.total_count_score || '-');
+                                                                        .textContent = facet?.subdomain?.deliberation
+                                                                        ?.total_count_score || '-');
 
                                                                 });
 
