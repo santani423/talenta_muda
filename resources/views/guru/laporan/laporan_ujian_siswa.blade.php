@@ -70,9 +70,9 @@
                                 </form>
 
 
-                                <div class="mt-3">
+                                {{-- <div class="mt-3">
                                     <p>Total Data: <span id="totalData">{{ count($MergeUjianSiswa) }}</span></p>
-                                </div>
+                                </div> --}}
 
                                 <div class="table-responsive mt-3" style="overflow-x: scroll;">
                                     <button class="btn btn-success mb-2"
