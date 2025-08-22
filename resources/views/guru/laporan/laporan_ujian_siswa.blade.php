@@ -558,9 +558,10 @@
                                                             }
 
 
+                                                            console.log(`sekalaqwerttt ${studentName}`, data?.sekala);
                                                             if (data?.sekala?.average_scores?.some(sekala => sekala?.average_score !=
                                                                     0)) {
-                                                                console.log(`sekala ${studentName}`, data);
+                                                                console.log(`sekalaqwerttt ${studentName}`, data);
 
                                                                 data?.sekala?.average_scores?.map((itm) => {
                                                                     switch (itm?.kode_sekala) {
