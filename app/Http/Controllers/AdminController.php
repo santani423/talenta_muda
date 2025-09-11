@@ -1028,4 +1028,32 @@ class AdminController extends Controller
             Gurumapel::insert($where);
         }
     }
+
+    public function toggleStatus(Kelas $kelas)
+    {
+        // dd($kelas);
+        if ($kelas->status == 'nonaktif') {
+            // Nonaktifkan semua kelas lain
+            Kelas::where('id', '!=', $kelas->id)->update(['status' => 'nonaktif']);
+            // Aktifkan kelas ini
+            $kelas->status = 'aktif';
+        } else {
+            // Kalau sedang aktif, ubah jadi nonaktif
+            $kelas->status = 'nonaktif';
+        }
+
+        $kelas->save();
+
+        return back()->with('pesan', "
+        <script>
+            swal({
+                title: 'Berhasil!',
+                text: 'Status kelas berhasil diubah!',
+                icon: 'success',
+                buttons: false,
+                timer: 2000
+            });
+        </script>
+    ");
+    }
 }

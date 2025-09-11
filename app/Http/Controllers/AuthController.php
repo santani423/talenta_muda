@@ -215,7 +215,7 @@ class AuthController extends Controller
 
         return view('auth.register', [
             "title" => "Daftar Akun ",
-            "kelas" => Kelas::all()
+            "kelas" => Kelas::where('status', 'aktif')->get()
         ]);
     }
     public function register_(Request $request)

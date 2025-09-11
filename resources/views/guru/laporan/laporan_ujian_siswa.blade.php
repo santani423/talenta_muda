@@ -139,7 +139,7 @@
                                                 }
                                             });
 
-                                            // Hapus kolom hasil ujian dari thead
+                                            // Hapus kolom hasil ujian dari thead dan tbody
                                             if (hasilIndex > -1) {
                                                 table.querySelectorAll("tr").forEach(row => {
                                                     if (row.cells.length > hasilIndex) {
@@ -147,6 +147,15 @@
                                                     }
                                                 });
                                             }
+
+                                            // Tambahkan border pada table, th, dan td
+                                            table.setAttribute("border", "1");
+                                            table.setAttribute("cellspacing", "0");
+                                            table.setAttribute("cellpadding", "5");
+                                            table.querySelectorAll("th, td").forEach(cell => {
+                                                cell.style.border = "1px solid black";
+                                                cell.style.padding = "5px";
+                                            });
 
                                             // Konversi ke HTML untuk Excel
                                             let tableHTML = table.outerHTML.replace(/ /g, '%20');
@@ -187,10 +196,15 @@
                                                 <th>Norma</th>
                                                 <th>SIM</th>
                                                 <th>5.1. NEUROTICISM</th>
+                                                <th></th>
                                                 <th>EXTRAVERSION:</th>
+                                                <th></th>
                                                 <th>OPENESS TO EXPERIENCE</th>
+                                                <th></th>
                                                 <th>AGREEABLENESS</th>
+                                                <th></th>
                                                 <th>CONSCIENTIOUSNESS</th>
+                                                <th></th>
                                                 <th>Anxiety</th>
                                                 <th>Angry Hostility</th>
                                                 <th>Depression</th>
@@ -288,36 +302,43 @@
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
                                                     <td><span id="MR{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-                                                    <td>Norma</td>
+                                                    <td> </td>
                                                     <td><span id="ARTd{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
-                                                    <td>Norma</td>
+                                                    <td> </td>
+                                                    <td></td>
 
                                                     <td><span id="SIM{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td></td>
                                                     <td><span id="NEUROTICISM{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td></td>
                                                     <td><span id="EXTRAVERSION{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td></td>
                                                     <td><span id="OPENESSTOEXPERIENCE{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td></td>
                                                     <td><span id="AGREEABLENESS{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td></td>
                                                     <td><span id="CONSCIENTIOUSNESS{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td></td>
                                                     <td><span id="anxiety{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
@@ -447,7 +468,7 @@
 
 
 
-                                                    <td>Deliberation</td>
+                                                    {{-- <td>Deliberation</td> --}}
                                                     <td><span id="CRUD{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"

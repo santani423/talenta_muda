@@ -5,7 +5,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <div id="content" class="main-content">
         <div class="layout-px-spacing">
-            <form action="{{ url('/guru/merge_ujian',$merge->id) }}" method="POST" enctype="multipart/form-data">
+            @if ($kelas->status == 'aktif')
+                <span class="badge bg-success">Aktif</span>
+                <form action="{{ route('kelas.toggleStatus', $kelas->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-sm btn-danger mt-2">Nonaktifkan</button>
+                </form>
+            @else
+                <span class="badge bg-secondary">Nonaktif</span>
+                <form action="{{ route('kelas.toggleStatus', $kelas->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-sm btn-success mt-2">Aktifkan</button>
+                </form>
+            @endif
+            <form action="{{ url('/guru/merge_ujian', $merge->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
@@ -55,8 +70,8 @@
                                 <h5 class="">Soal Tes</h5>
                             </div>
                             <div id="soal_pg">
-                                @foreach ($relasi_merge_ujian as $rmg) 
-                                <input type="hidden" name="idRelasiMergeUjian[]" value="{{$rmg->id}}">
+                                @foreach ($relasi_merge_ujian as $rmg)
+                                    <input type="hidden" name="idRelasiMergeUjian[]" value="{{ $rmg->id }}">
                                     <div class="isi_soal">
                                         {{-- <div class="form-group">
                                             <label for="">Banner</label>
@@ -80,7 +95,9 @@
                                             <label for="">Tes</label>
                                             <select name="ujian_id[]" id="" class="form-control">
                                                 @foreach ($ujian as $uj)
-                                                    <option value="{{ $uj->id }}" {{$uj->kode == $rmg->kode_ujian ? 'selected' : ''}}>{{ $uj->nama }}</option>
+                                                    <option value="{{ $uj->id }}"
+                                                        {{ $uj->kode == $rmg->kode_ujian ? 'selected' : '' }}>
+                                                        {{ $uj->nama }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

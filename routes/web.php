@@ -92,6 +92,7 @@ Route::get('/admin/hapus_guru/{guru:id}', [AdminController::class, 'hapus_guru']
 // ============KELAS
 // ==>View
 Route::get('/admin/kelas', [AdminController::class, 'kelas'])->middleware('is_admin');
+Route::put('/admin/kelas/toggleStatus/{kelas:id}', [AdminController::class, 'toggleStatus'])->name('kelas.toggleStatus');
 // ==>Function
 Route::post('/admin/tambah_kelas', [AdminController::class, 'tambah_kelas'])->middleware('is_admin');
 Route::post('/admin/edit_kelas', [AdminController::class, 'edit_kelas'])->middleware('is_admin');
