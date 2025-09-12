@@ -682,23 +682,23 @@
                                                                             break;
                                                                         case 'Mt':
                                                                             document.getElementById('Mt' + studentId)
-                                                                                .textContent = itm?.average_score;
+                                                                                .textContent = itm?.total_score;
                                                                             break;
                                                                         case 'L':
                                                                             document.getElementById('L' + studentId)
-                                                                                .textContent = itm?.average_score;
+                                                                                .textContent = itm?.total_score;
                                                                             break;
                                                                         case 'TRT':
                                                                             document.getElementById('TRT' + studentId)
-                                                                                .textContent = itm?.average_score;
+                                                                                .textContent = itm?.total_score;
                                                                             break;
                                                                         case 'TRT1':
                                                                             document.getElementById('TRT1' + studentId)
-                                                                                .textContent = itm?.average_score;
+                                                                                .textContent = itm?.total_score;
                                                                             break;
                                                                         case 'TRT2':
                                                                             document.getElementById('TRT2' + studentId)
-                                                                                .textContent = itm?.average_score;
+                                                                                .textContent = itm?.total_score;
                                                                             break;
 
                                                                         default:
