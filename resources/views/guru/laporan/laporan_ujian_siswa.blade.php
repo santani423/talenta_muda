@@ -195,7 +195,7 @@
                                                 <th>ARTH</th>
                                                 <th>Norma</th>
                                                 <th>SIM</th>
-                                                <th></th>
+                                                <th>Norma</th>
                                                 <th>5.1. NEUROTICISM</th>
                                                 <th></th>
                                                 <th>EXTRAVERSION:</th>
