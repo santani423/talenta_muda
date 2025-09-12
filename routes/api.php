@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MergeUjianController;
 use App\Http\Controllers\UjianSiswaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,3 +20,5 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::get('/siswa/ujian/IQCFIT', [UjianSiswaController::class, 'IQCFIT']);
+
+Route::post('/guru/merge_ujian/relasi_merge_ujian', [MergeUjianController::class, 'relasi_merge_ujian']);

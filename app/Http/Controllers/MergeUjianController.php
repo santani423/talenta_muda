@@ -76,7 +76,7 @@ class MergeUjianController extends Controller
             'nama' => $request->nama,
             'jenis' => 3,
             'kelas_id' => $request->kelas_id,
-            'jam' =>0,
+            'jam' => 0,
             'menit' => 0,
             'acak' => 0,
         ];
@@ -87,19 +87,7 @@ class MergeUjianController extends Controller
         foreach ($ujian_id as $index => $ujn_id) {
             $ujian = Ujian::whereId($ujn_id)->first();
             if ($ujian) {
-                // dd($ujian->kode);
-                // $bannerPath = null;
-                // $instruksiUjianPath = null;
-                // if ($request->hasFile('banner.' . $index)) {
-                //     $bannerFile = $request->file('banner.' . $index);
-                //     // Save banner to storage and get the path
-                //     $bannerPath = $bannerFile->store('marge_ujian/banners', 'public'); // Store in 'storage/app/public/banners' 
-                // }
-                // if ($request->hasFile('instruksi_ujian.' . $index)) {
-                //     $instruksi_ujian = $request->file('instruksi_ujian.' . $index);
-                //     // Save banner to storage and get the path 
-                //     $instruksiUjianPath = $instruksi_ujian->store('marge_ujian/instruksi_ujian', 'public'); // Store in 'storage/app/public/instruksi_ujian'
-                // }
+
                 array_push($relasi_merge_ujian, [
                     'kode_ujian' => $ujian->kode,
                     'kode_merge_ujian' => $kode,
@@ -111,79 +99,102 @@ class MergeUjianController extends Controller
             $index++;
             $urutan++;
         }
-        // dd($relasi_merge_ujian);
+        // dd($MergeUjian);
         MergeUjian::insert($MergeUjian);
-        RelasiMergeUjian::insert($relasi_merge_ujian);
+        // RelasiMergeUjian::insert($relasi_merge_ujian);
 
-        return redirect(url('guru/merge_ujian/' . $kode))->with('pesan', "
-        <script>
-            swal({
-                    title: 'Success!',
-                    text: 'Tambah Merge Ujian',
-                    type: 'success',
-                    padding: '2em'
-                })
-        </script>
-    ");
+        return response()->json([
+            'status' => true,
+            'message' => 'Merge Ujian berhasil ditambahkan',
+            'data' => [
+                'kode' => $kode,
+                'merge_ujian' => $MergeUjian,
+                'relasi_merge_ujian' => $relasi_merge_ujian,
+            ]
+        ], 201);
     }
+
+    public function relasi_merge_ujian(Request $request)
+    {
+
+
+        try {
+            $validated = $request->all();
+            // insert sekaligus (batch insert)
+            RelasiMergeUjian::insert($validated);
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Relasi Merge Ujian berhasil ditambahkan',
+                'data'    => $validated
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Gagal menambahkan relasi merge ujian',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     function show($code = null)
     {
-        
+
         $MergeUjianSiswa = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', '=', 'merge_ujian.kode')
-        ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
-        ->join('detail_ujian', 'detail_ujian.kode', '=', 'ujian.kode')
-        
-        // Joins untuk siswa dari berbagai tabel
-        ->leftJoin('pg_siswa', 'pg_siswa.detail_ujian_id', '=', 'detail_ujian.id')
-        ->leftJoin('siswa as siswa_pg', 'siswa_pg.id', '=', 'pg_siswa.siswa_id')
-        
-        ->leftJoin('detail_visual', 'detail_visual.kode', '=', 'ujian.kode')
-        ->leftJoin('visual_siswa', 'visual_siswa.detail_visual_id', '=', 'detail_visual.id')
-        ->leftJoin('siswa as siswa_visual', 'siswa_visual.id', '=', 'visual_siswa.siswa_id')
-        
-        ->leftJoin('detail_essay', 'detail_essay.kode', '=', 'ujian.kode')
-        ->leftJoin('essay_siswa', 'essay_siswa.detail_ujian_id', '=', 'detail_essay.id')
-        ->leftJoin('siswa as siswa_essay', 'siswa_essay.id', '=', 'essay_siswa.siswa_id')
-        
-        ->leftJoin('detail_kuisoner', 'detail_kuisoner.kode', '=', 'ujian.kode')
-        ->leftJoin('kuesioner_siswa', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner.id')
-        ->leftJoin('siswa as siswa_kuesioner', 'siswa_kuesioner.id', '=', 'kuesioner_siswa.siswa_id')
-        ->where('merge_ujian.kode', $code)
-        // Pilih kolom spesifik untuk menghindari konflik
-        ->select(
-            'merge_ujian.*',
-            'siswa_pg.nama_siswa as nama_siswa_pg',
-            'siswa_pg.tempat_lahir as tempat_lahir_pg',
-            'siswa_pg.tanggal_lahir as tanggal_lahir_pg',
-            'siswa_pg.gender as gender_pg',
-            'siswa_pg.tempat_lahir as tempat_lahir_pg',
-            'siswa_visual.nama_siswa as nama_siswa_visual',
-            'siswa_essay.nama_siswa as nama_siswa_essay',
-            'siswa_kuesioner.nama_siswa as nama_siswa_kuesioner',
+            ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
+            ->join('detail_ujian', 'detail_ujian.kode', '=', 'ujian.kode')
 
-            'siswa_pg.id as id_siswa_pg',
-            'siswa_visual.id as id_siswa_visual',
-            'siswa_essay.id as id_siswa_essay',
-            'siswa_kuesioner.id as id_siswa_kuesioner'
-        )
-        
-        // Hindari data siswa yang null
-        ->where(function ($query) {
-            $query->whereNotNull('siswa_pg.nama_siswa')
-            ->orWhereNotNull('siswa_visual.nama_siswa')
-            ->orWhereNotNull('siswa_essay.nama_siswa')
-            ->orWhereNotNull('siswa_kuesioner.nama_siswa');
-        })
-        
-        // Hindari data duplikat
-        ->distinct()
-        ->get();
+            // Joins untuk siswa dari berbagai tabel
+            ->leftJoin('pg_siswa', 'pg_siswa.detail_ujian_id', '=', 'detail_ujian.id')
+            ->leftJoin('siswa as siswa_pg', 'siswa_pg.id', '=', 'pg_siswa.siswa_id')
 
-        
-    
+            ->leftJoin('detail_visual', 'detail_visual.kode', '=', 'ujian.kode')
+            ->leftJoin('visual_siswa', 'visual_siswa.detail_visual_id', '=', 'detail_visual.id')
+            ->leftJoin('siswa as siswa_visual', 'siswa_visual.id', '=', 'visual_siswa.siswa_id')
 
-      
+            ->leftJoin('detail_essay', 'detail_essay.kode', '=', 'ujian.kode')
+            ->leftJoin('essay_siswa', 'essay_siswa.detail_ujian_id', '=', 'detail_essay.id')
+            ->leftJoin('siswa as siswa_essay', 'siswa_essay.id', '=', 'essay_siswa.siswa_id')
+
+            ->leftJoin('detail_kuisoner', 'detail_kuisoner.kode', '=', 'ujian.kode')
+            ->leftJoin('kuesioner_siswa', 'kuesioner_siswa.detail_kuisoner', '=', 'detail_kuisoner.id')
+            ->leftJoin('siswa as siswa_kuesioner', 'siswa_kuesioner.id', '=', 'kuesioner_siswa.siswa_id')
+            ->where('merge_ujian.kode', $code)
+            // Pilih kolom spesifik untuk menghindari konflik
+            ->select(
+                'merge_ujian.*',
+                'siswa_pg.nama_siswa as nama_siswa_pg',
+                'siswa_pg.tempat_lahir as tempat_lahir_pg',
+                'siswa_pg.tanggal_lahir as tanggal_lahir_pg',
+                'siswa_pg.gender as gender_pg',
+                'siswa_pg.tempat_lahir as tempat_lahir_pg',
+                'siswa_visual.nama_siswa as nama_siswa_visual',
+                'siswa_essay.nama_siswa as nama_siswa_essay',
+                'siswa_kuesioner.nama_siswa as nama_siswa_kuesioner',
+
+                'siswa_pg.id as id_siswa_pg',
+                'siswa_visual.id as id_siswa_visual',
+                'siswa_essay.id as id_siswa_essay',
+                'siswa_kuesioner.id as id_siswa_kuesioner'
+            )
+
+            // Hindari data siswa yang null
+            ->where(function ($query) {
+                $query->whereNotNull('siswa_pg.nama_siswa')
+                    ->orWhereNotNull('siswa_visual.nama_siswa')
+                    ->orWhereNotNull('siswa_essay.nama_siswa')
+                    ->orWhereNotNull('siswa_kuesioner.nama_siswa');
+            })
+
+            // Hindari data duplikat
+            ->distinct()
+            ->get();
+
+
+
+
+
         return view('guru.merge-ujian.show', [
             'title' => 'Data Ujian',
             'plugin' => '
@@ -211,7 +222,7 @@ class MergeUjianController extends Controller
 
                 ->orderBy('relasi_ujian_merge.urutan', 'asc')
                 ->get(),
-                'MergeUjianSiswa' => $MergeUjianSiswa
+            'MergeUjianSiswa' => $MergeUjianSiswa
         ]);
     }
 
