@@ -308,7 +308,7 @@
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
-                                                    <td> </td> 
+                                                    <td> </td>
 
                                                     <td><span id="SIM{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
@@ -337,7 +337,8 @@
                                                     <td><span id="CONSCIENTIOUSNESS{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
-                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td> 
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    <td></td>
                                                     <td><span id="anxiety{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
