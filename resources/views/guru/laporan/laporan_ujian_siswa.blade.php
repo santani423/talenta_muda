@@ -195,6 +195,7 @@
                                                 <th>ARTH</th>
                                                 <th>Norma</th>
                                                 <th>SIM</th>
+                                                <th></th>
                                                 <th>5.1. NEUROTICISM</th>
                                                 <th></th>
                                                 <th>EXTRAVERSION:</th>
@@ -307,8 +308,7 @@
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
-                                                    <td> </td>
-                                                    <td></td>
+                                                    <td> </td> 
 
                                                     <td><span id="SIM{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
@@ -337,8 +337,7 @@
                                                     <td><span id="CONSCIENTIOUSNESS{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
-                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-                                                    <td></td>
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td> 
                                                     <td><span id="anxiety{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
@@ -609,7 +608,7 @@
                                                         if (data.codeUjian === 'part1_3') {
                                                             nilaiARTd = parseInt(data?.nilai ?? 0);
                                                         }
-                                                        if (data.codeUjian === 'part1_4') {
+                                                        if (data.codeUjian === 'part4') {
                                                             nilaiSIM = parseInt(data?.nilai ?? 0);
                                                         }
                                                         if (data.typeUjian == 2) {
