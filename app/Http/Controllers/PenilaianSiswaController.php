@@ -355,6 +355,7 @@ class PenilaianSiswaController extends Controller
                 'detail_jawaban_kuesioner.kode as jawaban',
                 'detail_kuisoner_facets.*',
                 'facets.deskripsi as deskripsi_facet',
+                'facets.code as code_facet',
                 'detail_kuisoner.item as kuisoner_item'
             )
             ->get();
@@ -388,6 +389,7 @@ class PenilaianSiswaController extends Controller
             $results[] = [
                 'facet_code' => $pg->kode_facet,
                 'deskripsi_facet' => $pg->deskripsi_facet,
+                'code_facet' => $pg->code_facet,
                 'jawaban_kode' => $jawabanKode,
                 'kuisoner_item' => $kuisonerItem,
                 'score' => $score
@@ -419,12 +421,16 @@ class PenilaianSiswaController extends Controller
 
             foreach ($filteredResults as $item) {
                 $facetData = $item['deskripsi_facet'];
+                $facetcode = $item['code_facet'];
                 // Ubah ke lowercase semua huruf dulu
                 $facetData = strtolower($facetData);
 
                 // Pisahkan berdasarkan spasi atau tanda minus
-                $parts = preg_split('/[\s-]+/', $facetData);
-
+                $parts = preg_split('/[\s-]+/', strtolower($facetData));
+                // $parts = $facetData;
+                // $camelCase = array_shift($parts); // ambil kata pertama tetap kecil
+                // $camelCase .= implode('', array_map('ucfirst', $parts));
+                
                 // Ambil kata pertama tetap lowercase
                 $camelCase = array_shift($parts);
                 $facetData = $camelCase;
@@ -436,6 +442,7 @@ class PenilaianSiswaController extends Controller
                 if (!isset($grouped[$facetData])) {
                     $grouped[$facetData] = [
                         'deskripsi_facet' => $facetData,
+                        'code_facet' => $facetcode,
                         'total_score' => 0,
                         'items' => []
                     ];

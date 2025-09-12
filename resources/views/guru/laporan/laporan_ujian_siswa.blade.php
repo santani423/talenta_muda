@@ -707,6 +707,8 @@
                                                                 });
                                                             }
                                                         }
+                                                        console.log("123456qwertyu",data);
+                                                        
                                                         if (data.typeUjian == 2 && data?.ujian?.kode == "part5_1") {
                                                             if (data.facet.some(facet => facet?.totalScore != 0)) {
                                                                 data.facet.forEach((facet, ndxFacet) => {
@@ -715,58 +717,58 @@
 
                                                                     facet?.subdomain?.fantasy && (document.getElementById(
                                                                             'fantasy' + studentId).textContent = facet
-                                                                        ?.subdomain?.fantasy?.total_count_score || '-');
+                                                                        ?.subdomain?.fantasy?.total_score || '-');
                                                                     facet?.subdomain?.aesthetic && (document.getElementById(
                                                                             'aesthetic' + studentId).textContent = facet
-                                                                        ?.subdomain?.aesthetic?.total_count_score || '-');
+                                                                        ?.subdomain?.aesthetic?.total_score || '-');
                                                                     facet?.subdomain?.feelings && (document.getElementById(
                                                                             'feelings' + studentId).textContent = facet
-                                                                        ?.subdomain?.feelings?.total_count_score || '-');
+                                                                        ?.subdomain?.feelings?.total_score || '-');
                                                                     facet?.subdomain?.actions && (document.getElementById(
                                                                             'actions' + studentId).textContent = facet
-                                                                        ?.subdomain?.actions?.total_count_score || '-');
+                                                                        ?.subdomain?.actions?.total_score || '-');
                                                                     facet?.subdomain?.ideas && (document.getElementById(
                                                                             'ideas' + studentId).textContent = facet
-                                                                        ?.subdomain?.ideas?.total_count_score || '-');
+                                                                        ?.subdomain?.ideas?.total_score || '-');
                                                                     facet?.subdomain?.values && (document.getElementById(
                                                                             'values' + studentId).textContent = facet
-                                                                        ?.subdomain?.values?.total_count_score || '-');
+                                                                        ?.subdomain?.values?.total_score || '-');
                                                                     facet?.subdomain?.trust && (document.getElementById(
                                                                             'trust' + studentId).textContent = facet
-                                                                        ?.subdomain?.trust?.total_count_score || '-');
+                                                                        ?.subdomain?.trust?.total_score || '-');
                                                                     facet?.subdomain?.straightforwardness && (document
                                                                         .getElementById('straightforwardness' + studentId)
                                                                         .textContent = facet?.subdomain?.straightforwardness
-                                                                        ?.total_count_score || '-');
+                                                                        ?.total_score || '-');
                                                                     facet?.subdomain?.altruism && (document.getElementById(
                                                                             'altruism' + studentId).textContent = facet
-                                                                        ?.subdomain?.altruism?.total_count_score || '-');
+                                                                        ?.subdomain?.altruism?.total_score || '-');
                                                                     facet?.subdomain?.compliance && (document.getElementById(
                                                                             'compliance' + studentId).textContent = facet
-                                                                        ?.subdomain?.compliance?.total_count_score || '-');
+                                                                        ?.subdomain?.compliance?.total_score || '-');
                                                                     facet?.subdomain?.tender && (document
                                                                         .getElementById('tenderMindedness' + studentId)
                                                                         .textContent = facet?.subdomain?.tender
-                                                                        ?.total_count_score || '-');
+                                                                        ?.total_score || '-');
                                                                     facet?.subdomain?.order && (document.getElementById(
                                                                             'order' + studentId).textContent = facet
-                                                                        ?.subdomain?.order?.total_count_score || '-');
+                                                                        ?.subdomain?.order?.total_score || '-');
                                                                     facet?.subdomain?.dutifulness && (document.getElementById(
                                                                             'dutifulness' + studentId).textContent = facet
-                                                                        ?.subdomain?.dutifulness?.total_count_score || '-');
+                                                                        ?.subdomain?.dutifulness?.total_score || '-');
                                                                     facet?.subdomain?.achievement && (document.getElementById(
                                                                             'achievement' + studentId).textContent = facet
-                                                                        ?.subdomain?.achievement?.total_count_score || '-');
+                                                                        ?.subdomain?.achievement?.total_score || '-');
                                                                     facet?.subdomain?.self && (document
                                                                         .getElementById(
                                                                             'SelfDiscipline' + studentId).textContent =
                                                                         facet
-                                                                        ?.subdomain?.self?.total_count_score || '-');
+                                                                        ?.subdomain?.self?.total_score || '-');
 
                                                                     facet?.subdomain?.deliberation && (document
                                                                         .getElementById('deliberation' + studentId)
                                                                         .textContent = facet?.subdomain?.deliberation
-                                                                        ?.total_count_score || '-');
+                                                                        ?.total_score || '-');
 
                                                                 });
 
@@ -782,6 +784,8 @@
                                                         const artdEl = document.getElementById('ARTd' + studentId);
                                                         const SIMEl = document.getElementById('SIM' + studentId);
                                                         const scoreIQEl = document.getElementById('scoreIQ' + studentId);
+                                                        console.log('123456543',facet);
+                                                        
                                                         facet.map((itm) => {
                                                             console.log(`facetstudentName ${studentName}`, itm?.subdomain);
                                                             switch (itm?.domain) {
@@ -832,11 +836,11 @@
                                                                     .textContent = itm
                                                                     ?.subdomain?.["depression"]?.total_score || '-';
                                                             }
-                                                            if (itm?.subdomain?.self) {
+                                                            if (itm?.subdomain?.["self"] && itm?.subdomain?.["self"]?.code_facet == 'n4') {
 
                                                                 document.getElementById('self_consciousness' + studentId)
                                                                     .textContent = itm
-                                                                    ?.subdomain?.self?.total_score || '-';
+                                                                    ?.subdomain?.["self"]?.total_score || '-';
                                                             }
                                                             if (itm?.subdomain?.["impulsiveness"]) {
 
