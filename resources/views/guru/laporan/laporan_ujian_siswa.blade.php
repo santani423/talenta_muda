@@ -284,7 +284,7 @@
                                                     <td>{{ $bs->gender }}</td>
                                                     <td>{{ $bs->umur }}</td>
                                                     <td>
-                                                        <span id="nilaiIQ{{ $key }}"
+                                                        <span id="nilaiIQ{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span>
@@ -602,6 +602,8 @@
                                                     let sekala = [];
                                                     console.log('results', results);
 
+
+
                                                     results.forEach(data => {
                                                         if (['part1_1', 'part1_2', 'part1_3', 'part1_4'].includes(data.codeUjian)) {
                                                             nilaiTscore += parseInt(data?.nilai ?? 0);
@@ -707,8 +709,8 @@
                                                                 });
                                                             }
                                                         }
-                                                        console.log("123456qwertyu",data);
-                                                        
+                                                        console.log("123456qwertyu", data);
+
                                                         if (data.typeUjian == 2 && data?.ujian?.kode == "part5_1") {
                                                             if (data.facet.some(facet => facet?.totalScore != 0)) {
                                                                 data.facet.forEach((facet, ndxFacet) => {
@@ -779,13 +781,14 @@
                                                     });
 
                                                     if (isNorma) {
+                                                        const nilaiIQ = document.getElementById('nilaiIQ' + studentId);
                                                         const normaEl = document.getElementById('norma' + studentId);
                                                         const mrEl = document.getElementById('MR' + studentId);
                                                         const artdEl = document.getElementById('ARTd' + studentId);
                                                         const SIMEl = document.getElementById('SIM' + studentId);
                                                         const scoreIQEl = document.getElementById('scoreIQ' + studentId);
-                                                        console.log('123456543',facet);
-                                                        
+                                                        console.log('123456543', facet);
+
                                                         facet.map((itm) => {
                                                             console.log(`facetstudentName ${studentName}`, itm?.subdomain);
                                                             switch (itm?.domain) {
@@ -836,7 +839,8 @@
                                                                     .textContent = itm
                                                                     ?.subdomain?.["depression"]?.total_score || '-';
                                                             }
-                                                            if (itm?.subdomain?.["self"] && itm?.subdomain?.["self"]?.code_facet == 'n4') {
+                                                            if (itm?.subdomain?.["self"] && itm?.subdomain?.["self"]?.code_facet ==
+                                                                'n4') {
 
                                                                 document.getElementById('self_consciousness' + studentId)
                                                                     .textContent = itm
@@ -904,12 +908,14 @@
                                                             const skorIq = tScoreResponse?.kalenderScore?.nilai ?? '-';
                                                             const kualifikasiIq = tScoreResponse?.klasifikasi?.klasifikasi ?? '-';
 
+                                                            nilaiIQ.textContent = nilaiTscore;
                                                             normaEl.textContent = kualifikasiIq;
                                                             artdEl.textContent = nilaiARTd;
                                                             SIMEl.textContent = nilaiSIM;
                                                             scoreIQEl.textContent = skorIq;
                                                         } catch (err) {
                                                             console.error('Error tScore:', err);
+                                                            nilaiIQ.textContent = 'Gagal';
                                                             normaEl.textContent = 'Gagal';
                                                             mrEl.textContent = 'Gagal';
                                                             artdEl.textContent = 'Gagal';
@@ -918,7 +924,7 @@
                                                         }
                                                     }
                                                 } catch (error) {
-                                                    console.error('Error loadStudentScore:', error);
+                                                    console.error('Error loadStudentScore:',studentId, error);
                                                     if (isNorma) {
                                                         document.getElementById('norma' + studentId).textContent = 'Error';
                                                         document.getElementById('MR' + studentId).textContent = 'Error';
@@ -932,9 +938,9 @@
                                             }
 
                                             // Proses semua elemen nilai IQ
-                                            document.querySelectorAll('[id^="nilaiIQ"]').forEach(el => {
-                                                loadStudentScore(el, false);
-                                            });
+                                            // document.querySelectorAll('[id^="nilaiIQ"]').forEach(el => {
+                                            //     loadStudentScore(el, false);
+                                            // });
 
                                             // Proses semua elemen norma
                                             document.querySelectorAll('[id^="norma"]').forEach(el => {
