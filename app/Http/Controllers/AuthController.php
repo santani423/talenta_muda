@@ -31,138 +31,107 @@ class AuthController extends Controller
             "admin" => Admin::all()
         ]);
     }
+    use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Facades\Hash;
+    use Illuminate\Http\Request;
+
     public function login(Request $request)
     {
-        $admin = Admin::firstWhere('email', $request->input('email'));
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        // 1️⃣ Cek admin
+        $admin = Admin::firstWhere('email', $email);
         if ($admin) {
-            if (Hash::check($request->input('password'), $admin->password)) {
-                $request->session()->put('id', $admin->id);
-                $request->session()->put('email', $admin->email);
-                $request->session()->put('role', 1);
-                return redirect()->intended('/admin')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Berhasil!',
-                            text: 'login berhasil',
-                            type: 'success',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
-            } else {
-                return redirect('/login')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Login Failed!',
-                            text: 'Password salah',
-                            type: 'error',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
+            if (Hash::check($password, $admin->password)) {
+                $request->session()->put([
+                    'id' => $admin->id,
+                    'email' => $admin->email,
+                    'role' => 1,
+                ]);
+                DB::disconnect(); // <--- tambahkan ini
+                return redirect()->intended('/admin')->with('pesan', $this->swalSuccess('login berhasil'));
             }
+            DB::disconnect();
+            return redirect('/login')->with('pesan', $this->swalError('Password salah'));
         }
+        DB::disconnect();
 
-        $guru = Guru::firstWhere('email', $request->input('email'));
+        // 2️⃣ Cek guru
+        $guru = Guru::firstWhere('email', $email);
         if ($guru) {
-
             if ($guru->is_active == 0) {
-                return redirect('/login')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Login Failed!',
-                            text: 'akun tidak aktif',
-                            type: 'error',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
+                DB::disconnect();
+                return redirect('/login')->with('pesan', $this->swalError('akun tidak aktif'));
             }
-
-            if (Hash::check($request->input('password'), $guru->password)) {
-                $request->session()->put('id', $guru->id);
-                $request->session()->put('email', $guru->email);
-                $request->session()->put('nama_guru', $guru->nama_guru);
-                $request->session()->put('role', 2);
-                return redirect()->intended('/guru')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Berhasil!',
-                            text: 'login berhasil',
-                            type: 'success',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
-            } else {
-                return redirect('/login')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Login Failed!',
-                            text: 'Password salah',
-                            type: 'error',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
+            if (Hash::check($password, $guru->password)) {
+                $request->session()->put([
+                    'id' => $guru->id,
+                    'email' => $guru->email,
+                    'nama_guru' => $guru->nama_guru,
+                    'role' => 2,
+                ]);
+                DB::disconnect();
+                return redirect()->intended('/guru')->with('pesan', $this->swalSuccess('login berhasil'));
             }
+            DB::disconnect();
+            return redirect('/login')->with('pesan', $this->swalError('Password salah'));
         }
+        DB::disconnect();
 
-        $siswa = Siswa::firstWhere('email', $request->input('email'));
+        // 3️⃣ Cek siswa
+        $siswa = Siswa::firstWhere('email', $email);
         if ($siswa) {
-
             if ($siswa->is_active == 0) {
-                return redirect('/login')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Login Failed!',
-                            text: 'akun tidak aktif',
-                            type: 'error',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
+                DB::disconnect();
+                return redirect('/login')->with('pesan', $this->swalError('akun tidak aktif'));
             }
-
-            if (Hash::check($request->input('password'), $siswa->password)) {
-                $request->session()->put('id', $siswa->id);
-                $request->session()->put('email', $siswa->email);
-                $request->session()->put('role', 3);
-                return redirect()->intended('/siswa')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Berhasil!',
-                            text: 'login berhasil',
-                            type: 'success',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
-            } else {
-                return redirect('/login')->with('pesan', "
-                    <script>
-                        swal({
-                            title: 'Login Failed!',
-                            text: 'Password salah',
-                            type: 'error',
-                            padding: '2em'
-                        })
-                    </script>
-                ");
+            if (Hash::check($password, $siswa->password)) {
+                $request->session()->put([
+                    'id' => $siswa->id,
+                    'email' => $siswa->email,
+                    'role' => 3,
+                ]);
+                DB::disconnect();
+                return redirect()->intended('/siswa')->with('pesan', $this->swalSuccess('login berhasil'));
             }
+            DB::disconnect();
+            return redirect('/login')->with('pesan', $this->swalError('Password salah'));
         }
 
-        return redirect('/login')->with('pesan', "
-            <script>
-                swal({
-                    title: 'Login Failed!',
-                    text: 'Akun tidak ditemukan',
-                    type: 'error',
-                    padding: '2em'
-                })
-            </script>
-        ");
+        DB::disconnect();
+        return redirect('/login')->with('pesan', $this->swalError('Akun tidak ditemukan'));
     }
+
+    // helper swal
+    private function swalSuccess($text)
+    {
+        return "
+        <script>
+            swal({
+                title: 'Berhasil!',
+                text: '$text',
+                type: 'success',
+                padding: '2em'
+            });
+        </script>
+    ";
+    }
+
+    private function swalError($text)
+    {
+        return "
+        <script>
+            swal({
+                title: 'Login Failed!',
+                text: '$text',
+                type: 'error',
+                padding: '2em'
+            });
+        </script>
+    ";
+    }
+
 
     public function install()
     {
