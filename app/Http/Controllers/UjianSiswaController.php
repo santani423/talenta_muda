@@ -26,6 +26,7 @@ use App\Models\SimulatorUjianVisual;
 use App\Models\VisualSiswa;
 use Carbon\Carbon;
 
+
 class UjianSiswaController extends Controller
 {
     /**
@@ -427,7 +428,8 @@ class UjianSiswaController extends Controller
             'ujian' => $ujian,
             'essay_siswa' => $essay_siswa,
             'kode_merge_ujian' => $mergeUjian->merge_ujian_kode,
-            'waktu_ujian' => $waktu_ujian
+            'waktu_ujian' => $waktu_ujian,
+            'mergeUjian' => $mergeUjian
         ]);
     }
     public function ujian_visual($kodeMergeUjian)
@@ -484,6 +486,12 @@ class UjianSiswaController extends Controller
             ->where('siswa_id', session()->get('id'))
             ->get();
 
+
+        if ($visual_siswa->count() == 0) {
+            $visual_siswa =    UjianServiceController::createOrRetrieveVisualSiswa($mergeUjian->kode_ujian, session()->get('id'));
+        }
+        // dd($visual_siswa);
+
         // dd($visual_siswa);
         return view('siswa.ujian.merge-ujian-visual', [
             'title' => 'Ujian Pilihan Ganda',
@@ -503,7 +511,8 @@ class UjianSiswaController extends Controller
             'ujian' => $mergeUjian,
             'visual_siswa' => $visual_siswa,
             'kode_merge_ujian' => $mergeUjian->kode_merge_ujian,
-            'waktu_ujian' => $waktu_ujian
+            'waktu_ujian' => $waktu_ujian,
+            'mergeUjian' => $mergeUjian
         ]);
     }
 
@@ -650,7 +659,8 @@ class UjianSiswaController extends Controller
             'ujian' => $mergeUjian,
             'detail_siswa' => $detail_siswa,
             'kode_merge_ujian' => $mergeUjian->kode_merge_ujian,
-            'waktu_ujian' => $waktu_ujian
+            'waktu_ujian' => $waktu_ujian,
+            'mergeUjian' => $mergeUjian
         ]);
     }
 

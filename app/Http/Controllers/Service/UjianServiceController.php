@@ -216,7 +216,7 @@ class UjianServiceController extends Controller
 
         return $ujian;
     }
-    
+
     public static function createOrRetrieveVisualSiswa($kode_ujian)
     {
         // Retrieve existing records of PgSiswa for the specific exam and student
@@ -250,9 +250,13 @@ class UjianServiceController extends Controller
 
             // Insert shuffled or ordered questions into VisualSiswa table
             VisualSiswa::insert($soal_visual_siswa);
+
+            $visual_siswa = VisualSiswa::where('kode', $ujian->kode)
+                ->where('siswa_id', session()->get('id'))
+                ->get();
         }
 
-        return $ujian;
+        return $visual_siswa;
     }
     public static function createOrRetrieveKuesionerSiswa($kode_ujian)
     {

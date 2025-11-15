@@ -47,7 +47,8 @@
                             $soal_hidden = '';
                         @endphp
                         @foreach ($detail_siswa as $kuisoner)
-                            <div class="question {{ $soal_hidden }} question-{{ $no }}" data-question="{{ $no }}">
+                            <div class="question {{ $soal_hidden }} question-{{ $no }}"
+                                data-question="{{ $no }}">
                                 <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
                                     <h6 style="font-weight: bold">Soal No. <span class="badge badge-primary no-soal"
                                             style="font-size: 1rem">{{ $no }}</span></h6>
@@ -151,7 +152,8 @@
                             $('#fixed-timer').fadeIn();
                         }
 
-                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
+                            '0');
                         const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
                         const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
 
@@ -160,15 +162,39 @@
                         clearInterval(interval);
                         display.text("00:00:00");
                         alert("Waktu Ujian Habis");
-                        $('#examwizard-question').submit();
+                        // $('#examwizard-question').submit();
                     }
                 }, 1000);
             }
 
             $(function() {
-                const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
-                const display = $('.jam_ujin_skearan');
-                startTimer(endDate, display);
+                fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                            time: new Date()
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data?.request?.time) {
+                            // Ambil batas waktu ujian dari response API (format ISO 8601)
+                            const batasWaktu = data.waktu_berakhir;
+                            const display = $('.jam_ujin_skearan');
+                            startTimer(batasWaktu, display);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                // const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
+                // const display = $('.jam_ujin_skearan');
+                // startTimer(endDate, display);
             });
 
             $('#go-to-next-question-pg').on('click', function() {

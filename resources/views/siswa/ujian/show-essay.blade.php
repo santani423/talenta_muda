@@ -162,9 +162,34 @@
         }
 
         $(function() {
-            const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
-            const display = $('.jam_ujin_skearan');
-            startTimer(endDate, display);
+
+             fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                            .getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                        time: new Date()
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data?.request?.time) {
+                        // Ambil batas waktu ujian dari response API (format ISO 8601)
+                        const batasWaktu = data.waktu_berakhir;
+                        const display = $('.jam_ujin_skearan');
+                        startTimer(batasWaktu, display);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            // const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
+            // const display = $('.jam_ujin_skearan');
+            // startTimer(endDate, display);
         });
 
         $('#go-to-next-question-essay').on('click', function () {
