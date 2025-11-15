@@ -66,15 +66,19 @@
                                         <div class="widget-content mt-3">
                                             <div class="alert alert-danger hidden"></div>
                                             <div class="green-radio color-green">
-                                                <ol type="A" style="color: #000; margin-left: -20px; list-style-type: none;">
+                                                <ol type="A"
+                                                    style="color: #000; margin-left: -20px; list-style-type: none;">
                                                     <div class="row">
                                                         @foreach (['a', 'b', 'c', 'd', 'e'] as $opt)
-                                                            <div class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
+                                                            <div
+                                                                class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                                 <li class="answer-number d-flex align-items-center">
                                                                     <input type="radio"
                                                                         name="pilihan-{{ $soal->detailujian->id }}"
-                                                                        value="{{ $opt }}" id="soal{{ $no }}-{{ $opt }}" />
-                                                                    <label for="soal{{ $no }}-{{ $opt }}"
+                                                                        value="{{ $opt }}"
+                                                                        id="soal{{ $no }}-{{ $opt }}" />
+                                                                    <label
+                                                                        for="soal{{ $no }}-{{ $opt }}"
                                                                         class="d-flex align-items-center ml-2">
                                                                         <span>{{ strtoupper($opt) }}</span>
                                                                         <img src="{{ url($soal->detailujian->{'pg_' . (array_search($opt, ['a', 'b', 'c', 'd', 'e']) + 1)}) }}"
@@ -86,7 +90,8 @@
                                                         @endforeach
 
                                                         @if (!empty($soal->detailujian->pg_6) && $soal->detailujian->pg_6 != 'f')
-                                                            <div class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
+                                                            <div
+                                                                class="@if ($ujian->kode == 'part2') col @else col-md-6 @endif">
                                                                 <li class="answer-number d-flex align-items-center">
                                                                     <input type="radio"
                                                                         name="pilihan-{{ $soal->detailujian->id }}"
@@ -126,8 +131,7 @@
                     <div class="col-lg-12 exams-footer">
                         <div class="row pb-3">
                             <div class="col-sm-1 back-to-prev-question-wrapper text-center mt-3">
-                                <a href="javascript:void(0);" id="back-to-prev-question"
-                                    class="btn btn-primary disabled">
+                                <a href="javascript:void(0);" id="back-to-prev-question" class="btn btn-primary disabled">
                                     Back
                                 </a>
                             </div>
@@ -167,15 +171,19 @@
                 const interval = setInterval(() => {
                     const currentTime = new Date().getTime();
                     const timeLeft = targetTime - currentTime;
-
+                    console.log("Time left:", endDate);
                     if (timeLeft > 0) {
-                        $('.jam_ujin_skearan').closest('.timer-fixed').removeClass('hidden');
-
-                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
+                            '0');
                         const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
                         const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
 
                         display.text(`${hours}:${minutes}:${seconds}`);
+
+                        // Tampilkan timer hanya jika waktu tersisa <= 30 detik
+                        if (timeLeft <= 30000) {
+                            $('.jam_ujin_skearan').closest('.timer-fixed').removeClass('hidden');
+                        }
                     } else {
                         clearInterval(interval);
                         display.text("00:00:00");
@@ -186,9 +194,33 @@
             }
 
             $(function() {
-                const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
-                const display = $('.jam_ujin_skearan');
-                startTimer(endDate, display);
+                fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                            time: new Date()
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data?.request?.time) {
+                            // Ambil batas waktu ujian dari response API (format ISO 8601)
+                            const batasWaktu = data.waktu_berakhir;
+                            const display = $('.jam_ujin_skearan'); 
+                            startTimer(batasWaktu, display);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                // const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
+                // const display = $('.jam_ujin_skearan');
+                // startTimer(endDate, display);
             });
 
             $('#go-to-next-question-pg').on('click', function() {

@@ -118,17 +118,17 @@ class UjianServiceController extends Controller
 
         $hours = $ujian->jam;
         $minutes = $ujian->menit;
-        $timestamp = strtotime($waktuMulaiParam);
-        $endTime = date('Y-m-d H:i', strtotime("+$hours hour +$minutes minute", $timestamp));
+        $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
+        $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
 
         $dataEndTime = [
-            'waktu_mulai' => date('Y-m-d H:i'),
-            'waktu_berakhir' => $endTime,
+            'waktu_mulai' => $waktuMulai,
+            'waktu_berakhir' => $waktuBerakhir,
             'selesai' => 0
         ];
         // dd($ujian);
 
-        if (!$waktuUjian->waktu_mulai) {
+        if (!$waktuUjian->waktu_berakhir) {
 
             $waktuUjian->update($dataEndTime);
         } else {
@@ -178,7 +178,7 @@ class UjianServiceController extends Controller
             }
             // dd($visual_siswa);
         }
-        return $dataEndTime;
+        return $waktuUjian->waktu_berakhir;
     }
 
     public static function createOrRetrievePgSiswa($kode_ujian)

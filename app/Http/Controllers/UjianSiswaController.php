@@ -238,7 +238,8 @@ class UjianSiswaController extends Controller
             'ujian' => $ujian,
             'pg_siswa' => $pg_siswa,
             'kode_merge_ujian' => $mergeUjian->kode_merge_ujian,
-            'waktu_ujian' => $waktu_ujian
+            'waktu_ujian' => $waktu_ujian,
+            'mergeUjian' => $mergeUjian
         ]);
     }
 
@@ -1113,11 +1114,12 @@ class UjianSiswaController extends Controller
 
     public function simulasiUjian(Request $request)
     {
-        UjianServiceController::startUJian($request->kode_ujian, $request->time);
+        $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian, $request->time);
 
         return response()->json([
             'message' => 'Soal berhasil diupload',
             'request' => $request->all(),
+            'waktu_berakhir' => $waktu_berakhir,
         ], 200);
     }
 

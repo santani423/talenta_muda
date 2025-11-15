@@ -87,24 +87,24 @@
                                                             <script>
                                                                 function ujianEsay() {
                                                                     // Kirim data bahwa simulasi selesai
-                                                                    fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                                                                            method: "POST",
-                                                                            headers: {
-                                                                                "Content-Type": "application/json",
-                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                                                            },
-                                                                            body: JSON.stringify({
-                                                                                kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                                                                                time: new Date()
-                                                                            })
-                                                                        })
-                                                                        .then(response => response.json())
-                                                                        .then(data => {
-                                                                            console.log('Simulasi selesai:', data);
-                                                                        })
-                                                                        .catch(error => {
-                                                                            console.error('Error:', error);
-                                                                        });
+                                                                    // fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                                    //         method: "POST",
+                                                                    //         headers: {
+                                                                    //             "Content-Type": "application/json",
+                                                                    //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                                                    //         },
+                                                                    //         body: JSON.stringify({
+                                                                    //             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                                    //             time: new Date()
+                                                                    //         })
+                                                                    //     })
+                                                                    //     .then(response => response.json())
+                                                                    //     .then(data => {
+                                                                    //         console.log('Simulasi selesai:', data);
+                                                                    //     })
+                                                                    //     .catch(error => {
+                                                                    //         console.error('Error:', error);
+                                                                    //     });
 
                                                                     // Tampilkan modal countdown
                                                                     const modal = document.getElementById('countdownEssayModal');
@@ -151,24 +151,24 @@
                                                             <script>
                                                                 function ujianEsay() {
                                                                     // Kirim data ke server bahwa simulasi selesai
-                                                                    fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                                                                            method: "POST",
-                                                                            headers: {
-                                                                                "Content-Type": "application/json",
-                                                                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                                                            },
-                                                                            body: JSON.stringify({
-                                                                                kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                                                                                time: new Date()
-                                                                            })
-                                                                        })
-                                                                        .then(response => response.json())
-                                                                        .then(data => {
-                                                                            console.log('Simulasi selesai:', data);
-                                                                        })
-                                                                        .catch(error => {
-                                                                            console.error('Error:', error);
-                                                                        });
+                                                                    // fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                                                    //         method: "POST",
+                                                                    //         headers: {
+                                                                    //             "Content-Type": "application/json",
+                                                                    //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                                                    //         },
+                                                                    //         body: JSON.stringify({
+                                                                    //             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                                                    //             time: new Date()
+                                                                    //         })
+                                                                    //     })
+                                                                    //     .then(response => response.json())
+                                                                    //     .then(data => {
+                                                                    //         console.log('Simulasi selesai:', data);
+                                                                    //     })
+                                                                    //     .catch(error => {
+                                                                    //         console.error('Error:', error);
+                                                                    //     });
 
                                                                     // Tampilkan modal countdown
                                                                     const modal = document.getElementById('countdownEssayModal');
@@ -384,7 +384,7 @@
                                                                 @endif
                                                             </div>
                                                             <button type="button" class="btn btn-primary"
-                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit
+                                                                onclick="checkAnswer({{ $keySG }},{{ $no }}, '{{ $itemSG->jawaban }}',{{ count($simulasiPg) }})">Submit5
                                                                 <div id="jam"></div>
                                                             </button>
                                                             <p id="{{ $keySG }}result-{{ $no }}"
@@ -448,25 +448,25 @@
 
                                         if (nextQuestion == totalSoal) {
                                             // Simulasi selesai
-                                            fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                                                    method: "POST",
-                                                    headers: {
-                                                        "Content-Type": "application/json",
-                                                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                                            'content')
-                                                    },
-                                                    body: JSON.stringify({
-                                                        kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                                                        time: new Date()
-                                                    })
-                                                })
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    console.log('Simulasi selesai:', data);
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error:', error);
-                                                });
+                                            // fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                            //         method: "POST",
+                                            //         headers: {
+                                            //             "Content-Type": "application/json",
+                                            //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                            //                 'content')
+                                            //         },
+                                            //         body: JSON.stringify({
+                                            //             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                            //             time: new Date()
+                                            //         })
+                                            //     })
+                                            //     .then(response => response.json())
+                                            //     .then(data => {
+                                            //         console.log('Simulasi selesai:', data);
+                                            //     })
+                                            //     .catch(error => {
+                                            //         console.error('Error:', error);
+                                            //     });
 
                                             // Tampilkan modal
                                             const modal = document.getElementById('countdownModal');
@@ -561,25 +561,25 @@
                                         resultElement.innerText = "Jawaban Benar!";
                                         resultElement.style.color = "green";
                                         if (keySG == count - 1) {
-                                            fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                                                    method: "POST",
-                                                    headers: {
-                                                        "Content-Type": "application/json",
-                                                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                                            'content')
-                                                    },
-                                                    body: JSON.stringify({
-                                                        kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                                                        time: new Date()
-                                                    })
-                                                })
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    console.log('Simulasi selesai:', data);
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error:', error);
-                                                });
+                                            // fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                            //         method: "POST",
+                                            //         headers: {
+                                            //             "Content-Type": "application/json",
+                                            //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                            //                 'content')
+                                            //         },
+                                            //         body: JSON.stringify({
+                                            //             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                            //             time: new Date()
+                                            //         })
+                                            //     })
+                                            //     .then(response => response.json())
+                                            //     .then(data => {
+                                            //         console.log('Simulasi selesai:', data);
+                                            //     })
+                                            //     .catch(error => {
+                                            //         console.error('Error:', error);
+                                            //     });
 
                                             let countdown = 5;
                                             resultElement.textContent = `Simulasi selesai! Halaman akan dialihkan dalam ${countdown} detik...`
@@ -635,25 +635,25 @@
                                     resultElement.innerText = "Jawaban Benar!";
                                     resultElement.style.color = "green";
                                     if (keySG == count - 1) {
-                                        fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                                                method: "POST",
-                                                headers: {
-                                                    "Content-Type": "application/json",
-                                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                                        'content')
-                                                },
-                                                body: JSON.stringify({
-                                                    kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                                                    time: new Date()
-                                                })
-                                            })
-                                            .then(response => response.json())
-                                            .then(data => {
-                                                console.log('Simulasi selesai:', data);
-                                            })
-                                            .catch(error => {
-                                                console.error('Error:', error);
-                                            });
+                                        // fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                        //         method: "POST",
+                                        //         headers: {
+                                        //             "Content-Type": "application/json",
+                                        //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                        //                 'content')
+                                        //         },
+                                        //         body: JSON.stringify({
+                                        //             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                        //             time: new Date()
+                                        //         })
+                                        //     })
+                                        //     .then(response => response.json())
+                                        //     .then(data => {
+                                        //         console.log('Simulasi selesai:', data);
+                                        //     })
+                                        //     .catch(error => {
+                                        //         console.error('Error:', error);
+                                        //     });
                                         resultElement.textContent = 'Simulasi selesai!'
                                             .toUpperCase();
                                         resultElement.style.color = 'green';
@@ -756,25 +756,25 @@
 
                                     if (keySG == count - 1) {
                                         // Simulasi selesai - kirim data ke server
-                                        fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                                                method: "POST",
-                                                headers: {
-                                                    "Content-Type": "application/json",
-                                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                                        'content')
-                                                },
-                                                body: JSON.stringify({
-                                                    kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                                                    time: new Date()
-                                                })
-                                            })
-                                            .then(response => response.json())
-                                            .then(data => {
-                                                console.log('Simulasi selesai:', data);
-                                            })
-                                            .catch(error => {
-                                                console.error('Error:', error);
-                                            });
+                                        // fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                                        //         method: "POST",
+                                        //         headers: {
+                                        //             "Content-Type": "application/json",
+                                        //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                        //                 'content')
+                                        //         },
+                                        //         body: JSON.stringify({
+                                        //             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                        //             time: new Date()
+                                        //         })
+                                        //     })
+                                        //     .then(response => response.json())
+                                        //     .then(data => {
+                                        //         console.log('Simulasi selesai:', data);
+                                        //     })
+                                        //     .catch(error => {
+                                        //         console.error('Error:', error);
+                                        //     });
 
                                         // Tampilkan modal countdown
                                         const modal = document.getElementById('countdownModal');
