@@ -31,8 +31,8 @@
 
     <!-- TIMER -->
     <div class="d-flex timer-fixed" id="countdown-timer">
-        <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;" >
-            <span data-feather="clock" ></span> <span class="jam_ujin_skearan">00:00:00</span>
+        <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
+            <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
         </div>
     </div>
 
@@ -148,7 +148,7 @@
             function startTimer(endDate, display) {
                 const targetTime = new Date(endDate).getTime();
                 const timerElement = $('#countdown-timer');
-                
+
                 // Pastikan timer tersembunyi di awal
                 timerElement.hide();
 
@@ -186,7 +186,7 @@
                     },
                     body: JSON.stringify({
                         kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                        time: new Date()
+                        time: new Date().toISOString()
                     })
                 })
                 .then(response => response.json())
