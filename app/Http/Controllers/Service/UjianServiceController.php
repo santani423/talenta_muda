@@ -128,7 +128,8 @@ class UjianServiceController extends Controller
             'siswa_id' => session()->get('id'),
             'hours' => $hours,
             'minutes' => $minutes,
-            'waktuMulai' => $waktuMulaiParam,
+            'waktuMulaiParam' => $waktuMulaiParam,
+            'waktuMulai' => $waktuMulai,
             'waktuBerakhir' => $waktuBerakhir,
         ]);
         // -----------------------------------------------------------
