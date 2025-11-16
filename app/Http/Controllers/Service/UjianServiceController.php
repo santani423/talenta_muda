@@ -16,6 +16,7 @@ use App\Models\WaktuUjian;
 use App\Models\JawabanEssay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UjianServiceController extends Controller
 {
@@ -120,6 +121,17 @@ class UjianServiceController extends Controller
         $minutes = $ujian->menit;
         $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
         $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
+
+        // --- LOGGING: Catat permulaan proses dan parameter input ---
+        Log::info('Proses Start Ujian Dimulai', [
+            'kode_ujian' => $kodeUjian,
+            'siswa_id' => session()->get('id'),
+            'hours' => $hours,
+            'minutes' => $minutes,
+            'waktuMulai' => $waktuMulaiParam,
+            'waktuBerakhir' => $waktuBerakhir,
+        ]);
+        // -----------------------------------------------------------
 
         $dataEndTime = [
             'waktu_mulai' => $waktuMulai,
