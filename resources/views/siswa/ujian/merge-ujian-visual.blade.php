@@ -186,7 +186,7 @@
                     },
                     body: JSON.stringify({
                         kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                        time: new Date().toISOString()
+                        time: new Date()
                     })
                 })
                 .then(response => response.json())
