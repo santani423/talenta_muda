@@ -186,7 +186,7 @@
                             // Ambil batas waktu ujian dari response API (format ISO 8601)
                             // const batasWaktu = data.waktu_berakhir;
                             // const display = $('.jam_ujin_skearan');
-                            const batasWaktuUTC = data.waktu_berakhir + 'Z';
+                            const batasWaktuUTC = data.waktu_berakhir;
                             const display = $('.jam_ujin_skearan');
                             startTimer(batasWaktu, display);
                         }
