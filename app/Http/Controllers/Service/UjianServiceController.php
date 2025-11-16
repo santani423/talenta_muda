@@ -14,6 +14,7 @@ use App\Models\Ujian;
 use App\Models\VisualSiswa;
 use App\Models\WaktuUjian;
 use App\Models\JawabanEssay;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -115,23 +116,52 @@ class UjianServiceController extends Controller
         // $mergeUjian = ujian::where('kode',$kodeUjian)->first();
         // dd($mergeUjian);startUJian
 
-
-
         $hours = $ujian->jam;
         $minutes = $ujian->menit;
-        $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
-        $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
+        // $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
+        // $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
+
+        //CARA KE 2 
+        // 1. Parsing waktu input (dari JS) sebagai UTC
+        // Format ISO 8601 dari JS sudah mengandung 'Z' (UTC), Carbon menanganinya dengan baik
+        $waktuMulaiCarbon = Carbon::parse($waktuMulaiParam);
+
+        // 2. Set Timezone objek Carbon ke Timezone aplikasi (sekarang UTC)
+        // Walaupun Carbon::parse sudah mengambil timezone dari 'Z', langkah ini memastikan konsistensi
+        // dan menghapus milidetik untuk format database.
+        $waktuMulaiCarbon->setTimezone(config('app.timezone')); // Akan menjadi UTC
+
+        // 3. Hitung waktu berakhir dalam Timezone UTC
+        $waktuBerakhirCarbon = $waktuMulaiCarbon
+        ->copy()
+        ->addHours($ujian->jam)
+        ->addMinutes($ujian->menit);
+
+        // 4. Format untuk database (UTC)
+        $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
+        $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
+
+        // --- LOGGING: Catat perhitungan dalam konteks UTC ---
+        Log::info('Proses Start Ujian Dimulai (UTC)', [
+        'kode_ujian' => $kodeUjian,
+        'siswa_id' => session()->get('id'),
+        'durasi' => "$hours jam $minutes menit",
+        'waktuMulaiParam_Klien_UTC' => $waktuMulaiParam,
+        'waktuMulai_DB_UTC' => $waktuMulai,
+        'waktuBerakhir_DB_UTC' => $waktuBerakhir,
+        ]);
+         // -----------------------------------------------------------
 
         // --- LOGGING: Catat permulaan proses dan parameter input ---
-        Log::info('Proses Start Ujian Dimulai', [
-            'kode_ujian' => $kodeUjian,
-            'siswa_id' => session()->get('id'),
-            'hours' => $hours,
-            'minutes' => $minutes,
-            'waktuMulaiParam' => $waktuMulaiParam,
-            'waktuMulai' => $waktuMulai,
-            'waktuBerakhir' => $waktuBerakhir,
-        ]);
+        // Log::info('Proses Start Ujian Dimulai', [
+        //     'kode_ujian' => $kodeUjian,
+        //     'siswa_id' => session()->get('id'),
+        //     'hours' => $hours,
+        //     'minutes' => $minutes,
+        //     'waktuMulaiParam' => $waktuMulaiParam,
+        //     'waktuMulai' => $waktuMulai,
+        //     'waktuBerakhir' => $waktuBerakhir,
+        // ]);
         // -----------------------------------------------------------
 
         $dataEndTime = [
