@@ -141,6 +141,8 @@ class UjianServiceController extends Controller
         $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
         $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
 
+        $selisihDetik = $waktuMulaiCarbon->diffInSeconds($waktuBerakhirCarbon, false);
+
         // --- LOGGING: Catat perhitungan dalam konteks UTC ---
         Log::info('Proses Start Ujian Dimulai (UTC)', [
         'kode_ujian' => $kodeUjian,
@@ -149,6 +151,7 @@ class UjianServiceController extends Controller
         'waktuMulaiParam_Klien_UTC' => $waktuMulaiParam,
         'waktuMulai_DB_UTC' => $waktuMulai,
         'waktuBerakhir_DB_UTC' => $waktuBerakhir,
+        'Selisih_Detik' => $selisihDetik, // HARUS POSITIF (> 0)
         ]);
          // -----------------------------------------------------------
 
