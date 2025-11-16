@@ -107,124 +107,294 @@ class UjianServiceController extends Controller
         return $dataEndTime;
     }
 
-    public static function startUJian($kodeUjian, $waktuMulaiParam)
+    // public static function startUJian($kodeUjian, $waktuMulaiParam)
+    // {
+    //     $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
+    //         ->where('siswa_id', session()->get('id'))
+    //         ->first();
+    //     $ujian = Ujian::where('kode', $kodeUjian)->first();
+    //     // $mergeUjian = ujian::where('kode',$kodeUjian)->first();
+    //     // dd($mergeUjian);startUJian
+
+    //     $hours = $ujian->jam;
+    //     $minutes = $ujian->menit;
+    //     // $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
+    //     // $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
+
+    //     //CARA KE 2 
+    //     // 1. Parsing waktu input (dari JS) sebagai UTC
+    //     // Format ISO 8601 dari JS sudah mengandung 'Z' (UTC), Carbon menanganinya dengan baik
+    //     $waktuMulaiCarbon = Carbon::parse($waktuMulaiParam);
+
+    //     // 2. Set Timezone objek Carbon ke Timezone aplikasi (sekarang UTC)
+    //     // Walaupun Carbon::parse sudah mengambil timezone dari 'Z', langkah ini memastikan konsistensi
+    //     // dan menghapus milidetik untuk format database.
+    //     $waktuMulaiCarbon->setTimezone(config('app.timezone')); // Akan menjadi UTC
+
+    //     // 3. Hitung waktu berakhir dalam Timezone UTC
+    //     $waktuBerakhirCarbon = $waktuMulaiCarbon
+    //     ->copy()
+    //     ->addHours($ujian->jam)
+    //     ->addMinutes($ujian->menit);
+
+    //     // 4. Format untuk database (UTC)
+    //     $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
+    //     $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
+
+    //     $selisihDetik = $waktuMulaiCarbon->diffInSeconds($waktuBerakhirCarbon, false);
+
+    //     // --- LOGGING: Catat perhitungan dalam konteks UTC ---
+    //     Log::info('Proses Start Ujian Dimulai (UTC)', [
+    //     'kode_ujian' => $kodeUjian,
+    //     'siswa_id' => session()->get('id'),
+    //     'durasi' => "$hours jam $minutes menit",
+    //     'waktuMulaiParam_Klien_UTC' => $waktuMulaiParam,
+    //     'waktuMulai_DB_UTC' => $waktuMulai,
+    //     'waktuBerakhir_DB_UTC' => $waktuBerakhir,
+    //     'Selisih_Detik' => $selisihDetik, // HARUS POSITIF (> 0)
+    //     ]);
+    //      // -----------------------------------------------------------
+
+    //     // --- LOGGING: Catat permulaan proses dan parameter input ---
+    //     // Log::info('Proses Start Ujian Dimulai', [
+    //     //     'kode_ujian' => $kodeUjian,
+    //     //     'siswa_id' => session()->get('id'),
+    //     //     'hours' => $hours,
+    //     //     'minutes' => $minutes,
+    //     //     'waktuMulaiParam' => $waktuMulaiParam,
+    //     //     'waktuMulai' => $waktuMulai,
+    //     //     'waktuBerakhir' => $waktuBerakhir,
+    //     // ]);
+    //     // -----------------------------------------------------------
+
+    //     $dataEndTime = [
+    //         'waktu_mulai' => $waktuMulai,
+    //         'waktu_berakhir' => $waktuBerakhir,
+    //         'selesai' => 0
+    //     ];
+    //     // dd($ujian);
+
+    //     if (!$waktuUjian->waktu_berakhir) {
+
+    //         $waktuUjian->update($dataEndTime);
+    //     } else {
+    //         // $mergeUjian = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
+    //         //     ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
+    //         //     ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
+    //         //     ->where('merge_ujian.kode', $kodeMergeUjian)
+    //         //     ->where('waktu_ujian.selesai', 1)
+    //         //     ->where('waktu_ujian.siswa_id', session()->get('id'))
+    //         //     ->select(
+    //         //         'rum.*',
+    //         //         'waktu_ujian.*',
+    //         //         'ujian.jenis as jenis_ujian',
+    //         //         'ujian.kode as kode_ujian',
+    //         //         'merge_ujian.jam',
+    //         //         'merge_ujian.menit',
+    //         //         'merge_ujian.kode as merge_ujian_kode'
+    //         //     )
+    //         //     ->distinct('rum.id')
+    //         //     ->orderBy('rum.urutan', 'asc')
+    //         //     ->take(2) // ambil 2 data
+    //         //     ->get();
+    //         //         dd($mergeUjian);
+    //         // if ($mergeUjian) {
+    //         //     if ($mergeUjian[0]->kode_ujian != $kodeUjian) {
+    //         //         dd($mergeUjian[0]);
+    //         //     }
+    //         // }
+    //     }
+
+    //     $ujian = Ujian::where('kode', $kodeUjian)->first();
+    //     // dd($ujian);
+
+    //     if ($ujian->jenis == '3') {
+    //         $visual_siswa = VisualSiswa::where('kode', $kodeUjian)
+    //             ->where('siswa_id', session()->get('id'))
+    //             ->count();
+    //         if ($visual_siswa == 0) {
+    //             $detailVisual = DetailVisual::where('kode', $kodeUjian)->get();
+    //             foreach ($detailVisual as $key => $value) {
+    //                 VisualSiswa::create([
+    //                     'siswa_id' => session()->get('id'),
+    //                     'detail_visual_id' => $value->id,
+    //                     'kode' => $kodeUjian,
+    //                 ]);
+    //             }
+    //         }
+    //         // dd($visual_siswa);
+    //     }
+    //     return $waktuUjian->waktu_berakhir;
+    // }
+
+     public static function startUJian($kodeUjian, $waktuMulaiParam)
+
     {
+
         $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
+
             ->where('siswa_id', session()->get('id'))
+
             ->first();
+
         $ujian = Ujian::where('kode', $kodeUjian)->first();
+
         // $mergeUjian = ujian::where('kode',$kodeUjian)->first();
+
         // dd($mergeUjian);startUJian
 
         $hours = $ujian->jam;
+
         $minutes = $ujian->menit;
-        // $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
-        // $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
 
-        //CARA KE 2 
-        // 1. Parsing waktu input (dari JS) sebagai UTC
-        // Format ISO 8601 dari JS sudah mengandung 'Z' (UTC), Carbon menanganinya dengan baik
-        $waktuMulaiCarbon = Carbon::parse($waktuMulaiParam);
+        $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
 
-        // 2. Set Timezone objek Carbon ke Timezone aplikasi (sekarang UTC)
-        // Walaupun Carbon::parse sudah mengambil timezone dari 'Z', langkah ini memastikan konsistensi
-        // dan menghapus milidetik untuk format database.
-        $waktuMulaiCarbon->setTimezone(config('app.timezone')); // Akan menjadi UTC
+        $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
 
-        // 3. Hitung waktu berakhir dalam Timezone UTC
-        $waktuBerakhirCarbon = $waktuMulaiCarbon
-        ->copy()
-        ->addHours($ujian->jam)
-        ->addMinutes($ujian->menit);
 
-        // 4. Format untuk database (UTC)
-        $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
-        $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
-
-        $selisihDetik = $waktuMulaiCarbon->diffInSeconds($waktuBerakhirCarbon, false);
-
-        // --- LOGGING: Catat perhitungan dalam konteks UTC ---
-        Log::info('Proses Start Ujian Dimulai (UTC)', [
-        'kode_ujian' => $kodeUjian,
-        'siswa_id' => session()->get('id'),
-        'durasi' => "$hours jam $minutes menit",
-        'waktuMulaiParam_Klien_UTC' => $waktuMulaiParam,
-        'waktuMulai_DB_UTC' => $waktuMulai,
-        'waktuBerakhir_DB_UTC' => $waktuBerakhir,
-        'Selisih_Detik' => $selisihDetik, // HARUS POSITIF (> 0)
-        ]);
-         // -----------------------------------------------------------
 
         // --- LOGGING: Catat permulaan proses dan parameter input ---
-        // Log::info('Proses Start Ujian Dimulai', [
-        //     'kode_ujian' => $kodeUjian,
-        //     'siswa_id' => session()->get('id'),
-        //     'hours' => $hours,
-        //     'minutes' => $minutes,
-        //     'waktuMulaiParam' => $waktuMulaiParam,
-        //     'waktuMulai' => $waktuMulai,
-        //     'waktuBerakhir' => $waktuBerakhir,
-        // ]);
+        Log::info('Proses Start Ujian Dimulai', [
+
+
+            'kode_ujian' => $kodeUjian,
+
+
+            'siswa_id' => session()->get('id'),
+
+
+            'hours' => $hours,
+
+
+            'minutes' => $minutes,
+
+
+            'waktuMulai' => $waktuMulaiParam,
+
+
+            'waktuBerakhir' => $waktuBerakhir,
+
+
+        ]);
+
+
         // -----------------------------------------------------------
 
+
         $dataEndTime = [
+
             'waktu_mulai' => $waktuMulai,
+
             'waktu_berakhir' => $waktuBerakhir,
+
             'selesai' => 0
+
         ];
+
         // dd($ujian);
+
+
 
         if (!$waktuUjian->waktu_berakhir) {
 
             $waktuUjian->update($dataEndTime);
+
         } else {
+
             // $mergeUjian = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
+
             //     ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
+
             //     ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
+
             //     ->where('merge_ujian.kode', $kodeMergeUjian)
+
             //     ->where('waktu_ujian.selesai', 1)
+
             //     ->where('waktu_ujian.siswa_id', session()->get('id'))
+
             //     ->select(
+
             //         'rum.*',
+
             //         'waktu_ujian.*',
+
             //         'ujian.jenis as jenis_ujian',
+
             //         'ujian.kode as kode_ujian',
+
             //         'merge_ujian.jam',
+
             //         'merge_ujian.menit',
+
             //         'merge_ujian.kode as merge_ujian_kode'
+
             //     )
+
             //     ->distinct('rum.id')
+
             //     ->orderBy('rum.urutan', 'asc')
+
             //     ->take(2) // ambil 2 data
+
             //     ->get();
+
             //         dd($mergeUjian);
+
             // if ($mergeUjian) {
+
             //     if ($mergeUjian[0]->kode_ujian != $kodeUjian) {
+
             //         dd($mergeUjian[0]);
+
             //     }
+
             // }
+
         }
+
+
 
         $ujian = Ujian::where('kode', $kodeUjian)->first();
+
         // dd($ujian);
 
+
+
         if ($ujian->jenis == '3') {
+
             $visual_siswa = VisualSiswa::where('kode', $kodeUjian)
+
                 ->where('siswa_id', session()->get('id'))
+
                 ->count();
+
             if ($visual_siswa == 0) {
+
                 $detailVisual = DetailVisual::where('kode', $kodeUjian)->get();
+
                 foreach ($detailVisual as $key => $value) {
+
                     VisualSiswa::create([
+
                         'siswa_id' => session()->get('id'),
+
                         'detail_visual_id' => $value->id,
+
                         'kode' => $kodeUjian,
+
                     ]);
+
                 }
+
             }
+
             // dd($visual_siswa);
+
         }
+
         return $waktuUjian->waktu_berakhir;
+
     }
 
     public static function createOrRetrievePgSiswa($kode_ujian)
