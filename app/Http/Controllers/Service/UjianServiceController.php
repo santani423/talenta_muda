@@ -178,7 +178,10 @@ class UjianServiceController extends Controller
             }
             // dd($visual_siswa);
         }
-        return $waktuUjian->waktu_berakhir;
+        return [
+            'hours' => $hours,
+            'minutes' => $minutes
+        ];
     }
 
     public static function createOrRetrievePgSiswa($kode_ujian)
