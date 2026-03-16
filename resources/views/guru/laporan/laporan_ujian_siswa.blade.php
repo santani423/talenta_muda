@@ -230,7 +230,9 @@
                                                 <th>Straightforwardness</th>
                                                 <th>Altruism</th>
                                                 <th>Compliance</th>
+                                                <th>Modesty</th>
                                                 <th>Tender-mindedness</th>
+                                                <th>Competence</th>
                                                 <th>Order</th>
                                                 <th>Dutifulnes</th>
                                                 <th>Achievment Striving</th>
@@ -262,6 +264,7 @@
                                         <tbody>
                                             @foreach ($MergeUjianSiswa as $key => $bs)
                                                 <tr>
+                                                    {{-- Hasil Ujian --}}
                                                     <td>
                                                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                                             data-target="#exampleModal"
@@ -274,21 +277,28 @@
                                                             Hasil Tes
                                                         </button>
                                                     </td>
+                                                    {{-- No --}}
                                                     <td>{{ $key + $currentPage + 1 }}</td>
+                                                    {{-- Nama Siswa --}}
                                                     <td>
                                                         {{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}
                                                     </td>
+                                                    {{-- Tanggal Lahir --}}
                                                     <td>
                                                         {{ $bs->tanggal_lahir ?? 'Tempat lahir siswa tidak tersedia' }}
                                                     </td>
+                                                    {{-- Jenis Kelamin --}}
                                                     <td>{{ $bs->gender }}</td>
+                                                    {{-- Umur --}}
                                                     <td>{{ $bs->umur }}</td>
+                                                    {{-- Nilai IQ --}}
                                                     <td>
                                                         <span id="nilaiIQ{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span>
                                                     </td>
+                                                    {{-- Skor IQ --}}
                                                     <td>
                                                         <span id="scoreIQ{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
@@ -297,157 +307,206 @@
                                                     </td>
 
 
-
+                                                    {{-- Norma --}}
                                                     <td><span id="norma{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- MR --}}
                                                     <td><span id="MR{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{--  --}}
                                                     <td> </td>
+                                                    {{-- ARTd --}}
                                                     <td><span id="ARTd{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-
+                                                    {{--  --}}
                                                     <td> </td>
-
+                                                    {{-- SIM --}}
                                                     <td><span id="SIM{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{--  --}}
                                                     <td></td>
+                                                    {{-- NEUROTICISM --}}
                                                     <td><span id="NEUROTICISM{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
                                                     <td></td>
+                                                    {{-- EXTRAVERSION --}}
                                                     <td><span id="EXTRAVERSION{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
                                                     <td></td>
+                                                    {{-- OPENESSTOEXPERIENCE --}}
                                                     <td><span id="OPENESSTOEXPERIENCE{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- AGREEABLENESS --}}
                                                     <td></td>
+                                                    {{-- CONSCIENTIOUSNESS --}}
                                                     <td><span id="AGREEABLENESS{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- NEUROTICISM --}}
                                                     <td></td>
+                                                    {{-- CONSCIENTIOUSNESS --}}
                                                     <td><span id="CONSCIENTIOUSNESS{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{--  --}}
                                                     <td></td>
+                                                    {{-- Anxiety --}}
                                                     <td><span id="anxiety{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- ANGER --}}
                                                     <td><span id="angry_hostility{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- DEPRESSION --}}
                                                     <td><span id="depression{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- SELF-CONSCIOUSNESS --}}
                                                     <td><span id="self_consciousness{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- IMPULSIVENESS --}}
                                                     <td><span id="impulsiveness{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- VULNERABILITY --}}
                                                     <td><span id="vulnerability{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
-
+                                                    {{-- WARMTH --}}
                                                     <td><span id="warmth{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- GREGARIOUSNESS --}}
                                                     <td><span id="gregariousness{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- ASSERTIVENESS --}}
                                                     <td><span id="assertiveness{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- ACTIVITY --}}
                                                     <td><span id="activity{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- EXCITEMENT SEEKING --}}
                                                     <td><span id="excitement_seeking{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- POSITIVE EMOTIONS --}}
                                                     <td><span id="positive_emotions{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- FANTASY --}}
                                                     <td><span id="fantasy{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- AESTHETIC --}}
                                                     <td><span id="aesthetic{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- FEELINGS --}}
                                                     <td><span id="feelings{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- ASSERTIVENESS --}}
                                                     <td><span id="actions{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- IDEAS --}}
                                                     <td><span id="ideas{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- VALUES --}}
                                                     <td><span id="values{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- TRUST --}}
                                                     <td><span id="trust{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- STRAIGHTFORWARDNESS --}}
                                                     <td><span id="straightforwardness{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- ALTRUISM --}}
                                                     <td><span id="altruism{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- COMPLIANCE --}}
                                                     <td><span id="compliance{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Modesty --}}
+                                                    <td><span id="modesty{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- TENDERMINDEDNESS --}}
                                                     <td><span id="tenderMindedness{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Competence --}}
+                                                    <td><span id="competence{{ $bs->id }}"
+                                                            data-id="{{ $bs->id }}"
+                                                            data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
+                                                            data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- ORDER --}}
                                                     <td><span id="order{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- DUTIFULNESS --}}
                                                     <td><span id="dutifulness{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- ACHIEVEMENT --}}
                                                     <td><span id="achievement{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- SELF-DISCIPLINE --}}
                                                     <td><span id="SelfDiscipline{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- DELIBERATION --}}
                                                     <td><span id="deliberation{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
@@ -467,56 +526,68 @@
 
 
 
-
+                                                    {{-- 5.2. Crudelia --}}
                                                     {{-- <td>Deliberation</td> --}}
                                                     <td><span id="CRUD{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{--Egoism--}}
                                                     <td><span id="EGO{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Machiavellianism --}}
                                                     <td><span id="MACH{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Narcissism --}}
                                                     <td><span id="NARC{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Frustalia --}}
                                                     <td><span id="FRUST{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Greed --}}
                                                     <td><span id="GRD{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Machiavellianism --}}
                                                     <td><span id="MD{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Egoism --}}
                                                     <td><span id="PE{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Psychopathy --}}
                                                     <td><span id="PSY{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Sadism --}}
                                                     <td><span id="SAD{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Self-Confidence --}}
                                                     <td><span id="SC{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
+                                                    {{-- Spite --}}
+
                                                     <td><span id="SPITE{{ $bs->id }}"
                                                             data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
 
 
-
+                                                        {{--     --}}
                                                     <td><span id="Mt{{ $bs->id }}" data-id="{{ $bs->id }}"
                                                             data-name="{{ $bs->nama_siswa ?? ($bs->nama_siswa_visual ?? ($bs->nama_siswa_essay ?? ($bs->nama_siswa_kuesioner ?? 'Nama siswa tidak tersedia'))) }}"
                                                             data-tanggal-lahir="{{ $bs->tanggal_lahir }}">-</span></td>
@@ -742,19 +813,32 @@
                                                                         .getElementById('straightforwardness' + studentId)
                                                                         .textContent = facet?.subdomain?.straightforwardness
                                                                         ?.total_score || '-');
+
                                                                     facet?.subdomain?.altruism && (document.getElementById(
                                                                             'altruism' + studentId).textContent = facet
                                                                         ?.subdomain?.altruism?.total_score || '-');
+
                                                                     facet?.subdomain?.compliance && (document.getElementById(
                                                                             'compliance' + studentId).textContent = facet
                                                                         ?.subdomain?.compliance?.total_score || '-');
+
+                                                                    facet?.subdomain?.modesty && (document.getElementById(
+                                                                            'modesty' + studentId).textContent = facet
+                                                                        ?.subdomain?.modesty?.total_score || '-');
+
                                                                     facet?.subdomain?.tender && (document
                                                                         .getElementById('tenderMindedness' + studentId)
                                                                         .textContent = facet?.subdomain?.tender
                                                                         ?.total_score || '-');
+
+                                                                    facet?.subdomain?.competence && (document.getElementById(
+                                                                            'competence' + studentId).textContent = facet
+                                                                        ?.subdomain?.competence?.total_score || '-');
+
                                                                     facet?.subdomain?.order && (document.getElementById(
                                                                             'order' + studentId).textContent = facet
                                                                         ?.subdomain?.order?.total_score || '-');
+
                                                                     facet?.subdomain?.dutifulness && (document.getElementById(
                                                                             'dutifulness' + studentId).textContent = facet
                                                                         ?.subdomain?.dutifulness?.total_score || '-');
@@ -1294,7 +1378,7 @@
                                 let total_score5_1 = 0;
                                 data?.sekala?.average_scores?.forEach((sekala, ndxsekala) => {
                                     htmlContent +=
-                                        `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.total_score}</div>`;
+                                        `    <div class="col-md-6" style="color: black;">${sekala?.keterangan} : ${sekala?.total_score} </div>`;
                                     total_score5_1 += sekala?.total_score;
                                 });
                                 htmlContent +=

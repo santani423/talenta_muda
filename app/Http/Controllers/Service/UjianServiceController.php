@@ -227,139 +227,221 @@ class UjianServiceController extends Controller
     //     return $waktuUjian->waktu_berakhir;
     // }
 
-     public static function startUJian($kodeUjian, $waktuMulaiParam)
+    //  public static function startUJian($kodeUjian, $waktuMulaiParam)
+    // {
 
+    //     $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
+
+    //         ->where('siswa_id', session()->get('id'))
+
+    //         ->first();
+
+    //     $ujian = Ujian::where('kode', $kodeUjian)->first();
+
+    //     // $mergeUjian = ujian::where('kode',$kodeUjian)->first();
+
+    //     // dd($mergeUjian);startUJian
+
+    //     $hours = $ujian->jam;
+
+    //     $minutes = $ujian->menit;
+
+    //     $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
+
+    //     $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
+
+
+
+    //     // --- LOGGING: Catat permulaan proses dan parameter input ---
+    //     Log::info('Proses Start Ujian Dimulai', [
+
+
+    //         'kode_ujian' => $kodeUjian,
+
+
+    //         'siswa_id' => session()->get('id'),
+
+
+    //         'hours' => $hours,
+
+
+    //         'minutes' => $minutes,
+
+
+    //         'waktuMulai' => $waktuMulaiParam,
+
+
+    //         'waktuBerakhir' => $waktuBerakhir,
+
+
+    //     ]);
+
+
+    //     // -----------------------------------------------------------
+
+
+    //     $dataEndTime = [
+
+    //         'waktu_mulai' => $waktuMulai,
+
+    //         'waktu_berakhir' => $waktuBerakhir,
+
+    //         'selesai' => 0
+
+    //     ];
+
+    //     // dd($ujian);
+
+
+
+    //     if (!$waktuUjian->waktu_berakhir) {
+
+    //         $waktuUjian->update($dataEndTime);
+
+    //     } else {
+
+    //         // $mergeUjian = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
+
+    //         //     ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
+
+    //         //     ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
+
+    //         //     ->where('merge_ujian.kode', $kodeMergeUjian)
+
+    //         //     ->where('waktu_ujian.selesai', 1)
+
+    //         //     ->where('waktu_ujian.siswa_id', session()->get('id'))
+
+    //         //     ->select(
+
+    //         //         'rum.*',
+
+    //         //         'waktu_ujian.*',
+
+    //         //         'ujian.jenis as jenis_ujian',
+
+    //         //         'ujian.kode as kode_ujian',
+
+    //         //         'merge_ujian.jam',
+
+    //         //         'merge_ujian.menit',
+
+    //         //         'merge_ujian.kode as merge_ujian_kode'
+
+    //         //     )
+
+    //         //     ->distinct('rum.id')
+
+    //         //     ->orderBy('rum.urutan', 'asc')
+
+    //         //     ->take(2) // ambil 2 data
+
+    //         //     ->get();
+
+    //         //         dd($mergeUjian);
+
+    //         // if ($mergeUjian) {
+
+    //         //     if ($mergeUjian[0]->kode_ujian != $kodeUjian) {
+
+    //         //         dd($mergeUjian[0]);
+
+    //         //     }
+
+    //         // }
+
+    //     }
+
+
+
+    //     $ujian = Ujian::where('kode', $kodeUjian)->first();
+
+    //     // dd($ujian);
+
+
+
+    //     if ($ujian->jenis == '3') {
+
+    //         $visual_siswa = VisualSiswa::where('kode', $kodeUjian)
+
+    //             ->where('siswa_id', session()->get('id'))
+
+    //             ->count();
+
+    //         if ($visual_siswa == 0) {
+
+    //             $detailVisual = DetailVisual::where('kode', $kodeUjian)->get();
+
+    //             foreach ($detailVisual as $key => $value) {
+
+    //                 VisualSiswa::create([
+
+    //                     'siswa_id' => session()->get('id'),
+
+    //                     'detail_visual_id' => $value->id,
+
+    //                     'kode' => $kodeUjian,
+
+    //                 ]);
+
+    //             }
+
+    //         }
+
+    //         // dd($visual_siswa);
+
+    //     }
+
+    //     return $waktuUjian->waktu_berakhir;
+
+    // }
+
+    public static function startUJian($kodeUjian)
     {
+        // --- Langkah 1: Tentukan Waktu Mulai (diambil dari SERVER, disetel ke UTC) ---
+        // Carbon::now('UTC') mengambil waktu saat ini server dan mengonversinya ke UTC.
+        $waktuMulaiCarbon = Carbon::now('UTC');
 
         $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
-
             ->where('siswa_id', session()->get('id'))
-
             ->first();
-
         $ujian = Ujian::where('kode', $kodeUjian)->first();
 
-        // $mergeUjian = ujian::where('kode',$kodeUjian)->first();
-
-        // dd($mergeUjian);startUJian
-
         $hours = $ujian->jam;
-
         $minutes = $ujian->menit;
 
-        $waktuMulai = date('Y-m-d H:i:s', strtotime($waktuMulaiParam));
+         // --- Langkah 2: Hitung Waktu Berakhir (di UTC) ---
+        $waktuBerakhirCarbon = $waktuMulaiCarbon
+            ->copy() // Buat salinan
+            ->addHours($hours)
+            ->addMinutes($minutes);
 
-        $waktuBerakhir = date('Y-m-d H:i:s', strtotime("+$hours hour +$minutes minute", strtotime($waktuMulaiParam)));
-
-
+        // Format untuk database (tanpa zona waktu, diasumsikan database menyimpan UTC)
+        $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
+        $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
 
         // --- LOGGING: Catat permulaan proses dan parameter input ---
         Log::info('Proses Start Ujian Dimulai', [
-
-
             'kode_ujian' => $kodeUjian,
-
-
             'siswa_id' => session()->get('id'),
-
-
             'hours' => $hours,
-
-
             'minutes' => $minutes,
-
-
-            'waktuMulai' => $waktuMulaiParam,
-
-
-            'waktuBerakhir' => $waktuBerakhir,
-
-
+            'waktuMulai_Server_UTC' => $waktuMulai,
+            'waktuBerakhir_Server_UTC' => $waktuBerakhir,
         ]);
-
-
         // -----------------------------------------------------------
 
-
         $dataEndTime = [
-
             'waktu_mulai' => $waktuMulai,
-
             'waktu_berakhir' => $waktuBerakhir,
-
             'selesai' => 0
-
         ];
-
-        // dd($ujian);
-
-
-
+        
         if (!$waktuUjian->waktu_berakhir) {
-
             $waktuUjian->update($dataEndTime);
-
-        } else {
-
-            // $mergeUjian = MergeUjian::join('relasi_ujian_merge as rum', 'rum.kode_merge_ujian', 'merge_ujian.kode')
-
-            //     ->join('ujian', 'ujian.kode', '=', 'rum.kode_ujian')
-
-            //     ->join('waktu_ujian', 'waktu_ujian.kode', '=', 'ujian.kode')
-
-            //     ->where('merge_ujian.kode', $kodeMergeUjian)
-
-            //     ->where('waktu_ujian.selesai', 1)
-
-            //     ->where('waktu_ujian.siswa_id', session()->get('id'))
-
-            //     ->select(
-
-            //         'rum.*',
-
-            //         'waktu_ujian.*',
-
-            //         'ujian.jenis as jenis_ujian',
-
-            //         'ujian.kode as kode_ujian',
-
-            //         'merge_ujian.jam',
-
-            //         'merge_ujian.menit',
-
-            //         'merge_ujian.kode as merge_ujian_kode'
-
-            //     )
-
-            //     ->distinct('rum.id')
-
-            //     ->orderBy('rum.urutan', 'asc')
-
-            //     ->take(2) // ambil 2 data
-
-            //     ->get();
-
-            //         dd($mergeUjian);
-
-            // if ($mergeUjian) {
-
-            //     if ($mergeUjian[0]->kode_ujian != $kodeUjian) {
-
-            //         dd($mergeUjian[0]);
-
-            //     }
-
-            // }
-
-        }
-
-
+        } 
 
         $ujian = Ujian::where('kode', $kodeUjian)->first();
-
-        // dd($ujian);
-
-
 
         if ($ujian->jenis == '3') {
 
@@ -388,15 +470,9 @@ class UjianServiceController extends Controller
                 }
 
             }
-
-            // dd($visual_siswa);
-
         }
-
         return $waktuUjian->waktu_berakhir;
-
     }
-
     public static function createOrRetrievePgSiswa($kode_ujian)
     {
         // Retrieve existing records of PgSiswa for the specific exam and student

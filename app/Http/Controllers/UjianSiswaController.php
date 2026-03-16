@@ -1124,7 +1124,8 @@ class UjianSiswaController extends Controller
 
     public function simulasiUjian(Request $request)
     {
-        $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian, $request->time);
+        // $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian, $request->time);
+        $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian);
 
         return response()->json([
             'message' => 'Soal berhasil diupload',
