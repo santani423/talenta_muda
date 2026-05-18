@@ -15,16 +15,16 @@
             top: 20px;
             right: 20px;
             z-index: 9999;
-            background-color: #d9534f; /* Diubah ke merah agar mencolok saat kritis */
+            background-color: #d9534f; /* Warna merah mencolok untuk fase kritis 10 detik terakhir */
             color: #fff;
             padding: 8px 12px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            display: none;
+            display: none; /* Default disembunyikan total */
         }
 
         .timer-fixed.show {
-            display: block !important;
+            display: block !important; /* Hanya muncul ketika class .show ditambahkan */
         }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -170,12 +170,11 @@
                     timeLeft = targetTime - currentTime;
 
                     if (timeLeft > 0) {
-                        // Memunculkan timer saat sisa waktu 10 detik terakhir (10000 ms)
-                        // Ganti ke 30000 jika ingin memunculkannya saat sisa waktu 30 detik
+                        // KUNCI UTAMA: Hanya tampilkan (.addClass('show')) jika sisa waktu <= 10 detik (10000 ms)
                         if (timeLeft <= 10000) {
                             $('#countdown-timer').addClass('show');
                         } else {
-                            $('#countdown-timer').removeClass('show');
+                            $('#countdown-timer').removeClass('show'); // Pastikan tetap tersembunyi jika di atas 10 detik
                         }
 
                         const totalSeconds = Math.floor(timeLeft / 1000);
@@ -209,13 +208,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Skenario penyesuaian jika property bersarang atau langsung
                 const batasWaktu = data.waktu_berakhir || (data.request && data.waktu_berakhir);
                 if (batasWaktu) {
                     const display = $('.jam_ujin_skearan');
                     startTimer(batasWaktu, display);
                 } else {
-                    // Fallback jika API merespon sukses namun data kosong
                     useFallbackTimer();
                 }
             })
@@ -247,7 +244,6 @@
 
             $('#back-to-prev-question-pg').on('click', function(e) {
                 e.preventDefault();
-                // Validasi ketat: Tombol back hanya berfungsi jika nomor halaman di atas 1
                 if (currentQuestionNumber > 1) {
                     currentQuestionNumber--;
                     showQuestion(currentQuestionNumber);
@@ -255,20 +251,16 @@
             });
 
             function showQuestion(questionNumber) {
-                // Mengunci parameter agar tidak keluar dari area batas aman nomor soal
                 if (questionNumber < 1) questionNumber = 1;
                 if (questionNumber > totalOfQuestion) questionNumber = totalOfQuestion;
                 currentQuestionNumber = questionNumber;
 
-                // Tampilkan dan sembunyikan soal
                 $('.question').addClass('hidden');
                 $('.question-' + questionNumber).removeClass('hidden');
                 
-                // Perbarui teks informasi nomor halaman
                 $('#current-question-number-label').text(questionNumber);
                 $('#currentQuestionNumber').val(questionNumber);
                 
-                // Kontrol sistem tombol back
                 if (questionNumber === 1) {
                     $('#back-to-prev-question-pg').addClass('disabled').css('pointer-events', 'none');
                 } else {
@@ -287,7 +279,6 @@
                 }
             });
 
-            // Inisialisasi awal saat halaman ujian dimuat pertama kali
             showQuestion(currentQuestionNumber);
         });
     </script>
