@@ -396,7 +396,7 @@ class UjianServiceController extends Controller
 
     // }
 
-   public static function startUjian($kodeUjian, $waktuMulaiCarbon)
+public static function startUjian($kodeUjian, $waktuMulaiCarbon)
 {
     // --- Langkah 1: Inisialisasi & Validasi Awal ---
     $siswaId = session()->get('id');
@@ -412,29 +412,31 @@ class UjianServiceController extends Controller
         return null;
     }
 
-    // Pastikan $waktuMulaiCarbon adalah instance Carbon dan set ke UTC/Timezone aplikasi Anda
-    // agar sinkron dengan data yang dikirim dari browser/device
-    $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
+    // --- Langkah 2: Hitung Waktu Berakhir Murni dari Parameter ---
+    // Pastikan input adalah instance Carbon. Jika berupa string, otomatis di-parse tanpa mengubah timezone-nya.
+    if (!$waktuMulaiCarbon instanceof Carbon) {
+        $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon);
+    }
 
     $hours = $ujian->jam;
     $minutes = $ujian->menit;
 
-    // --- Langkah 2: Hitung Waktu Berakhir Berdasarkan Parameter ---
+    // Hitung waktu berakhir berdasarkan parameter input
     $waktuBerakhirCarbon = $waktuMulaiCarbon
         ->copy()
         ->addHours($hours)
         ->addMinutes($minutes);
 
-    // Format string untuk kebutuhan database
+    // Format ke string untuk kebutuhan database
     $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
     $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
 
     // --- LOGGING ---
-    Log::info('Proses Start Ujian Dimulai (Berbasis Parameter)', [
+    Log::info('Proses Start Ujian Dimulai (Murni Berbasis Parameter)', [
         'kode_ujian' => $kodeUjian,
         'siswa_id' => $siswaId,
-        'waktuMulai_Parameter' => $waktuMulai,
-        'waktuBerakhir_Dihitung' => $waktuBerakhir,
+        'waktu_mulai_pasti' => $waktuMulai,
+        'waktu_berakhir_pasti' => $waktuBerakhir,
     ]);
 
     // --- Langkah 3: Update Waktu Ujian Jika Belum Di-set ---
@@ -447,7 +449,7 @@ class UjianServiceController extends Controller
         $waktuUjian->refresh();
     } 
 
-    // --- Langkah 4: Handle Jenis Ujian '3' (Timestamps Berdasarkan Parameter) ---
+    // --- Langkah 4: Handle Jenis Ujian '3' ---
     if ($ujian->jenis == '3') {
         $visualSiswaCount = VisualSiswa::where('kode', $kodeUjian)
             ->where('siswa_id', $siswaId)
@@ -463,7 +465,7 @@ class UjianServiceController extends Controller
                     'siswa_id'         => $siswaId,
                     'detail_visual_id' => $value->id,
                     'kode'             => $kodeUjian,
-                    // Menggunakan waktu dari parameter untuk timestamp pembuatan data
+                    // Timestamps murni menggunakan waktu dari parameter
                     'created_at'       => $waktuMulai, 
                     'updated_at'       => $waktuMulai  
                 ];
