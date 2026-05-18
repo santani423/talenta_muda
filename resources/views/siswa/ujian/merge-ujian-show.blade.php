@@ -7,7 +7,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .timer-fixed {
@@ -15,7 +15,7 @@
             top: 20px;
             right: 20px;
             z-index: 9999;
-            background-color: #1b55e2;
+            background-color: #d9534f; /* Diubah ke merah agar mencolok saat 10 detik terakhir */
             color: #fff;
             padding: 8px 12px;
             border-radius: 8px;
@@ -27,9 +27,9 @@
     <!-- BEGIN CONTENT AREA -->
     <div class="layout-px-spacing">
 
-        <!-- TIMER -->
-        <div class="d-flex timer-fixed hidden">
-            <div class="badge badge-primary" style="font-size: 18px; font-weight: bold;">
+        <!-- TIMER (Secara default disembunyikan lewat class 'hidden') -->
+        <div class="d-flex timer-fixed hidden" id="fixed-timer">
+            <div class="badge badge-danger" style="font-size: 18px; font-weight: bold; background: none; border: none;">
                 <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
             </div>
         </div>
@@ -59,7 +59,7 @@
                                             <h6 class="question-title color-green text-center"
                                                 style="word-wrap: break-word">
                                                 <img src="{{ url($soal->detailujian->soal) }}" alt=""
-                                                    style="width: 70Wh; height: 30vh;">
+                                                    style="width: 70vw; height: 30vh;">
                                             </h6>
                                         </div>
 
@@ -165,95 +165,77 @@
             var currentQuestionNumber = 1;
             var totalOfQuestion = $('#totalOfQuestion').val();
 
-           function startTimer(endDate, display) {
-        // --- 1. Konversi ke Format ISO dan LOG ---
-        // Karena server sudah mengembalikan ISO string (menggunakan toISOString()), 
-        // kita hanya perlu memastikan new Date() menginterpretasikannya.
-        
-        // Jika server mengembalikan YYYY-MM-DD HH:MM:SS, gunakan baris ini:
-        // const endDateUTCString = endDate.replace(' ', 'T') + 'Z'; 
-        
-        // Jika server mengembalikan toISOString(), cukup gunakan endDate:
-        const endDateUTCString = endDate; 
-        
-        console.log('1. Waktu Berakhir (Format UTC untuk JS):', endDateUTCString);
-
-        const targetTime = new Date(endDateUTCString).getTime();
-        
-        console.log('2. Target Waktu (Objek Date Lokal):', new Date(endDateUTCString));
-        
-        let currentTime = new Date().getTime();
-        let timeLeft = targetTime - currentTime;
-        
-        // --- 2. Pengecekan Awal Waktu Habis ---
-        // Jika waktu sudah habis sejak awal (misalnya, jam klien terlalu cepat), hentikan segera.
-        if (timeLeft <= 0) {
-            display.text("00:00:00");
-            alert("Waktu Ujian Habis");
-            return; 
-        }
-
-        // --- 3. Memulai Interval Timer ---
-        const interval = setInterval(() => {
-            currentTime = new Date().getTime();
-            timeLeft = targetTime - currentTime;
-
-            if (timeLeft > 0) {
-                if (timeLeft <= 30000) {
-                    $('#fixed-timer').fadeIn();
+            function startTimer(endDate, display) {
+                const targetTime = new Date(endDate).getTime();
+                
+                let currentTime = new Date().getTime();
+                let timeLeft = targetTime - currentTime;
+                
+                if (timeLeft <= 0) {
+                    display.text("00:00:00");
+                    alert("Waktu Ujian Habis");
+                    $('#examwizard-question').submit();
+                    return; 
                 }
 
-                const totalSeconds = Math.floor(timeLeft / 1000);
-                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-                const seconds = String(Math.floor(totalSeconds % 60)).padStart(2, '0');
+                const interval = setInterval(() => {
+                    currentTime = new Date().getTime();
+                    timeLeft = targetTime - currentTime;
 
-                display.text(`${hours}:${minutes}:${seconds}`);
-                
-            } else {
-                // Waktu berakhir
-                clearInterval(interval);
-                display.text("00:00:00");
-                alert("Waktu Ujian Habis");
-                // $('#examwizard-question').submit();
-            }
-        }, 1000);
-    }
-
-            $(function() {
-                fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                        kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                        time: (() => {
-                            const now = new Date();
-                            // Menggeser waktu sesuai timezone offset device user
-                            const offset = now.getTimezoneOffset() * 60000; 
-                            const localISOTime = new Date(now.getTime() - offset).toISOString().slice(0, -1);
-                            return localISOTime;
-                        })()
-                    })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data?.request?.time) {
-                            // Ambil batas waktu ujian dari response API (format ISO 8601)
-                            const batasWaktu = data.waktu_berakhir;
-                            const display = $('.jam_ujin_skearan'); 
-                            startTimer(batasWaktu, display);
+                    if (timeLeft > 0) {
+                        // JIKA WAKTU TERSISA KURANG DARI ATAU SAMA DENGAN 10 DETIK (10000 ms)
+                        if (timeLeft <= 10000) {
+                            $('#fixed-timer').removeClass('hidden').fadeIn(); // Tampilkan box counter
+                        } else {
+                            $('#fixed-timer').addClass('hidden'); // Sembunyikan jika masih di atas 10 detik
                         }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                // const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
-                // const display = $('.jam_ujin_skearan');
-                // startTimer(endDate, display);
+
+                        const totalSeconds = Math.floor(timeLeft / 1000);
+                        const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                        const seconds = String(Math.floor(totalSeconds % 60)).padStart(2, '0');
+
+                        display.text(`${hours}:${minutes}:${seconds}`);
+                        
+                    } else {
+                        clearInterval(interval);
+                        display.text("00:00:00");
+                        alert("Waktu Ujian Habis");
+                        $('#examwizard-question').submit();
+                    }
+                }, 1000);
+            }
+
+            // Jalankan sinkronisasi waktu ke server via Fetch API
+            fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                    time: (() => {
+                        const now = new Date();
+                        const offset = now.getTimezoneOffset() * 60000; 
+                        const localISOTime = new Date(now.getTime() - offset).toISOString().slice(0, -1);
+                        return localISOTime;
+                    })()
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Pastikan key response sesuai dengan property yang dikembalikan dari Controller Anda
+                const batasWaktu = data.waktu_berakhir || "{{ $waktu_ujian->waktu_berakhir }}";
+                const display = $('.jam_ujin_skearan'); 
+                startTimer(batasWaktu, display);
+            })
+            .catch(error => {
+                console.error('Error Sync Timer:', error);
+                // Fallback jika API bermasalah, tetap jalankan timer berdasarkan session data laravel
+                const endDateFallback = "{{ $waktu_ujian->waktu_berakhir }}";
+                const display = $('.jam_ujin_skearan');
+                startTimer(endDateFallback, display);
             });
 
             $('#go-to-next-question-pg').on('click', function() {
@@ -284,18 +266,20 @@
                 var textareaId = $('.question-' + questionNumber + ' textarea').data('essay_siswa');
                 var answer = $('.question-' + questionNumber + ' textarea').val();
 
-                $.ajax({
-                    url: '{{ url('/siswa/ujian_essay/saveAnswer') }}',
-                    method: 'POST',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        answer: answer,
-                        id_essay: textareaId
-                    },
-                    success: function(response) {
-                        console.log('Answer saved:', response);
-                    }
-                });
+                if(textareaId) { // Hanya kirim ajax jika elemen essay ditemukan
+                    $.ajax({
+                        url: '{{ url('/siswa/ujian_essay/saveAnswer') }}',
+                        method: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            answer: answer,
+                            id_essay: textareaId
+                        },
+                        success: function(response) {
+                            console.log('Answer saved:', response);
+                        }
+                    });
+                }
             }
 
             showQuestion(currentQuestionNumber);
