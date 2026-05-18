@@ -402,6 +402,8 @@ class UjianServiceController extends Controller
         // Carbon::now('UTC') mengambil waktu saat ini server dan mengonversinya ke UTC.
         $waktuMulaiCarbon = Carbon::now('UTC');
 
+        dd($waktuMulaiCarbon);
+
         $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
             ->where('siswa_id', session()->get('id'))
             ->first();
