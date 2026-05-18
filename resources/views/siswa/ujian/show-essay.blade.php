@@ -8,7 +8,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         #fixed-timer {
@@ -16,7 +16,7 @@
             top: 20px;
             right: 30px;
             z-index: 9999;
-            background-color: #007bff;
+            background-color: #d9534f; /* Diubah ke merah agar memberikan kesan kritis */
             color: white;
             padding: 10px 20px;
             border-radius: 10px;
@@ -50,8 +50,8 @@
                                 @foreach ($essay_siswa as $key => $soal)
                                     <div class="question {{ $soal_hidden }} question-{{ $no }}" data-question="{{ $no }}">
                                         <div class="widget-heading pl-2 pt-2" style="border-bottom: 1px solid #e0e6ed;">
-                                            <div class="">
-                                                <h6 style="font-weight: bold">Soal No  . <span class="badge badge-primary no-soal" style="font-size: 1rem">{{ $no }}</span></h6>
+                                            <div>
+                                                <h6 style="font-weight: bold">Soal No. <span class="badge badge-primary no-soal" style="font-size: 1rem">{{ $no }}</span></h6>
                                             </div>
                                         </div>
 
@@ -71,7 +71,7 @@
                                                             var value = e.target.value;
                                                             var regex = /^\d+(\.\d{0,2})?$/;
                                                             var validationMessage = document.getElementById('validation-{{ $soal->id }}');
-                                                            if (!regex.test(value)) {
+                                                            if (value && !regex.test(value)) {
                                                                 validationMessage.classList.remove('hidden');
                                                             } else {
                                                                 validationMessage.classList.add('hidden');
@@ -80,7 +80,7 @@
                                                     </script>
                                                 @else
                                                     <div class="green-radio color-green">
-                                                        <textarea name="jawaban-{{ $soal->id }}" id="soal{{ $no }}-{{ $soal->id }}" data-essay_siswa="{{ $soal->id }}" data-noSoal="{{ $no }}" class="form-control" placeholder="tuliskan jawaban...">@if($soal->jawaban !== null) {{ $soal->jawaban }} @endif</textarea>
+                                                        <textarea name="jawaban-{{ $soal->id }}" id="soal{{ $no }}-{{ $soal->id }}" data-essay_siswa="{{ $soal->id }}" data-noSoal="{{ $no }}" class="form-control" placeholder="tuliskan jawaban...">@if($soal->jawaban !== null){{ $soal->jawaban }}@endif</textarea>
                                                     </div>
                                                 @endif
                                             </div>
@@ -123,7 +123,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     {!! session('pesan') !!}
     @include('error.ew-s-e')
@@ -133,112 +132,107 @@
 <script>
     $(document).ready(function () {
         var currentQuestionNumber = 1;
-        var totalOfQuestion = $('#totalOfQuestion').val();
+        var totalOfQuestion = parseInt($('#totalOfQuestion').val()) || 1;
 
+        // ==========================================
+        // SISTEM LOGIKA TIMER
+        // ==========================================
         function startTimer(endDate, display) {
-        // --- 1. Konversi ke Format ISO dan LOG ---
-        // Karena server sudah mengembalikan ISO string (menggunakan toISOString()), 
-        // kita hanya perlu memastikan new Date() menginterpretasikannya.
-        
-        // Jika server mengembalikan YYYY-MM-DD HH:MM:SS, gunakan baris ini:
-        // const endDateUTCString = endDate.replace(' ', 'T') + 'Z'; 
-        
-        // Jika server mengembalikan toISOString(), cukup gunakan endDate:
-        const endDateUTCString = endDate; 
-        
-        console.log('1. Waktu Berakhir (Format UTC untuk JS):', endDateUTCString);
+            const endDateUTCString = endDate; 
+            console.log('1. Waktu Berakhir:', endDateUTCString);
 
-        const targetTime = new Date(endDateUTCString).getTime();
-        
-        console.log('2. Target Waktu (Objek Date Lokal):', new Date(endDateUTCString));
-        
-        let currentTime = new Date().getTime();
-        let timeLeft = targetTime - currentTime;
-        
-        // --- 2. Pengecekan Awal Waktu Habis ---
-        // Jika waktu sudah habis sejak awal (misalnya, jam klien terlalu cepat), hentikan segera.
-        if (timeLeft <= 0) {
-            display.text("00:00:00");
-            alert("Waktu Ujian Habis");
-            return; 
-        }
-
-        // --- 3. Memulai Interval Timer ---
-        const interval = setInterval(() => {
-            currentTime = new Date().getTime();
-            timeLeft = targetTime - currentTime;
-
-            if (timeLeft > 0) {
-                if (timeLeft <= 30000) {
-                    $('#fixed-timer').fadeIn();
-                }
-
-                const totalSeconds = Math.floor(timeLeft / 1000);
-                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-                const seconds = String(Math.floor(totalSeconds % 60)).padStart(2, '0');
-
-                display.text(`${hours}:${minutes}:${seconds}`);
-                
-            } else {
-                // Waktu berakhir
-                clearInterval(interval);
+            const targetTime = new Date(endDateUTCString).getTime();
+            let currentTime = new Date().getTime();
+            let timeLeft = targetTime - currentTime;
+            
+            if (timeLeft <= 0) {
                 display.text("00:00:00");
                 alert("Waktu Ujian Habis");
-                // $('#examwizard-question').submit();
+                $('#examwizard-question').submit();
+                return; 
             }
-        }, 1000);
-    }
 
-        $(function() {
+            const interval = setInterval(() => {
+                currentTime = new Date().getTime();
+                timeLeft = targetTime - currentTime;
 
-             fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-                            .getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                       
-                    time: (() => {
-                        const now = new Date();
-                        const offset = now.getTimezoneOffset() * 60000; 
-                        const localISOTime = new Date(now.getTime() - offset).toISOString().slice(0, -1);
-                        return localISOTime;
-                    })()
-                })
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data?.request?.time) {
-                        // Ambil batas waktu ujian dari response API (format ISO 8601)
-                        const batasWaktu = data.waktu_berakhir;
-                        const display = $('.jam_ujin_skearan');
-                        startTimer(batasWaktu, display);
+                if (timeLeft > 0) {
+                    // KUNCI UTAMA: Hanya tampilkan (.fadeIn) di 10 detik terakhir (10000 ms)
+                    if (timeLeft <= 10000) {
+                        $('#fixed-timer').fadeIn();
+                    } else {
+                        $('#fixed-timer').fadeOut();
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            // const endDate = "{{ $waktu_ujian->waktu_berakhir }}";
-            // const display = $('.jam_ujin_skearan');
-            // startTimer(endDate, display);
+
+                    const totalSeconds = Math.floor(timeLeft / 1000);
+                    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                    const seconds = String(Math.floor(totalSeconds % 60)).padStart(2, '0');
+
+                    display.text(`${hours}:${minutes}:${seconds}`);
+                    
+                } else {
+                    clearInterval(interval);
+                    display.text("00:00:00");
+                    alert("Waktu Ujian Habis");
+                    $('#examwizard-question').submit();
+                }
+            }, 1000);
+        }
+
+        // ==========================================
+        // SINKRONISASI TIMER KE SERVER (FIX SYNTAX)
+        // ==========================================
+        const localTimePayload = (() => {
+            const now = new Date();
+            const offset = now.getTimezoneOffset() * 60000; 
+            return new Date(now.getTime() - offset).toISOString().slice(0, -1);
+        })();
+
+        fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                time: localTimePayload
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const batasWaktu = data?.waktu_berakhir || data?.request?.time;
+            if (batasWaktu) {
+                const display = $('.jam_ujin_skearan');
+                startTimer(batasWaktu, display);
+            }
+        })
+        .catch(error => {
+            console.error('Error Sync Timer:', error);
         });
 
-        $('#go-to-next-question-essay').on('click', function () {
+        // ==========================================
+        // SISTEM KONTROL NAVIGASI JAWABAN (FIXED)
+        // ==========================================
+        $('#go-to-next-question-essay').on('click', function (e) {
+            e.preventDefault();
+            // Simpan jawaban aktif saat ini terlebih dahulu sebelum bergeser
+            saveAnswer(currentQuestionNumber);
+
             if (currentQuestionNumber < totalOfQuestion) {
                 currentQuestionNumber++;
                 showQuestion(currentQuestionNumber);
             } else {
-                saveAnswer(currentQuestionNumber);
                 $('#examwizard-question').submit();
             }
         });
 
-        $('#back-to-prev-question-essay').on('click', function () {
+        $('#back-to-prev-question-essay').on('click', function (e) {
+            e.preventDefault();
+            // Simpan jawaban aktif saat ini terlebih dahulu sebelum bergeser
+            saveAnswer(currentQuestionNumber);
+
             if (currentQuestionNumber > 1) {
                 currentQuestionNumber--;
                 showQuestion(currentQuestionNumber);
@@ -249,26 +243,42 @@
             $('.question').addClass('hidden');
             $('.question-' + questionNumber).removeClass('hidden');
             $('#current-question-number-label').text(questionNumber);
+            $('#currentQuestionNumber').val(questionNumber);
+
+            // Kunci tombol back secara visual jika berada di nomor 1
+            if (questionNumber === 1) {
+                $('#back-to-prev-question-essay').addClass('disabled').css('pointer-events', 'none');
+            } else {
+                $('#back-to-prev-question-essay').removeClass('disabled').css('pointer-events', 'auto');
+            }
         }
 
+        // Perbaikan vital pada selector pencarian input value (Mendukung tipe Number dan Textarea)
         function saveAnswer(questionNumber) {
-            var textareaId = $('.question-' + questionNumber + ' textarea').data('essay_siswa');
-            var answer = $('.question-' + questionNumber + ' textarea').val();
+            var inputElement = $('.question-' + questionNumber).find('input, textarea');
+            var idEssay = inputElement.data('essay_siswa');
+            var answer = inputElement.val();
 
-            $.ajax({
-                url: '{{ url("/siswa/ujian_essay/saveAnswer") }}',
-                method: 'POST',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    answer: answer,
-                    id_essay: textareaId
-                },
-                success: function (response) {
-                    console.log('Answer saved:', response);
-                }
-            });
+            if (idEssay) {
+                $.ajax({
+                    url: '{{ url("/siswa/ujian_essay/saveAnswer") }}',
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        answer: answer,
+                        id_essay: idEssay
+                    },
+                    success: function (response) {
+                        console.log('Jawaban otomatis tersimpan untuk soal no ' + questionNumber, response);
+                    },
+                    error: function(xhr) {
+                        console.error('Gagal menyimpan jawaban otomatis:', xhr);
+                    }
+                });
+            }
         }
 
+        // Inisialisasi tampilan pertama
         showQuestion(currentQuestionNumber);
     });
 </script>
