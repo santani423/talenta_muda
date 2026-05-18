@@ -398,7 +398,7 @@ class UjianServiceController extends Controller
 
    public static function startUjian($kodeUjian, $waktuMulaiCarbon)
 {
-    dd($waktuMulaiCarbon);
+    // dd($waktuMulaiCarbon);
     // --- Langkah 1: Ambil Data Awal (Satu Query per Tabel) ---
     $siswaId = session()->get('id');
 
@@ -415,7 +415,7 @@ class UjianServiceController extends Controller
     }
 
     // Pastikan $waktuMulaiCarbon menggunakan timezone UTC sesuai kebutuhan system
-    $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
+    // $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
 
     $hours = $ujian->jam;
     $minutes = $ujian->menit;
