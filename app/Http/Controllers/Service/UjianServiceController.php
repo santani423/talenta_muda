@@ -398,24 +398,24 @@ class UjianServiceController extends Controller
 
    public static function startUjian($kodeUjian, $waktuMulaiCarbon)
 {
-    // dd($waktuMulaiCarbon);
     // --- Langkah 1: Ambil Data Awal (Satu Query per Tabel) ---
     $siswaId = session()->get('id');
 
     $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
-        ->where('siswa_id', $siswaId)
-        ->first();
-
+    ->where('siswa_id', $siswaId)
+    ->first();
+    
     $ujian = Ujian::where('kode', $kodeUjian)->first();
-
+    
     // Validasi pencegahan jika data tidak ditemukan
     if (!$waktuUjian || !$ujian) {
         Log::error('Gagal Start Ujian: Data tidak ditemukan', ['kode_ujian' => $kodeUjian, 'siswa_id' => $siswaId]);
         return null;
-    }
-
-    // Pastikan $waktuMulaiCarbon menggunakan timezone UTC sesuai kebutuhan system
-    // $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
+        }
+        
+        // Pastikan $waktuMulaiCarbon menggunakan timezone UTC sesuai kebutuhan system
+        $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
+        dd($waktuMulaiCarbon);
 
     $hours = $ujian->jam;
     $minutes = $ujian->menit;
