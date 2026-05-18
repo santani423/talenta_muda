@@ -165,60 +165,66 @@
             var currentQuestionNumber = 1;
             var totalOfQuestion = $('#totalOfQuestion').val();
 
-           function startTimer(endDate, display) {
-        // --- 1. Konversi ke Format ISO dan LOG ---
-        // Karena server sudah mengembalikan ISO string (menggunakan toISOString()), 
-        // kita hanya perlu memastikan new Date() menginterpretasikannya.
-        
-        // Jika server mengembalikan YYYY-MM-DD HH:MM:SS, gunakan baris ini:
-        // const endDateUTCString = endDate.replace(' ', 'T') + 'Z'; 
-        
-        // Jika server mengembalikan toISOString(), cukup gunakan endDate:
-        const endDateUTCString = endDate; 
-        
-        console.log('1. Waktu Berakhir (Format UTC untuk JS):', endDateUTCString);
+            function startTimer(duration, display) {
 
-        const targetTime = new Date(endDateUTCString).getTime();
-        
-        console.log('2. Target Waktu (Objek Date Lokal):', new Date(endDateUTCString));
-        
-        let currentTime = new Date().getTime();
-        let timeLeft = targetTime - currentTime;
-        
-        // --- 2. Pengecekan Awal Waktu Habis ---
-        // Jika waktu sudah habis sejak awal (misalnya, jam klien terlalu cepat), hentikan segera.
-        if (timeLeft <= 0) {
-            display.text("00:00:00");
-            alert("Waktu Ujian Habis");
-            return; 
-        }
+                // 1. Ambil waktu saat ini dalam milidetik
+                const now = new Date().getTime();
 
-        // --- 3. Memulai Interval Timer ---
-        const interval = setInterval(() => {
-            currentTime = new Date().getTime();
-            timeLeft = targetTime - currentTime;
+                // 2. Hitung durasi tambahan dalam milidetik dari data (duration)
+                const totalDurationMs = (duration.hours * 60 * 60 * 1000) + (duration.minutes * 60 * 1000);
 
-            if (timeLeft > 0) {
-                if (timeLeft <= 30000) {
-                    $('#fixed-timer').fadeIn();
-                }
+                // --- PERUBAHAN INI YANG ANDA INGINKAN ---
+                // Tambahkan 5 Menit Hardcode
+                const additionalTwoMinutesMs = 5 * 60 * 1000; // 120.000 ms
 
-                const totalSeconds = Math.floor(timeLeft / 1000);
-                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-                const seconds = String(Math.floor(totalSeconds % 60)).padStart(2, '0');
+                const finalDurationMs = totalDurationMs + additionalTwoMinutesMs;
+                // ----------------------------------------
 
-                display.text(`${hours}:${minutes}:${seconds}`);
-                
-            } else {
-                // Waktu berakhir
-                clearInterval(interval);
-                display.text("00:00:00");
-                alert("Waktu Ujian Habis");
-                // $('#examwizard-question').submit();
+                // 3. Hitung target waktu berakhir
+                // targetTime adalah waktu saat ini + durasi akhir
+                const targetTime = now + finalDurationMs; // Menggunakan finalDurationMs
+
+                const interval = setInterval(() => {
+                    console.log("duration:", duration);
+                    console.log("targetTime:", targetTime);
+                    const currentTime = new Date().getTime();
+                    const timeLeft = targetTime - currentTime;
+
+                    // --- KONVERSI DAN LOGGING CURRENT TIME KE DD-MM-YYYY HH:MM:SS ---
+                    const dateToLog = new Date(currentTime);
+                    const day = String(dateToLog.getDate()).padStart(2, '0');
+                    const month = String(dateToLog.getMonth() + 1).padStart(2,
+                        '0'); // getMonth() dimulai dari 0
+                    const year = dateToLog.getFullYear();
+                    const hours = String(dateToLog.getHours()).padStart(2, '0');
+                    const minutes = String(dateToLog.getMinutes()).padStart(2, '0');
+                    const seconds = String(dateToLog.getSeconds()).padStart(2, '0');
+
+                    const formattedCurrentTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+
+                    console.log("Waktu Saat Ini (DD-MM-YYYY HH:MM:SS):", formattedCurrentTime);
+
+                    console.log("timeLeft:", timeLeft);
+                    if (timeLeft > 0) {
+                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
+                            '0');
+                        const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
+                        const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
+
+                        display.text(`${hours}:${minutes}:${seconds}`);
+
+                        // Tampilkan timer hanya jika waktu tersisa <= 30 detik
+                        if (timeLeft <= 30000) {
+                            $('.jam_ujin_skearan').closest('.timer-fixed').removeClass('hidden');
+                        }
+                    } else {
+                        clearInterval(interval);
+                        display.text("00:00:00");
+                        alert("Waktu Ujian Habis");
+                        $('#examwizard-question').submit();
+                    }
+                }, 1000);
             }
-        }, 1000);
-    }
 
             $(function() {
                 fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
@@ -230,7 +236,7 @@
                         },
                         body: JSON.stringify({
                             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                            // time: new Date()
+                            time: new Date()
                         })
                     })
                     .then(response => response.json())
@@ -238,7 +244,7 @@
                         if (data?.request?.time) {
                             // Ambil batas waktu ujian dari response API (format ISO 8601)
                             const batasWaktu = data.waktu_berakhir;
-                            const display = $('.jam_ujin_skearan'); 
+                            const display = $('.jam_ujin_skearan');
                             startTimer(batasWaktu, display);
                         }
                     })
