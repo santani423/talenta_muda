@@ -15,7 +15,7 @@
             top: 20px;
             right: 20px;
             z-index: 9999;
-            background-color: #d9534f; /* Diubah ke merah agar mencolok saat 10 detik terakhir */
+            background-color: #d9534f; /* Berubah menjadi merah mencolok */
             color: #fff;
             padding: 8px 12px;
             border-radius: 8px;
@@ -131,7 +131,7 @@
                     <div class="col-lg-12 exams-footer">
                         <div class="row pb-3">
                             <div class="col-sm-1 back-to-prev-question-wrapper text-center mt-3">
-                                <a href="javascript:void(0);" id="back-to-prev-question" class="btn btn-primary disabled">
+                                <a href="javascript:void(0);" id="back-to-prev-question" class="btn btn-primary disabled" style="pointer-events: none;">
                                     Back
                                 </a>
                             </div>
@@ -163,8 +163,11 @@
     <script>
         $(document).ready(function() {
             var currentQuestionNumber = 1;
-            var totalOfQuestion = $('#totalOfQuestion').val();
+            var totalOfQuestion = parseInt($('#totalOfQuestion').val()) || 1;
 
+            // ==========================================
+            // TIMER UTAMA SYSTEM
+            // ==========================================
             function startTimer(endDate, display) {
                 const targetTime = new Date(endDate).getTime();
                 
@@ -183,11 +186,11 @@
                     timeLeft = targetTime - currentTime;
 
                     if (timeLeft > 0) {
-                        // JIKA WAKTU TERSISA KURANG DARI ATAU SAMA DENGAN 10 DETIK (10000 ms)
+                        // Jika waktu tersisa <= 10 Detik, tampilkan hitungan mundur
                         if (timeLeft <= 10000) {
-                            $('#fixed-timer').removeClass('hidden').fadeIn(); // Tampilkan box counter
+                            $('#fixed-timer').removeClass('hidden').fadeIn(); 
                         } else {
-                            $('#fixed-timer').addClass('hidden'); // Sembunyikan jika masih di atas 10 detik
+                            $('#fixed-timer').addClass('hidden'); 
                         }
 
                         const totalSeconds = Math.floor(timeLeft / 1000);
@@ -206,7 +209,9 @@
                 }, 1000);
             }
 
-            // Jalankan sinkronisasi waktu ke server via Fetch API
+            // ==========================================
+            // SYNC WAKTU KE SERVER VIA FETCH
+            // ==========================================
             fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
                 method: "POST",
                 headers: {
@@ -225,20 +230,23 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Pastikan key response sesuai dengan property yang dikembalikan dari Controller Anda
                 const batasWaktu = data.waktu_berakhir || "{{ $waktu_ujian->waktu_berakhir }}";
                 const display = $('.jam_ujin_skearan'); 
                 startTimer(batasWaktu, display);
             })
             .catch(error => {
                 console.error('Error Sync Timer:', error);
-                // Fallback jika API bermasalah, tetap jalankan timer berdasarkan session data laravel
+                // Fallback jika API bermasalah, gunakan session data laravel langsung
                 const endDateFallback = "{{ $waktu_ujian->waktu_berakhir }}";
                 const display = $('.jam_ujin_skearan');
                 startTimer(endDateFallback, display);
             });
 
-            $('#go-to-next-question-pg').on('click', function() {
+            // ==========================================
+            // NAVIGASI TOMBOL NEXT & BACK (ANTI BUG)
+            // ==========================================
+            $('#go-to-next-question-pg').on('click', function(e) {
+                e.preventDefault();
                 if (currentQuestionNumber < totalOfQuestion) {
                     currentQuestionNumber++;
                     showQuestion(currentQuestionNumber);
@@ -248,7 +256,8 @@
                 }
             });
 
-            $('#back-to-prev-question').on('click', function() {
+            $('#back-to-prev-question').on('click', function(e) {
+                e.preventDefault();
                 if (currentQuestionNumber > 1) {
                     currentQuestionNumber--;
                     showQuestion(currentQuestionNumber);
@@ -256,17 +265,35 @@
             });
 
             function showQuestion(questionNumber) {
+                // Kunci batas angka agar tidak bernilai minus atau over-index
+                if (questionNumber < 1) questionNumber = 1;
+                if (questionNumber > totalOfQuestion) questionNumber = totalOfQuestion;
+                currentQuestionNumber = questionNumber;
+
+                // Toggle visibility class HTML
                 $('.question').addClass('hidden');
                 $('.question-' + questionNumber).removeClass('hidden');
+                
+                // Ubah label nomor di footer
                 $('#current-question-number-label').text(questionNumber);
-                $('#back-to-prev-question').toggleClass('disabled', questionNumber === 1);
+                $('#currentQuestionNumber').val(questionNumber);
+
+                // Kontrol ketat fungsional & visual tombol back
+                if (questionNumber === 1) {
+                    $('#back-to-prev-question').addClass('disabled').css('pointer-events', 'none');
+                } else {
+                    $('#back-to-prev-question').removeClass('disabled').css('pointer-events', 'auto');
+                }
             }
 
+            // ==========================================
+            // SIMPAN JAWABAN (AJAX)
+            // ==========================================
             function saveAnswer(questionNumber) {
                 var textareaId = $('.question-' + questionNumber + ' textarea').data('essay_siswa');
                 var answer = $('.question-' + questionNumber + ' textarea').val();
 
-                if(textareaId) { // Hanya kirim ajax jika elemen essay ditemukan
+                if (textareaId) { 
                     $.ajax({
                         url: '{{ url('/siswa/ujian_essay/saveAnswer') }}',
                         method: 'POST',
@@ -282,6 +309,7 @@
                 }
             }
 
+            // Jalankan inisialisasi awal pada nomor 1
             showQuestion(currentQuestionNumber);
         });
     </script>
