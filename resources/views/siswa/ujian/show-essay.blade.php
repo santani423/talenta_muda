@@ -201,7 +201,14 @@
                     },
                     body: JSON.stringify({
                         kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                        // time: new Date()
+                       
+                    time: (() => {
+                        const now = new Date();
+                        const offset = now.getTimezoneOffset() * 60000; 
+                        const localISOTime = new Date(now.getTime() - offset).toISOString().slice(0, -1);
+                        return localISOTime;
+                    })()
+                })
                     })
                 })
                 .then(response => response.json())
