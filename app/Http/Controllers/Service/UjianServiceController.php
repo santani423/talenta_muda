@@ -396,83 +396,92 @@ class UjianServiceController extends Controller
 
     // }
 
-    public static function startUJian($kodeUjian,$waktuMulaiCarbon)
-    {
-        // --- Langkah 1: Tentukan Waktu Mulai (diambil dari SERVER, disetel ke UTC) ---
-        // Carbon::now('UTC') mengambil waktu saat ini server dan mengonversinya ke UTC.
-        $waktuMulaiCarbon = Carbon::now('UTC');
+   public static function startUjian($kodeUjian, $waktuMulaiCarbon)
+{
+    // --- Langkah 1: Ambil Data Awal (Satu Query per Tabel) ---
+    $siswaId = session()->get('id');
 
-        $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
-            ->where('siswa_id', session()->get('id'))
-            ->first();
-        $ujian = Ujian::where('kode', $kodeUjian)->first();
+    $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
+        ->where('siswa_id', $siswaId)
+        ->first();
 
-        $hours = $ujian->jam;
-        $minutes = $ujian->menit;
+    $ujian = Ujian::where('kode', $kodeUjian)->first();
 
-         // --- Langkah 2: Hitung Waktu Berakhir (di UTC) ---
-        $waktuBerakhirCarbon = $waktuMulaiCarbon
-            ->copy() // Buat salinan
-            ->addHours($hours)
-            ->addMinutes($minutes);
+    // Validasi pencegahan jika data tidak ditemukan
+    if (!$waktuUjian || !$ujian) {
+        Log::error('Gagal Start Ujian: Data tidak ditemukan', ['kode_ujian' => $kodeUjian, 'siswa_id' => $siswaId]);
+        return null;
+    }
 
-        // Format untuk database (tanpa zona waktu, diasumsikan database menyimpan UTC)
-        $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
-        $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
+    // Pastikan $waktuMulaiCarbon menggunakan timezone UTC sesuai kebutuhan system
+    $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
 
-        // --- LOGGING: Catat permulaan proses dan parameter input ---
-        Log::info('Proses Start Ujian Dimulai', [
-            'kode_ujian' => $kodeUjian,
-            'siswa_id' => session()->get('id'),
-            'hours' => $hours,
-            'minutes' => $minutes,
-            'waktuMulai_Server_UTC' => $waktuMulai,
-            'waktuBerakhir_Server_UTC' => $waktuBerakhir,
-        ]);
-        // -----------------------------------------------------------
+    $hours = $ujian->jam;
+    $minutes = $ujian->menit;
 
-        $dataEndTime = [
-            'waktu_mulai' => $waktuMulai,
+    // --- Langkah 2: Hitung Waktu Berakhir ---
+    $waktuBerakhirCarbon = $waktuMulaiCarbon
+        ->copy()
+        ->addHours($hours)
+        ->addMinutes($minutes);
+
+    // Format untuk database
+    $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
+    $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
+
+    // --- LOGGING ---
+    Log::info('Proses Start Ujian Dimulai', [
+        'kode_ujian'               => $kodeUjian,
+        'siswa_id'                 => $siswaId,
+        'hours'                    => $hours,
+        'minutes'                  => $minutes,
+        'waktuMulai_Server_UTC'    => $waktuMulai,
+        'waktuBerakhir_Server_UTC' => $waktuBerakhir,
+    ]);
+
+    // --- Langkah 3: Update Waktu Ujian Jika Belum Di-set ---
+    if (!$waktuUjian->waktu_berakhir) {
+        $waktuUjian->update([
+            'waktu_mulai'    => $waktuMulai,
             'waktu_berakhir' => $waktuBerakhir,
-            'selesai' => 0
-        ];
-        
-        if (!$waktuUjian->waktu_berakhir) {
-            $waktuUjian->update($dataEndTime);
-        } 
+            'selesai'        => 0
+        ]);
+        // Refresh data agar objek $waktuUjian memuat data terbaru yang baru di-update
+        $waktuUjian->refresh();
+    } 
 
-        $ujian = Ujian::where('kode', $kodeUjian)->first();
+    // --- Langkah 4: Handle Jenis Ujian '3' (Optimasi Bulk Insert) ---
+    if ($ujian->jenis == '3') {
+        $visualSiswaCount = VisualSiswa::where('kode', $kodeUjian)
+            ->where('siswa_id', $siswaId)
+            ->count();
 
-        if ($ujian->jenis == '3') {
+        if ($visualSiswaCount == 0) {
+            $detailVisual = DetailVisual::where('kode', $kodeUjian)->get();
+            
+            $dataInsert = [];
+            $timestampNow = Carbon::now(); // Untuk mengisi created_at & updated_at jika dibutuhkan
 
-            $visual_siswa = VisualSiswa::where('kode', $kodeUjian)
+            foreach ($detailVisual as $value) {
+                $dataInsert[] = [
+                    'siswa_id'         => $siswaId,
+                    'detail_visual_id' => $value->id,
+                    'kode'             => $kodeUjian,
+                    'created_at'       => $timestampNow, // hapus baris ini jika tabel tidak pakai timestamps
+                    'updated_at'       => $timestampNow  // hapus baris ini jika tabel tidak pakai timestamps
+                ];
+            }
 
-                ->where('siswa_id', session()->get('id'))
-
-                ->count();
-
-            if ($visual_siswa == 0) {
-
-                $detailVisual = DetailVisual::where('kode', $kodeUjian)->get();
-
-                foreach ($detailVisual as $key => $value) {
-
-                    VisualSiswa::create([
-
-                        'siswa_id' => session()->get('id'),
-
-                        'detail_visual_id' => $value->id,
-
-                        'kode' => $kodeUjian,
-
-                    ]);
-
-                }
-
+            // Lakukan insert sekaligus (Hanya 1 query, jauh lebih cepat!)
+            if (!empty($dataInsert)) {
+                VisualSiswa::insert($dataInsert);
             }
         }
-        return $waktuUjian->waktu_berakhir;
     }
+
+    return $waktuUjian->waktu_berakhir;
+}
+
     public static function createOrRetrievePgSiswa($kode_ujian)
     {
         // Retrieve existing records of PgSiswa for the specific exam and student
