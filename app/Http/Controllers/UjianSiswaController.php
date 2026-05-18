@@ -220,7 +220,7 @@ class UjianSiswaController extends Controller
         $pg_siswa = PgSiswa::where('kode', $mergeUjian->kode_ujian)
             ->where('siswa_id', session()->get('id'))
             ->get();
-        // dd($mergeUjian);
+        dd($mergeUjian);
         return view('siswa.ujian.merge-ujian-show', [
             'title' => 'Ujian Pilihan Ganda',
             'plugin' => '
