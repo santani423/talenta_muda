@@ -396,11 +396,11 @@ class UjianServiceController extends Controller
 
     // }
 
-    public static function startUJian($kodeUjian)
+    public static function startUJian($kodeUjian, $waktuMulaiParam = null)
     {
         // --- Langkah 1: Tentukan Waktu Mulai (diambil dari SERVER, disetel ke UTC) ---
         // Carbon::now('UTC') mengambil waktu saat ini server dan mengonversinya ke UTC.
-        $waktuMulaiCarbon = Carbon::now('UTC');
+         $waktuMulaiCarbon = $waktuMulaiParam ??  Carbon::now('UTC');
 
         // dd($waktuMulaiCarbon);
 

@@ -1125,8 +1125,8 @@ class UjianSiswaController extends Controller
     public function simulasiUjian(Request $request)
     {
         // $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian, $request->time);
-        $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian);
-        $waktuMulaiCarbon = Carbon::now('UTC');
+        $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian, $request->time);
+         $waktuMulaiCarbon = $waktuMulaiParam ??  Carbon::now('UTC');
         return response()->json([
             'message' => 'Soal berhasil diupload',
             'request' => $request->all(),

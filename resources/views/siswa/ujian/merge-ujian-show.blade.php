@@ -229,9 +229,9 @@
                                 .getAttribute('content')
                         },
                         body: JSON.stringify({
-                            kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                            // time: new Date()
-                        })
+                                kode_ujian: "{{ $mergeUjian->kode_ujian }}",
+                                time: new Date().toISOString()
+                            })
                     })
                     .then(response => response.json())
                     .then(data => {
