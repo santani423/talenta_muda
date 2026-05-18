@@ -59,7 +59,7 @@
                                             <h6 class="question-title color-green text-center"
                                                 style="word-wrap: break-word">
                                                 <img src="{{ url($soal->detailujian->soal) }}" alt=""
-                                                    style="width: 70vw; height: 30vh;">
+                                                    style="width: auto; height: 30vh;">
                                             </h6>
                                         </div>
 
