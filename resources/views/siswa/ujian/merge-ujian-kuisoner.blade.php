@@ -140,32 +140,87 @@
             var currentQuestionNumber = 1;
             var totalOfQuestion = $('#totalOfQuestion').val();
 
+            // function startTimer(endDate, display) {
+            //     const targetTime = new Date(endDate).getTime();
+
+            //     const interval = setInterval(() => {
+            //         const currentTime = new Date().getTime();
+            //         const timeLeft = targetTime - currentTime;
+
+            //         if (timeLeft > 0) {
+            //             if (timeLeft <= 30000) {
+            //                 $('#fixed-timer').fadeIn();
+            //             }
+
+            //             const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
+            //                 '0');
+            //             const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
+            //             const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
+
+            //             display.text(`${hours}:${minutes}:${seconds}`);
+            //         } else {
+            //             clearInterval(interval);
+            //             display.text("00:00:00");
+            //             alert("Waktu Ujian Habis");
+            //             // $('#examwizard-question').submit();
+            //         }
+            //     }, 1000);
+            // }
+
             function startTimer(endDate, display) {
-                const targetTime = new Date(endDate).getTime();
+        // --- 1. Konversi ke Format ISO dan LOG ---
+        // Karena server sudah mengembalikan ISO string (menggunakan toISOString()), 
+        // kita hanya perlu memastikan new Date() menginterpretasikannya.
+        
+        // Jika server mengembalikan YYYY-MM-DD HH:MM:SS, gunakan baris ini:
+        // const endDateUTCString = endDate.replace(' ', 'T') + 'Z'; 
+        
+        // Jika server mengembalikan toISOString(), cukup gunakan endDate:
+        const endDateUTCString = endDate; 
+        
+        console.log('1. Waktu Berakhir (Format UTC untuk JS):', endDateUTCString);
 
-                const interval = setInterval(() => {
-                    const currentTime = new Date().getTime();
-                    const timeLeft = targetTime - currentTime;
+        const targetTime = new Date(endDateUTCString).getTime();
+        
+        console.log('2. Target Waktu (Objek Date Lokal):', new Date(endDateUTCString));
+        
+        let currentTime = new Date().getTime();
+        let timeLeft = targetTime - currentTime;
+        
+        // --- 2. Pengecekan Awal Waktu Habis ---
+        // Jika waktu sudah habis sejak awal (misalnya, jam klien terlalu cepat), hentikan segera.
+        if (timeLeft <= 0) {
+            display.text("00:00:00");
+            alert("Waktu Ujian Habis");
+            return; 
+        }
 
-                    if (timeLeft > 0) {
-                        if (timeLeft <= 30000) {
-                            $('#fixed-timer').fadeIn();
-                        }
+        // --- 3. Memulai Interval Timer ---
+        const interval = setInterval(() => {
+            currentTime = new Date().getTime();
+            timeLeft = targetTime - currentTime;
 
-                        const hours = String(Math.floor((timeLeft / (1000 * 60 * 60)) % 24)).padStart(2,
-                            '0');
-                        const minutes = String(Math.floor((timeLeft / (1000 * 60)) % 60)).padStart(2, '0');
-                        const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, '0');
+            if (timeLeft > 0) {
+                if (timeLeft <= 30000) {
+                    $('#fixed-timer').fadeIn();
+                }
 
-                        display.text(`${hours}:${minutes}:${seconds}`);
-                    } else {
-                        clearInterval(interval);
-                        display.text("00:00:00");
-                        alert("Waktu Ujian Habis");
-                        // $('#examwizard-question').submit();
-                    }
-                }, 1000);
+                const totalSeconds = Math.floor(timeLeft / 1000);
+                const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                const seconds = String(Math.floor(totalSeconds % 60)).padStart(2, '0');
+
+                display.text(`${hours}:${minutes}:${seconds}`);
+                
+            } else {
+                // Waktu berakhir
+                clearInterval(interval);
+                display.text("00:00:00");
+                alert("Waktu Ujian Habis");
+                // $('#examwizard-question').submit();
             }
+        }, 1000);
+    }
 
             $(function() {
                 fetch("{{ url('siswa/ujian/simulasi-finish') }}", {
@@ -177,14 +232,16 @@
                         },
                         body: JSON.stringify({
                             kode_ujian: "{{ $mergeUjian->kode_ujian }}",
-                            time: new Date()
+                            // time: new Date()
                         })
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data?.request?.time) {
                             // Ambil batas waktu ujian dari response API (format ISO 8601)
-                            const batasWaktu = data.waktu_berakhir;
+                            // const batasWaktu = data.waktu_berakhir;
+                            // const display = $('.jam_ujin_skearan');
+                            const batasWaktuUTC = data.waktu_berakhir;
                             const display = $('.jam_ujin_skearan');
                             startTimer(batasWaktu, display);
                         }
