@@ -398,46 +398,43 @@ class UjianServiceController extends Controller
 
    public static function startUjian($kodeUjian, $waktuMulaiCarbon)
 {
-    // --- Langkah 1: Ambil Data Awal (Satu Query per Tabel) ---
+    // --- Langkah 1: Inisialisasi & Validasi Awal ---
     $siswaId = session()->get('id');
 
     $waktuUjian = WaktuUjian::where('kode', $kodeUjian)
-    ->where('siswa_id', $siswaId)
-    ->first();
-    
+        ->where('siswa_id', $siswaId)
+        ->first();
+
     $ujian = Ujian::where('kode', $kodeUjian)->first();
-    
-    // Validasi pencegahan jika data tidak ditemukan
+
     if (!$waktuUjian || !$ujian) {
         Log::error('Gagal Start Ujian: Data tidak ditemukan', ['kode_ujian' => $kodeUjian, 'siswa_id' => $siswaId]);
         return null;
-        }
-        
-        // Pastikan $waktuMulaiCarbon menggunakan timezone UTC sesuai kebutuhan system
-        $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
-        dd($waktuMulaiCarbon);
+    }
+
+    // Pastikan $waktuMulaiCarbon adalah instance Carbon dan set ke UTC/Timezone aplikasi Anda
+    // agar sinkron dengan data yang dikirim dari browser/device
+    $waktuMulaiCarbon = Carbon::parse($waktuMulaiCarbon)->setTimezone('UTC');
 
     $hours = $ujian->jam;
     $minutes = $ujian->menit;
 
-    // --- Langkah 2: Hitung Waktu Berakhir ---
+    // --- Langkah 2: Hitung Waktu Berakhir Berdasarkan Parameter ---
     $waktuBerakhirCarbon = $waktuMulaiCarbon
         ->copy()
         ->addHours($hours)
         ->addMinutes($minutes);
 
-    // Format untuk database
+    // Format string untuk kebutuhan database
     $waktuMulai = $waktuMulaiCarbon->format('Y-m-d H:i:s');
     $waktuBerakhir = $waktuBerakhirCarbon->format('Y-m-d H:i:s');
 
     // --- LOGGING ---
-    Log::info('Proses Start Ujian Dimulai', [
-        'kode_ujian'               => $kodeUjian,
-        'siswa_id'                 => $siswaId,
-        'hours'                    => $hours,
-        'minutes'                  => $minutes,
-        'waktuMulai_Server_UTC'    => $waktuMulai,
-        'waktuBerakhir_Server_UTC' => $waktuBerakhir,
+    Log::info('Proses Start Ujian Dimulai (Berbasis Parameter)', [
+        'kode_ujian' => $kodeUjian,
+        'siswa_id' => $siswaId,
+        'waktuMulai_Parameter' => $waktuMulai,
+        'waktuBerakhir_Dihitung' => $waktuBerakhir,
     ]);
 
     // --- Langkah 3: Update Waktu Ujian Jika Belum Di-set ---
@@ -447,11 +444,10 @@ class UjianServiceController extends Controller
             'waktu_berakhir' => $waktuBerakhir,
             'selesai'        => 0
         ]);
-        // Refresh data agar objek $waktuUjian memuat data terbaru yang baru di-update
         $waktuUjian->refresh();
     } 
 
-    // --- Langkah 4: Handle Jenis Ujian '3' (Optimasi Bulk Insert) ---
+    // --- Langkah 4: Handle Jenis Ujian '3' (Timestamps Berdasarkan Parameter) ---
     if ($ujian->jenis == '3') {
         $visualSiswaCount = VisualSiswa::where('kode', $kodeUjian)
             ->where('siswa_id', $siswaId)
@@ -461,19 +457,18 @@ class UjianServiceController extends Controller
             $detailVisual = DetailVisual::where('kode', $kodeUjian)->get();
             
             $dataInsert = [];
-            $timestampNow = Carbon::now(); // Untuk mengisi created_at & updated_at jika dibutuhkan
 
             foreach ($detailVisual as $value) {
                 $dataInsert[] = [
                     'siswa_id'         => $siswaId,
                     'detail_visual_id' => $value->id,
                     'kode'             => $kodeUjian,
-                    'created_at'       => $timestampNow, // hapus baris ini jika tabel tidak pakai timestamps
-                    'updated_at'       => $timestampNow  // hapus baris ini jika tabel tidak pakai timestamps
+                    // Menggunakan waktu dari parameter untuk timestamp pembuatan data
+                    'created_at'       => $waktuMulai, 
+                    'updated_at'       => $waktuMulai  
                 ];
             }
 
-            // Lakukan insert sekaligus (Hanya 1 query, jauh lebih cepat!)
             if (!empty($dataInsert)) {
                 VisualSiswa::insert($dataInsert);
             }
@@ -482,7 +477,6 @@ class UjianServiceController extends Controller
 
     return $waktuUjian->waktu_berakhir;
 }
-
     public static function createOrRetrievePgSiswa($kode_ujian)
     {
         // Retrieve existing records of PgSiswa for the specific exam and student
