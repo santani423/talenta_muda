@@ -30,7 +30,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- TIMER -->
-    <div class="d-flex timer-fixed" id="countdown-timer">
+    <div class="d-flex timer-fixed hidden" id="countdown-timer">
         <div class="badge badge-danger" style="font-size: 18px; font-weight: bold; background: none; border: none;">
             <span data-feather="clock"></span> <span class="jam_ujin_skearan">00:00:00</span>
         </div>
