@@ -1126,12 +1126,11 @@ class UjianSiswaController extends Controller
     {
         // $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian, $request->time);
         $waktu_berakhir =  UjianServiceController::startUJian($request->kode_ujian, $request->time);
-         $waktuMulaiCarbon = $waktuMulaiParam ??  Carbon::now('UTC');
+          
         return response()->json([
             'message' => 'Soal berhasil diupload',
             'request' => $request->all(),
-            'waktu_berakhir' => $waktu_berakhir,
-            'waktu_mulai' => $waktuMulaiCarbon,
+            'waktu_berakhir' => $waktu_berakhir, 
         ], 200);
     }
 
