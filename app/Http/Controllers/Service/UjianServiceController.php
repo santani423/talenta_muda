@@ -398,6 +398,7 @@ class UjianServiceController extends Controller
 
    public static function startUjian($kodeUjian, $waktuMulaiCarbon)
 {
+    dd();
     // --- Langkah 1: Ambil Data Awal (Satu Query per Tabel) ---
     $siswaId = session()->get('id');
 
