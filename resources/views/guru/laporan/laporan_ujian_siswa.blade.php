@@ -1047,7 +1047,7 @@
                                                 </li>
                                             @else
                                                 <li class="page-item"><a class="page-link"
-                                                        href="{{ $MergeUjianSiswa->previousPageUrl() }}?batch={{ $batchPage }}">Previous</a>
+                                                        href="{{ $MergeUjianSiswa->previousPageUrl() }}&batch={{ $batchPage }}">Previous</a>
                                                 </li>
                                             @endif
 
@@ -1056,14 +1056,14 @@
                                                 <li
                                                     class="page-item {{ $MergeUjianSiswa->currentPage() == $i ? 'active' : '' }}">
                                                     <a class="page-link"
-                                                        href="{{ $MergeUjianSiswa->url($i) }}?batch={{ $batchPage }}">{{ $i }}</a>
+                                                        href="{{ $MergeUjianSiswa->url($i) }}&batch={{ $batchPage }}">{{ $i }}</a>
                                                 </li>
                                             @endfor
 
                                             {{-- Next Page Link --}}
                                             @if ($MergeUjianSiswa->hasMorePages())
                                                 <li class="page-item"><a class="page-link"
-                                                        href="{{ $MergeUjianSiswa->nextPageUrl() }}?batch={{ $batchPage }}">Next</a></li>
+                                                        href="{{ $MergeUjianSiswa->nextPageUrl() }}&batch={{ $batchPage }}">Next</a></li>
                                             @else
                                                 <li class="page-item disabled"><span class="page-link">Next</span></li>
                                             @endif
