@@ -18,6 +18,7 @@ class LaporanController extends Controller
         $kelas_id = $request->input('batch');
         $perPage = $request->input('limit', 10);
         $page = $request->input('page', 1);
+        $batchPage = $request->input('batch', 1);
 
 
         $MergeUjianSiswa = Siswa::when($search, function ($query, $search) {
@@ -48,6 +49,7 @@ class LaporanController extends Controller
             'guru_kelas' => Gurukelas::where('guru_id', session()->get('id'))->get(),
             'merge_ujian' => MergeUjian::join('kelas', 'kelas.id', '=', 'merge_ujian.kelas_id')->get(),
             'batch' => $batch,
+            'batchPage' => $batchPage,
             'MergeUjianSiswa' => $MergeUjianSiswa,
             'currentPage' => ($MergeUjianSiswa->currentPage() - 1) * 10,
         ]);
