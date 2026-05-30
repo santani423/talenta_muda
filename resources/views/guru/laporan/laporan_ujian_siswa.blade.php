@@ -15,6 +15,8 @@
             vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .chart-wrap { margin: 16px 0; }
+        .chart-wrap canvas { max-width: 100%; }
     </style>
 
     <div id="content" class="main-content">
@@ -147,13 +149,13 @@
 
     {{-- Modal Hasil Tes --}}
     <div class="modal fade" id="modalHasilTes" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Hasil Tes</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="max-height:80vh;overflow-y:auto;">
                     <div id="modalBodyContent"></div>
                     <div class="form-group mt-4">
                         <textarea class="form-control" id="formKomentar" rows="5" placeholder="Komentar..."></textarea>
@@ -167,18 +169,22 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script>
     // ─── State ────────────────────────────────────────────────────────────────
     let state = { search: '', batch: '', limit: 10, page: 1 };
     let currentPrintPayload = null;
     let currentPrintName    = '';
+    let modalChartInstances = {};
 
     // ─── Boot ─────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
         loadBatch();
         loadSiswa();
+        document.getElementById('searchInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') applyFilter();
+        });
     });
 
     // ─── Batch (kelas) dropdown ───────────────────────────────────────────────
@@ -212,7 +218,6 @@
         renderTable(json.data, json.meta);
         renderPagination(json.meta);
 
-        // Load nilai untuk setiap siswa secara paralel
         json.data.forEach(siswa => loadNilaiSiswa(siswa.id));
     }
 
@@ -325,20 +330,18 @@
             set(id, 'ARTd',     n.artd);
             set(id, 'SIM',      n.sim);
 
-            // Facets dari parts
             const parts = json.parts;
 
-            // NEO-PI facet domain totals & subdomain (part5_1)
             const p51 = parts['part5_1'];
             if (p51 && p51.facet) {
                 p51.facet.forEach(facet => {
-                    const dom = facet.domain;
+                    const dom   = facet.domain;
                     const total = facet.totalScore;
-                    if (dom === 'NEUROTICISM')         set(id, 'NEUROTICISM', total);
-                    if (dom === 'EXTRAVERSION')        set(id, 'EXTRAVERSION', total);
+                    if (dom === 'NEUROTICISM')           set(id, 'NEUROTICISM', total);
+                    if (dom === 'EXTRAVERSION')          set(id, 'EXTRAVERSION', total);
                     if (dom === 'OPENESS TO EXPERIENCE') set(id, 'OPENESSTOEXPERIENCE', total);
-                    if (dom === 'AGREEABLENESS')       set(id, 'AGREEABLENESS', total);
-                    if (dom === 'CONSCIENTIOUSNESS')   set(id, 'CONSCIENTIOUSNESS', total);
+                    if (dom === 'AGREEABLENESS')         set(id, 'AGREEABLENESS', total);
+                    if (dom === 'CONSCIENTIOUSNESS')     set(id, 'CONSCIENTIOUSNESS', total);
 
                     const sd = facet.subdomain ?? {};
                     setSD(id, sd, 'anxiety',             'anxiety');
@@ -371,14 +374,12 @@
                     setSD(id, sd, 'self',                'SelfDiscipline');
                     setSD(id, sd, 'deliberation',        'deliberation');
 
-                    // self_consciousness hanya jika code_facet == n4
                     if (sd['self'] && sd['self'].code_facet === 'n4') {
                         set(id, 'self_consciousness', sd['self'].total_score);
                     }
                 });
             }
 
-            // Dark Triad sekala (part5_2)
             const p52 = parts['part5_2'];
             if (p52 && p52.sekala && p52.sekala.average_scores) {
                 p52.sekala.average_scores.forEach(s => {
@@ -391,7 +392,6 @@
                 });
             }
 
-            // MMPI sekala (part5_3)
             const p53 = parts['part5_3'];
             if (p53 && p53.sekala && p53.sekala.average_scores) {
                 p53.sekala.average_scores.forEach(s => {
@@ -425,12 +425,6 @@
         loadSiswa();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('searchInput').addEventListener('keydown', e => {
-            if (e.key === 'Enter') applyFilter();
-        });
-    });
-
     // ─── Pagination ───────────────────────────────────────────────────────────
     function renderPagination(meta) {
         const ul = document.getElementById('pagination');
@@ -462,6 +456,10 @@
 
     // ─── Modal Hasil Tes ──────────────────────────────────────────────────────
     async function openModalHasil(id, nama, tempatLahir, tanggalLahir, gender) {
+        // Destroy existing chart instances
+        Object.values(modalChartInstances).forEach(c => { try { c.destroy(); } catch(e) {} });
+        modalChartInstances = {};
+
         currentPrintName = nama;
         const body = document.getElementById('modalBodyContent');
         body.innerHTML = `<div class="text-center py-4"><span class="spinner-border text-primary"></span></div>`;
@@ -476,12 +474,16 @@
 
         currentPrintPayload = { json, nama, tempatLahir, tanggalLahir, gender };
         body.innerHTML = buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender);
+
+        // Render charts setelah HTML ada di DOM
+        renderModalCharts(json);
     }
 
+    // ─── Build modal HTML (static content + canvas placeholders) ─────────────
     function buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender) {
-        const n      = json.nilai;
-        const parts  = json.parts;
-        const umur   = hitungUsia(tanggalLahir);
+        const n     = json.nilai;
+        const parts = json.parts;
+        const umur  = hitungUsia(tanggalLahir);
 
         let html = `
         <h5 class="text-center" style="color:black">HASIL TEST TALENTA MUDA</h5>
@@ -495,7 +497,6 @@
         <p style="color:black"><b>Skor IQ:</b> ${n.skor_iq} &nbsp; <b>Kualifikasi:</b> ${n.kualifikasi}</p>`;
 
         // Tabel PG / Visual / Essay
-        const typeMap = { part1_1: 'pg', part1_2: 'visual', part1_3: 'pg', part1_4: 'pg', part2: 'essay', part3: 'essay', part4: 'essay' };
         const pgParts = ['part1_1', 'part1_2', 'part1_3', 'part1_4', 'part2', 'part3', 'part4'];
 
         html += `<div class="table-responsive"><table border="1" style="width:100%;color:black"><tr>`;
@@ -530,14 +531,19 @@
             const p = parts[kode];
             if (!p) return;
             html += `<div class="mt-4" style="page-break-before:always">`;
-            html += `<p style="color:black"><b>${p.ujian?.nama ?? kode}</b></p>`;
+            html += `<p style="color:black"><b>${p.ujian?.nama_ujian ?? kode}</b></p>`;
 
             if (p.facet && p.facet.some(f => f.totalScore != 0)) {
+                // Domain totals (text)
                 html += `<div class="row">`;
                 p.facet.forEach(f => {
-                    html += `<div class="col-md-6" style="color:black">${f.domain}: ${f.totalScore}</div>`;
+                    html += `<div class="col-md-6" style="color:black">${f.domain}: <b>${f.totalScore}</b></div>`;
                 });
                 html += `</div>`;
+                // Canvas untuk radar chart domain
+                html += `<div class="chart-wrap"><canvas id="chart-${kode}-domain" height="120"></canvas></div>`;
+                // Canvas untuk bar chart subdomain
+                html += `<div class="chart-wrap"><canvas id="chart-${kode}-facets" height="180"></canvas></div>`;
             }
 
             if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
@@ -556,13 +562,125 @@
                     html += `<div class="col-md-12 mt-2" style="color:black;font-weight:bold;text-align:center">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
                 }
                 html += `</div>`;
+                // Canvas untuk bar chart sekala
+                html += `<div class="chart-wrap"><canvas id="chart-${kode}-sekala" height="120"></canvas></div>`;
             } else if (p.skorNilai) {
                 html += `<div class="mt-3" style="color:black;font-weight:bold;text-align:center">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>`;
             }
+
             html += `</div>`;
         });
 
         return html;
+    }
+
+    // ─── Render Chart.js instances ke canvas di modal ─────────────────────────
+    function renderModalCharts(json) {
+        const parts = json.parts;
+
+        ['part5_1', 'part5_2', 'part5_3'].forEach(kode => {
+            const p = parts[kode];
+            if (!p) return;
+
+            // Radar chart domain (NEO-PI)
+            if (p.facet && p.facet.some(f => f.totalScore != 0)) {
+                const domCanvas = document.getElementById(`chart-${kode}-domain`);
+                if (domCanvas) {
+                    const labels = p.facet.map(f => f.domain);
+                    const data   = p.facet.map(f => f.totalScore);
+                    modalChartInstances[`${kode}-domain`] = new Chart(domCanvas, {
+                        type: 'radar',
+                        data: {
+                            labels,
+                            datasets: [{
+                                label: 'Domain Score',
+                                data,
+                                backgroundColor: 'rgba(54,162,235,0.2)',
+                                borderColor:     'rgba(54,162,235,1)',
+                                pointBackgroundColor: 'rgba(54,162,235,1)',
+                                borderWidth: 2,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { display: false } },
+                            scales: { r: { beginAtZero: true, ticks: { stepSize: 20 } } },
+                        }
+                    });
+                }
+
+                // Bar chart subdomains
+                const facetCanvas = document.getElementById(`chart-${kode}-facets`);
+                if (facetCanvas) {
+                    const facetLabels = [];
+                    const facetData   = [];
+                    const facetColors = [];
+                    const domColors = [
+                        'rgba(255,99,132,0.7)',
+                        'rgba(255,159,64,0.7)',
+                        'rgba(255,205,86,0.7)',
+                        'rgba(75,192,192,0.7)',
+                        'rgba(54,162,235,0.7)',
+                    ];
+                    p.facet.forEach((f, di) => {
+                        Object.values(f.subdomain ?? {}).forEach(sd => {
+                            facetLabels.push(sd.deskripsi_facet ?? sd.code_facet ?? '');
+                            facetData.push(sd.total_score ?? 0);
+                            facetColors.push(domColors[di % domColors.length]);
+                        });
+                    });
+                    if (facetLabels.length) {
+                        modalChartInstances[`${kode}-facets`] = new Chart(facetCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels: facetLabels,
+                                datasets: [{
+                                    label: 'Facet Score',
+                                    data: facetData,
+                                    backgroundColor: facetColors,
+                                    borderWidth: 1,
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                indexAxis: 'y',
+                                plugins: { legend: { display: false } },
+                                scales: { x: { beginAtZero: true } },
+                            }
+                        });
+                    }
+                }
+            }
+
+            // Bar chart sekala (Dark Triad / MMPI)
+            if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.length) {
+                const sekCanvas = document.getElementById(`chart-${kode}-sekala`);
+                if (sekCanvas) {
+                    const labels = p.sekala.average_scores.map(s => s.keterangan ?? s.kode_sekala);
+                    const data   = p.sekala.average_scores.map(s =>
+                        p.skorNilai ? s.total_score : parseFloat(s.average_score)
+                    );
+                    modalChartInstances[`${kode}-sekala`] = new Chart(sekCanvas, {
+                        type: 'bar',
+                        data: {
+                            labels,
+                            datasets: [{
+                                label: p.skorNilai ? 'Total Score' : 'Average Score',
+                                data,
+                                backgroundColor: 'rgba(153,102,255,0.7)',
+                                borderColor:     'rgba(153,102,255,1)',
+                                borderWidth: 1,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { beginAtZero: true } },
+                        }
+                    });
+                }
+            }
+        });
     }
 
     function hitungUsia(tanggal_lahir) {
@@ -576,17 +694,44 @@
     }
 
     // ─── Print PDF ────────────────────────────────────────────────────────────
-    function printNilaiSiswa() {
+    async function printNilaiSiswa() {
         if (!currentPrintPayload) return;
         const { json, nama, tempatLahir, tanggalLahir, gender } = currentPrintPayload;
         const komentar = document.getElementById('formKomentar').value || 'Tidak ada komentar';
 
+        // Ambil gambar dari chart yang sudah dirender di modal
+        const chartImages = {};
+        Object.entries(modalChartInstances).forEach(([key, chart]) => {
+            try { chartImages[key] = chart.toBase64Image('image/png', 1); } catch (e) {}
+        });
+
         const el = document.createElement('div');
-        el.style.padding = '20px';
+        el.style.cssText = 'padding:20px;width:760px;background:white;color:black;';
         el.innerHTML = buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender)
             + `<div style="margin-top:20px;color:black"><b>Komentar:</b><p>${komentar}</p></div>`;
 
-        html2pdf().from(el).save(`Hasil_Test_${nama}.pdf`);
+        // Replace setiap canvas dengan gambar dari modal
+        el.querySelectorAll('canvas[id^="chart-"]').forEach(canvas => {
+            const kodeKey = canvas.id.replace('chart-', '');
+            const imgSrc  = chartImages[kodeKey];
+            if (imgSrc) {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.style.cssText = 'max-width:100%;height:auto;display:block;margin:8px 0;';
+                canvas.parentNode.replaceChild(img, canvas);
+            } else {
+                // Sembunyikan canvas kosong agar tidak ada area blank di PDF
+                canvas.style.display = 'none';
+            }
+        });
+
+        await html2pdf().from(el).set({
+            margin:     [10, 10, 10, 10],
+            filename:   `Hasil_Test_${nama}.pdf`,
+            image:      { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF:      { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        }).save();
     }
 
     // ─── Download Excel ───────────────────────────────────────────────────────
@@ -601,8 +746,8 @@
 
         clone.setAttribute('border', '1');
         clone.querySelectorAll('th,td').forEach(c => {
-            c.style.border   = '1px solid black';
-            c.style.padding  = '5px';
+            c.style.border  = '1px solid black';
+            c.style.padding = '5px';
         });
 
         const html = clone.outerHTML.replace(/ /g, '%20');
