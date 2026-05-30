@@ -482,32 +482,78 @@
         if (SHOW_CHART) renderModalCharts(json);
     }
 
+    // ─── CSS bersama untuk PDF ────────────────────────────────────────────────
+    const PDF_CSS = `
+        body, * { font-family: Arial, Helvetica, sans-serif; color: #111; }
+        .pdf-page { padding: 0; }
+        .pdf-section-title {
+            font-size: 13px; font-weight: bold; color: #1a1a1a;
+            border-bottom: 2px solid #333; padding-bottom: 4px; margin-bottom: 10px;
+        }
+        .pdf-sub-title {
+            font-size: 11px; font-weight: bold; color: #333;
+            margin: 6px 0 4px 0;
+        }
+        table.pdf-table {
+            width: 100%; border-collapse: collapse; font-size: 10px;
+        }
+        table.pdf-table th {
+            background: #2c3e50; color: #fff; padding: 5px 6px;
+            text-align: left; font-size: 10px;
+        }
+        table.pdf-table td {
+            padding: 4px 6px; border: 1px solid #ccc; vertical-align: top;
+        }
+        table.pdf-table tr:nth-child(even) td { background: #f8f8f8; }
+        .pdf-kv-table td { padding: 3px 6px; font-size: 11px; }
+        .pdf-badge {
+            display: inline-block; background: #2c3e50; color: #fff;
+            padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: bold;
+        }
+        .pdf-score-grid { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+        .pdf-score-item {
+            width: 48%; font-size: 10px; padding: 3px 6px;
+            background: #f0f4f8; border-left: 3px solid #2c3e50;
+        }
+        .pdf-chart-container { text-align: center; margin: 8px 0; }
+        .html2pdf__page-break { page-break-before: always; }
+    `;
+
     // ─── Build modal HTML (static content + canvas placeholders) ─────────────
     function buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender) {
         const n     = json.nilai;
         const parts = json.parts;
         const umur  = hitungUsia(tanggalLahir);
 
+        // ── Halaman 1: Info Siswa + Skor IQ ───────────────────────────────────
         let html = `
-        <h5 class="text-center" style="color:black">HASIL TEST TALENTA MUDA</h5>
-        <table style="color:black">
-            <tr><td><b>Nama</b></td><td>:</td><td>${nama}</td></tr>
-            <tr><td><b>Tempat/Tgl Lahir</b></td><td>:</td><td>${tempatLahir}, ${tanggalLahir}</td></tr>
-            <tr><td><b>Jenis Kelamin</b></td><td>:</td><td>${gender}</td></tr>
-            <tr><td><b>Usia</b></td><td>:</td><td>${umur} tahun</td></tr>
-        </table>
-        <hr>
-        <p style="color:black"><b>Skor IQ:</b> ${n.skor_iq} &nbsp; <b>Kualifikasi:</b> ${n.kualifikasi}</p>`;
+        <div class="pdf-page">
+            <h4 style="text-align:center;letter-spacing:2px;margin-bottom:16px;font-size:16px;">
+                HASIL TEST TALENTA MUDA
+            </h4>
+            <table class="pdf-kv-table" style="margin-bottom:12px;">
+                <tr><td style="width:160px;"><b>Nama</b></td><td>: ${nama}</td></tr>
+                <tr><td><b>Tempat / Tgl Lahir</b></td><td>: ${tempatLahir}, ${tanggalLahir}</td></tr>
+                <tr><td><b>Jenis Kelamin</b></td><td>: ${gender}</td></tr>
+                <tr><td><b>Usia</b></td><td>: ${umur} tahun</td></tr>
+            </table>
+            <div style="background:#f0f4f8;padding:8px 12px;border-left:4px solid #2c3e50;margin-bottom:14px;font-size:11px;">
+                <b>Skor IQ:</b> <span class="pdf-badge">${n.skor_iq}</span>
+                &nbsp;&nbsp; <b>Kualifikasi:</b> <span class="pdf-badge">${n.kualifikasi}</span>
+            </div>
+        </div>`;
 
-        // Tabel PG / Visual / Essay
+        // ── Halaman 2: Tabel jawaban PG / Visual / Essay (1 tabel 1 halaman) ──
         const pgParts = ['part1_1', 'part1_2', 'part1_3', 'part1_4', 'part2', 'part3', 'part4'];
-
-        html += `<div class="table-responsive"><table border="1" style="width:100%;color:black"><tr>`;
+        html += `<div class="html2pdf__page-break"></div>
+        <div class="pdf-page">
+            <div class="pdf-section-title">Jawaban Ujian</div>
+            <table class="pdf-table" border="1"><thead><tr>`;
         pgParts.forEach(kode => {
             const p = parts[kode];
-            html += `<td style="padding:4px"><b>${p?.type ?? kode}</b></td>`;
+            html += `<th>${p?.type ?? kode}</th>`;
         });
-        html += `</tr>`;
+        html += `</tr></thead><tbody>`;
 
         const maxRows = Math.max(...pgParts.map(k => parts[k]?.siswa?.length ?? 0));
         for (let i = 0; i < maxRows; i++) {
@@ -517,117 +563,133 @@
                 const s  = p?.siswa?.[i];
                 const jw = s?.jawaban ?? '-';
                 const ni = s?.nilai;
-                // nilai essay bisa 0, 1, atau 2 — semua > 0 dianggap benar
                 const check = (ni !== null && ni !== undefined && ni !== '')
-                    ? (Number(ni) > 0 ? '✔' : '✘')
+                    ? (Number(ni) > 0
+                        ? `<span style="color:#27ae60;font-weight:bold;">✔</span>`
+                        : `<span style="color:#e74c3c;font-weight:bold;">✘</span>`)
                     : '';
-                html += `<td style="padding:2px;font-size:11px">${String(i+1).padStart(2,'0')}. ${jw} ${check}</td>`;
+                html += `<td>${String(i+1).padStart(2,'0')}. ${jw} ${check}</td>`;
             });
             html += `</tr>`;
         }
-        html += `<tr>`;
+        html += `</tbody><tfoot><tr>`;
         pgParts.forEach(kode => {
             const p = parts[kode];
-            html += `<td style="padding:4px"><b>${(p?.nilai ?? 0) + (p?.niaiTambah ?? 0)}</b></td>`;
+            html += `<td style="font-weight:bold;background:#2c3e50;color:#fff;text-align:center;">${(p?.nilai ?? 0) + (p?.niaiTambah ?? 0)}</td>`;
         });
-        html += `</tr></table></div>`;
+        html += `</tr></tfoot></table></div>`;
 
-        // Kuesioner sections — page break hanya sebelum tiap part (part5_1/5_2/5_3)
+        // ── Kuesioner sections — tiap tabel & chart dapat halaman sendiri ────────
         ['part5_1', 'part5_2', 'part5_3'].forEach(kode => {
             const p = parts[kode];
             if (!p) return;
+            const judulPart = p.ujian?.nama_ujian ?? kode;
 
-            // Force halaman baru sebelum tiap part kuesioner
-            html += `<div class="html2pdf__page-break"></div>`;
-            html += `<div style="margin-top:4px;">`;
-            html += `<p style="color:black;font-weight:bold;font-size:13px;margin-bottom:8px;">${p.ujian?.nama_ujian ?? kode}</p>`;
-
-            // ── Tabel jawaban kuesioner (20 baris × N chunk kolom) ─────────────
+            // ── Tabel jawaban kuesioner (1 tabel = 1 halaman) ─────────────────
             if (p.siswa && p.siswa.length) {
-                html += `<table border="1" style="width:100%;color:black;border-collapse:collapse;font-size:10px;">`;
+                html += `<div class="html2pdf__page-break"></div>
+                <div class="pdf-page">
+                    <div class="pdf-section-title">${judulPart} — Jawaban</div>
+                    <table class="pdf-table" border="1"><tbody>`;
                 for (let i = 0; i < 20; i++) {
                     html += `<tr>`;
                     let qNo = i + 1;
                     p.siswa.forEach(chunk => {
                         const chunkArr = Array.isArray(chunk) ? chunk : Object.values(chunk);
                         const item = chunkArr[i];
-                        html += `<td style="padding:2px 5px;color:black;">${qNo}. ${item?.jawaban ?? '-'}</td>`;
+                        html += `<td>${qNo}. ${item?.jawaban ?? '-'}</td>`;
                         qNo += 20;
                     });
                     html += `</tr>`;
                 }
-                html += `</table>`;
+                html += `</tbody></table></div>`;
             }
 
-            // ── Facet domain totals + radar chart ─────────────────────────────
+            // ── Facet domain totals + radar chart (1 chart = 1 halaman) ────────
             if (p.facet && p.facet.some(f => f.totalScore != 0)) {
-                html += `<div style="margin-top:10px;">`;
+                // Skor domain (tabel ringkas + chart)
+                html += `<div class="html2pdf__page-break"></div>
+                <div class="pdf-page">
+                    <div class="pdf-section-title">${judulPart} — Skor Domain</div>
+                    <div class="pdf-score-grid">`;
                 p.facet.forEach(f => {
-                    html += `<span style="color:black;display:inline-block;width:48%;margin-bottom:3px;font-size:11px;">${f.domain}: <b>${f.totalScore}</b></span>`;
+                    html += `<div class="pdf-score-item"><b>${f.domain}</b>: ${f.totalScore}</div>`;
                 });
                 html += `</div>`;
-                // Radar chart — dibatasi max-height 160px saat dimasukkan ke PDF
                 if (SHOW_CHART) {
-                    html += `<div class="chart-wrap" data-maxh="160"><canvas id="chart-${kode}-domain" height="120"></canvas></div>`;
+                    html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-domain" width="560" height="360"></canvas></div>`;
                 }
+                html += `</div>`;
 
-                // ── Subdomain per domain (part5_1) — mengalir natural, tidak per halaman ─
+                // ── Per domain: 1 halaman = chart + tabel subdomain ────────────
                 if (kode === 'part5_1') {
                     p.facet.forEach(f => {
                         const subEntries = Object.values(f.subdomain ?? {});
                         if (!subEntries.length) return;
                         const domainSlug = f.domain.replace(/\s+/g, '-');
-                        html += `<div style="margin-top:10px;page-break-inside:avoid;">`;
-                        html += `<p style="color:black;font-weight:bold;font-size:11px;margin:4px 0;">${f.domain}</p>`;
+                        html += `<div class="html2pdf__page-break"></div>
+                        <div class="pdf-page">
+                            <div class="pdf-section-title">${judulPart} — ${f.domain}</div>`;
                         if (SHOW_CHART) {
-                            html += `<div class="chart-wrap" data-maxh="130"><canvas id="chart-${kode}-${domainSlug}" height="80"></canvas></div>`;
+                            html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-${domainSlug}" width="560" height="260"></canvas></div>`;
                         }
-                        html += `<table border="1" style="width:100%;color:black;font-size:10px;border-collapse:collapse;">`;
-                        html += `<thead><tr style="background:#f0f0f0;"><th style="padding:3px;text-align:left;">Facet</th><th style="padding:3px;text-align:center;width:100px;">Total Score</th></tr></thead><tbody>`;
+                        html += `<table class="pdf-table" border="1" style="margin-top:10px;">
+                            <thead><tr><th>Facet</th><th style="width:120px;text-align:center;">Total Score</th></tr></thead>
+                            <tbody>`;
                         subEntries.forEach(sd => {
-                            html += `<tr><td style="padding:3px;">${sd.deskripsi_facet ?? ''}</td><td style="padding:3px;text-align:center;">${sd.total_score ?? 0}</td></tr>`;
+                            html += `<tr><td>${sd.deskripsi_facet ?? ''}</td><td style="text-align:center;">${sd.total_score ?? 0}</td></tr>`;
                         });
                         html += `</tbody></table></div>`;
                     });
                 }
 
-                // All-facets bar chart (horizontal, cukup panjang)
+                // ── All-facets horizontal bar chart (1 chart = 1 halaman) ──────
                 if (SHOW_CHART) {
-                    html += `<div class="chart-wrap" data-maxh="260"><canvas id="chart-${kode}-facets" height="180"></canvas></div>`;
+                    html += `<div class="html2pdf__page-break"></div>
+                    <div class="pdf-page">
+                        <div class="pdf-section-title">${judulPart} — Semua Facet</div>
+                        <div class="pdf-chart-container"><canvas id="chart-${kode}-facets" width="560" height="460"></canvas></div>
+                    </div>`;
                 }
             }
 
-            // ── Sekala scores + chart ──────────────────────────────────────────
+            // ── Sekala scores + chart (1 halaman) ─────────────────────────────
             if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
-                html += `<div style="margin-top:8px;">`;
+                html += `<div class="html2pdf__page-break"></div>
+                <div class="pdf-page">
+                    <div class="pdf-section-title">${judulPart} — Skor Sekala</div>
+                    <div class="pdf-score-grid">`;
                 if (p.skorNilai) {
                     let total = 0;
                     p.sekala.average_scores.forEach(s => {
-                        html += `<span style="color:black;display:inline-block;width:48%;margin-bottom:3px;font-size:11px;">${s.keterangan}: ${s.total_score}</span>`;
+                        html += `<div class="pdf-score-item"><b>${s.keterangan}</b>: ${s.total_score}</div>`;
                         total += s.total_score;
                     });
-                    html += `<div style="color:black;font-weight:bold;text-align:center;margin-top:6px;">Skor: ${total}</div>`;
+                    html += `</div><div style="font-weight:bold;text-align:center;margin:8px 0;font-size:13px;">Total Skor: ${total}</div>`;
                 } else {
                     p.sekala.average_scores.forEach(s => {
-                        html += `<span style="color:black;display:inline-block;width:48%;margin-bottom:3px;font-size:11px;">${s.keterangan}: ${Math.ceil((s.total_score / s.count) * 10) / 10}</span>`;
+                        html += `<div class="pdf-score-item"><b>${s.keterangan}</b>: ${Math.ceil((s.total_score / s.count) * 10) / 10}</div>`;
                     });
-                    html += `<div style="color:black;font-weight:bold;text-align:center;margin-top:6px;">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
+                    html += `</div><div style="font-weight:bold;text-align:center;margin:8px 0;font-size:13px;">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
+                }
+                if (SHOW_CHART) {
+                    html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-sekala" width="560" height="280"></canvas></div>`;
                 }
                 html += `</div>`;
-                if (SHOW_CHART) {
-                    html += `<div class="chart-wrap" data-maxh="150"><canvas id="chart-${kode}-sekala" height="120"></canvas></div>`;
-                }
             } else if (p.skorNilai) {
-                html += `<div style="color:black;font-weight:bold;text-align:center;margin-top:8px;">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>`;
+                html += `<div class="html2pdf__page-break"></div>
+                <div class="pdf-page">
+                    <div class="pdf-section-title">${judulPart} — Skor</div>
+                    <div style="font-weight:bold;text-align:center;font-size:13px;margin-top:20px;">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>
+                </div>`;
             }
-
-            html += `</div>`;
         });
 
         return html;
     }
 
     // ─── Render Chart.js instances ke canvas di modal ─────────────────────────
+    // responsive: false + dimensi tetap agar toBase64Image() menghasilkan ukuran konsisten
     function renderModalCharts(json) {
         const parts = json.parts;
 
@@ -635,7 +697,7 @@
             const p = parts[kode];
             if (!p) return;
 
-            // Radar chart domain (NEO-PI)
+            // Radar chart domain
             if (p.facet && p.facet.some(f => f.totalScore != 0)) {
                 const domCanvas = document.getElementById(`chart-${kode}-domain`);
                 if (domCanvas) {
@@ -648,36 +710,29 @@
                             datasets: [{
                                 label: 'Domain Score',
                                 data,
-                                backgroundColor: 'rgba(54,162,235,0.2)',
-                                borderColor:     'rgba(54,162,235,1)',
-                                pointBackgroundColor: 'rgba(54,162,235,1)',
+                                backgroundColor: 'rgba(44,62,80,0.15)',
+                                borderColor:     'rgba(44,62,80,0.9)',
+                                pointBackgroundColor: 'rgba(44,62,80,1)',
                                 borderWidth: 2,
                             }]
                         },
                         options: {
-                            responsive: true,
+                            responsive: false,
+                            maintainAspectRatio: false,
                             plugins: { legend: { display: false } },
                             scales: { r: { beginAtZero: true, ticks: { stepSize: 20 } } },
                         }
                     });
                 }
 
-                // Bar chart subdomains (semua domain digabung)
+                // Bar chart semua facet (horizontal)
                 const facetCanvas = document.getElementById(`chart-${kode}-facets`);
                 if (facetCanvas) {
-                    const facetLabels = [];
-                    const facetData   = [];
-                    const facetColors = [];
-                    const domColors = [
-                        'rgba(255,99,132,0.7)',
-                        'rgba(255,159,64,0.7)',
-                        'rgba(255,205,86,0.7)',
-                        'rgba(75,192,192,0.7)',
-                        'rgba(54,162,235,0.7)',
-                    ];
+                    const facetLabels = [], facetData = [], facetColors = [];
+                    const domColors = ['rgba(231,76,60,0.75)','rgba(230,126,34,0.75)','rgba(241,196,15,0.75)','rgba(39,174,96,0.75)','rgba(41,128,185,0.75)'];
                     p.facet.forEach((f, di) => {
                         Object.values(f.subdomain ?? {}).forEach(sd => {
-                            facetLabels.push(sd.deskripsi_facet ?? sd.code_facet ?? '');
+                            facetLabels.push(sd.deskripsi_facet ?? '');
                             facetData.push(sd.total_score ?? 0);
                             facetColors.push(domColors[di % domColors.length]);
                         });
@@ -687,46 +742,42 @@
                             type: 'bar',
                             data: {
                                 labels: facetLabels,
-                                datasets: [{
-                                    label: 'Facet Score',
-                                    data: facetData,
-                                    backgroundColor: facetColors,
-                                    borderWidth: 1,
-                                }]
+                                datasets: [{ data: facetData, backgroundColor: facetColors, borderWidth: 0 }]
                             },
                             options: {
-                                responsive: true,
+                                responsive: false,
+                                maintainAspectRatio: false,
                                 indexAxis: 'y',
                                 plugins: { legend: { display: false } },
-                                scales: { x: { beginAtZero: true } },
+                                scales: { x: { beginAtZero: true, grid: { color: '#e8e8e8' } } },
                             }
                         });
                     }
                 }
 
-                // Mini bar chart per domain (khusus part5_1)
+                // Bar chart per domain (part5_1)
                 if (kode === 'part5_1') {
                     p.facet.forEach(f => {
                         const subEntries = Object.values(f.subdomain ?? {});
                         if (!subEntries.length) return;
                         const domainSlug = f.domain.replace(/\s+/g, '-');
-                        const domCanvas  = document.getElementById(`chart-${kode}-${domainSlug}`);
-                        if (!domCanvas) return;
-                        modalChartInstances[`${kode}-${domainSlug}`] = new Chart(domCanvas, {
+                        const dc = document.getElementById(`chart-${kode}-${domainSlug}`);
+                        if (!dc) return;
+                        modalChartInstances[`${kode}-${domainSlug}`] = new Chart(dc, {
                             type: 'bar',
                             data: {
                                 labels: subEntries.map(sd => sd.deskripsi_facet ?? ''),
                                 datasets: [{
-                                    label: f.domain,
                                     data: subEntries.map(sd => sd.total_score ?? 0),
-                                    backgroundColor: 'rgba(54,162,235,0.7)',
-                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(41,128,185,0.75)',
+                                    borderWidth: 0,
                                 }]
                             },
                             options: {
-                                responsive: true,
+                                responsive: false,
+                                maintainAspectRatio: false,
                                 plugins: { legend: { display: false } },
-                                scales: { y: { beginAtZero: true } },
+                                scales: { y: { beginAtZero: true, grid: { color: '#e8e8e8' } } },
                             }
                         });
                     });
@@ -746,17 +797,16 @@
                         data: {
                             labels,
                             datasets: [{
-                                label: p.skorNilai ? 'Total Score' : 'Average Score',
                                 data,
-                                backgroundColor: 'rgba(153,102,255,0.7)',
-                                borderColor:     'rgba(153,102,255,1)',
-                                borderWidth: 1,
+                                backgroundColor: 'rgba(142,68,173,0.75)',
+                                borderWidth: 0,
                             }]
                         },
                         options: {
-                            responsive: true,
+                            responsive: false,
+                            maintainAspectRatio: false,
                             plugins: { legend: { display: false } },
-                            scales: { y: { beginAtZero: true } },
+                            scales: { y: { beginAtZero: true, grid: { color: '#e8e8e8' } } },
                         }
                     });
                 }
@@ -788,39 +838,36 @@
             });
         }
 
-        // Buat wrapper dengan CSS kontrol page-break
+        // Buat wrapper PDF
         const el = document.createElement('div');
-        el.style.cssText = 'padding:16px;width:780px;background:white;color:black;font-family:Arial,sans-serif;font-size:12px;';
+        el.style.cssText = 'padding:20px;width:760px;background:white;';
 
-        // Inject CSS agar tabel & chart tidak terpotong
-        el.innerHTML = `<style>
-            * { box-sizing: border-box; }
-            table { border-collapse: collapse; width: 100%; }
-            tr { page-break-inside: avoid; }
-            td, th { color: black !important; }
-            .pdf-avoid-break { page-break-inside: avoid; }
-            .pdf-section { page-break-inside: auto; }
-            img { page-break-inside: avoid; max-width: 100%; height: auto; }
-        </style>`;
+        // Inject CSS global untuk PDF
+        const styleEl = document.createElement('style');
+        styleEl.textContent = PDF_CSS;
+        el.appendChild(styleEl);
 
         const content = document.createElement('div');
         content.innerHTML = buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender)
-            + `<div style="margin-top:16px;color:black;"><b>Komentar:</b><p style="margin-top:4px;">${komentar}</p></div>`;
+            + `<div class="html2pdf__page-break"></div>
+               <div class="pdf-page">
+                 <div class="pdf-section-title">Komentar</div>
+                 <p style="font-size:11px;margin-top:6px;">${komentar}</p>
+               </div>`;
         el.appendChild(content);
 
-        // Replace canvas → img (dari chart modal), baca data-maxh dari wrapper
+        // Replace canvas → img dengan dimensi penuh halaman
         content.querySelectorAll('canvas[id^="chart-"]').forEach(canvas => {
-            const key     = canvas.id.replace('chart-', '');
-            const imgSrc  = chartImages[key];
-            const wrapper = canvas.closest('.chart-wrap') ?? canvas.parentNode;
-            // Baca batasan tinggi yang disimpan di data-maxh
-            const maxH    = wrapper.dataset?.maxh ?? '200';
+            const key    = canvas.id.replace('chart-', '');
+            const imgSrc = chartImages[key];
+            // Wrapper langsung adalah .pdf-chart-container atau parentNode
+            const wrapper = canvas.closest('.pdf-chart-container') ?? canvas.parentNode;
 
             if (imgSrc) {
                 const img = document.createElement('img');
                 img.src   = imgSrc;
-                // max-height membatasi ukuran chart, width:auto menjaga aspect ratio
-                img.style.cssText = `display:block;margin:4px auto;max-width:100%;max-height:${maxH}px;width:auto;`;
+                // Chart mengisi lebar halaman penuh, tinggi menyesuaikan aspect ratio
+                img.style.cssText = 'display:block;width:100%;height:auto;margin:0 auto;';
                 wrapper.parentNode.replaceChild(img, wrapper);
             } else {
                 wrapper.remove();
@@ -828,14 +875,13 @@
         });
 
         await html2pdf().from(el).set({
-            margin:      [8, 8, 8, 8],
+            margin:      [10, 10, 10, 10],
             filename:    `Hasil_Test_${nama}.pdf`,
-            image:       { type: 'jpeg', quality: 0.95 },
+            image:       { type: 'jpeg', quality: 0.97 },
             html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false },
             jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            // html2pdf__page-break class ditangani mode 'css'
-            // avoid-all mencegah elemen terpotong di tengah
-            pagebreak:   { mode: ['css', 'avoid-all'] },
+            // mode 'css' saja — semua break via html2pdf__page-break class
+            pagebreak:   { mode: 'css' },
         }).save();
     }
 
