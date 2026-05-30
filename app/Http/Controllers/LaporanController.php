@@ -21,6 +21,7 @@ class LaporanController extends Controller
                 'menu'     => 'laporan_ujian_siswa',
                 'expanded' => 'laporan_ujian_siswa',
             ],
+            'show_chart' => env('SHOW_CHART', true),
         ]);
     }
 }

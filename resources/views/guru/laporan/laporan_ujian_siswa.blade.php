@@ -169,9 +169,12 @@
         </div>
     </div>
 
+    @if($show_chart)
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    @endif
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script>
+    const SHOW_CHART = @json($show_chart);
     // ─── State ────────────────────────────────────────────────────────────────
     let state = { search: '', batch: '', limit: 10, page: 1 };
     let currentPrintPayload = null;
@@ -475,8 +478,8 @@
         currentPrintPayload = { json, nama, tempatLahir, tanggalLahir, gender };
         body.innerHTML = buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender);
 
-        // Render charts setelah HTML ada di DOM
-        renderModalCharts(json);
+        // Render charts setelah HTML ada di DOM (hanya jika SHOW_CHART aktif)
+        if (SHOW_CHART) renderModalCharts(json);
     }
 
     // ─── Build modal HTML (static content + canvas placeholders) ─────────────
@@ -556,7 +559,9 @@
                     html += `<div class="col-md-6" style="color:black">${f.domain}: <b>${f.totalScore}</b></div>`;
                 });
                 html += `</div>`;
-                html += `<div class="chart-wrap"><canvas id="chart-${kode}-domain" height="120"></canvas></div>`;
+                if (SHOW_CHART) {
+                    html += `<div class="chart-wrap"><canvas id="chart-${kode}-domain" height="120"></canvas></div>`;
+                }
 
                 // ── Subdomain detail per domain (khusus part5_1) ────────────
                 if (kode === 'part5_1') {
@@ -566,7 +571,9 @@
                         const domainSlug = f.domain.replace(/\s+/g, '-');
                         html += `<div class="mt-3" style="page-break-before:always">`;
                         html += `<p style="color:black"><b>${p.ujian?.nama_ujian ?? kode} — ${f.domain}</b></p>`;
-                        html += `<canvas id="chart-${kode}-${domainSlug}" height="80"></canvas>`;
+                        if (SHOW_CHART) {
+                            html += `<canvas id="chart-${kode}-${domainSlug}" height="80"></canvas>`;
+                        }
                         html += `<table border="1" style="width:100%;color:black;font-size:11px;">`;
                         html += `<thead><tr><th style="padding:4px;text-align:left">Facet</th><th style="padding:4px;">Total Score</th></tr></thead><tbody>`;
                         subEntries.forEach(sd => {
@@ -579,7 +586,9 @@
                     });
                 }
 
-                html += `<div class="chart-wrap"><canvas id="chart-${kode}-facets" height="180"></canvas></div>`;
+                if (SHOW_CHART) {
+                    html += `<div class="chart-wrap"><canvas id="chart-${kode}-facets" height="180"></canvas></div>`;
+                }
             }
 
             // ── Sekala scores + chart ──────────────────────────────────────────
@@ -599,7 +608,9 @@
                     html += `<div class="col-md-12 mt-2" style="color:black;font-weight:bold;text-align:center">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
                 }
                 html += `</div>`;
-                html += `<div class="chart-wrap"><canvas id="chart-${kode}-sekala" height="120"></canvas></div>`;
+                if (SHOW_CHART) {
+                    html += `<div class="chart-wrap"><canvas id="chart-${kode}-sekala" height="120"></canvas></div>`;
+                }
             } else if (p.skorNilai) {
                 html += `<div class="mt-3" style="color:black;font-weight:bold;text-align:center">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>`;
             }
@@ -763,11 +774,13 @@
         const { json, nama, tempatLahir, tanggalLahir, gender } = currentPrintPayload;
         const komentar = document.getElementById('formKomentar').value || 'Tidak ada komentar';
 
-        // Ambil gambar dari chart yang sudah dirender di modal
+        // Ambil gambar dari chart yang sudah dirender di modal (jika SHOW_CHART aktif)
         const chartImages = {};
-        Object.entries(modalChartInstances).forEach(([key, chart]) => {
-            try { chartImages[key] = chart.toBase64Image('image/png', 1); } catch (e) {}
-        });
+        if (SHOW_CHART) {
+            Object.entries(modalChartInstances).forEach(([key, chart]) => {
+                try { chartImages[key] = chart.toBase64Image('image/png', 1); } catch (e) {}
+            });
+        }
 
         const el = document.createElement('div');
         el.style.cssText = 'padding:20px;width:760px;background:white;color:black;';
