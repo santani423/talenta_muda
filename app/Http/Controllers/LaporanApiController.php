@@ -255,7 +255,7 @@ class LaporanApiController extends Controller
             ->leftJoin('detail_jawaban_kuesioner', 'kuesioner_siswa.detail_jawaban_kuesioner_id', '=', 'detail_jawaban_kuesioner.id')
             ->where('kuesioner_siswa.kode', $kode)
             ->select('kuesioner_siswa.*', 'detail_jawaban_kuesioner.kode as jawaban', 'detail_kuisoner.jenis_jawaban_kuesioner_id')
-            ->get()->chunk(20)->toArray();
+            ->get()->chunk(20)->map(fn($chunk) => $chunk->values())->toArray();
 
         $ujian = Ujian::where('ujian.kode', $kode)
             ->leftJoin('detail_kuisoner', 'detail_kuisoner.kode', '=', 'ujian.kode')

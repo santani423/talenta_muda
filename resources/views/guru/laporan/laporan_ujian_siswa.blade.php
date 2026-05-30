@@ -517,7 +517,10 @@
                 const s  = p?.siswa?.[i];
                 const jw = s?.jawaban ?? '-';
                 const ni = s?.nilai;
-                const check = (ni == 1) ? '✔' : (ni == 0 && ni !== null ? '✘' : '');
+                // nilai essay bisa 0, 1, atau 2 — semua > 0 dianggap benar
+                const check = (ni !== null && ni !== undefined && ni !== '')
+                    ? (Number(ni) > 0 ? '✔' : '✘')
+                    : '';
                 html += `<td style="padding:2px;font-size:11px">${String(i+1).padStart(2,'0')}. ${jw} ${check}</td>`;
             });
             html += `</tr>`;
@@ -543,7 +546,10 @@
                     html += `<tr>`;
                     let qNo = i + 1;
                     p.siswa.forEach(chunk => {
-                        const item = Array.isArray(chunk) ? chunk[i] : null;
+                        // chunk key bisa non-0 (misal chunk ke-2 punya key 20,21,...) setelah PHP chunk()
+                        // gunakan Object.values() agar selalu 0-indexed
+                        const chunkArr = Array.isArray(chunk) ? chunk : Object.values(chunk);
+                        const item = chunkArr[i];
                         html += `<td style="text-align:left;"><p style="margin:6px;font-size:10px;color:black;">${qNo}. ${item?.jawaban ?? '-'}</p></td>`;
                         qNo += 20;
                     });
