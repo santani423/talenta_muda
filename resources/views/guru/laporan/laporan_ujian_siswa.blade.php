@@ -533,19 +533,56 @@
             html += `<div class="mt-4" style="page-break-before:always">`;
             html += `<p style="color:black"><b>${p.ujian?.nama_ujian ?? kode}</b></p>`;
 
+            // ── Tabel jawaban kuesioner (20 baris × N chunk kolom) ─────────────
+            if (p.siswa && p.siswa.length) {
+                html += `<div class="table-responsive"><table border="1" style="width:100%;color:black;">`;
+                for (let i = 0; i < 20; i++) {
+                    html += `<tr>`;
+                    let qNo = i + 1;
+                    p.siswa.forEach(chunk => {
+                        const item = Array.isArray(chunk) ? chunk[i] : null;
+                        html += `<td style="text-align:left;"><p style="margin:6px;font-size:10px;color:black;">${qNo}. ${item?.jawaban ?? '-'}</p></td>`;
+                        qNo += 20;
+                    });
+                    html += `</tr>`;
+                }
+                html += `</table></div>`;
+            }
+
+            // ── Facet domain totals + chart ────────────────────────────────────
             if (p.facet && p.facet.some(f => f.totalScore != 0)) {
-                // Domain totals (text)
-                html += `<div class="row">`;
+                html += `<div class="row mt-3">`;
                 p.facet.forEach(f => {
                     html += `<div class="col-md-6" style="color:black">${f.domain}: <b>${f.totalScore}</b></div>`;
                 });
                 html += `</div>`;
-                // Canvas untuk radar chart domain
                 html += `<div class="chart-wrap"><canvas id="chart-${kode}-domain" height="120"></canvas></div>`;
-                // Canvas untuk bar chart subdomain
+
+                // ── Subdomain detail per domain (khusus part5_1) ────────────
+                if (kode === 'part5_1') {
+                    p.facet.forEach(f => {
+                        const subEntries = Object.values(f.subdomain ?? {});
+                        if (!subEntries.length) return;
+                        const domainSlug = f.domain.replace(/\s+/g, '-');
+                        html += `<div class="mt-3" style="page-break-before:always">`;
+                        html += `<p style="color:black"><b>${p.ujian?.nama_ujian ?? kode} — ${f.domain}</b></p>`;
+                        html += `<canvas id="chart-${kode}-${domainSlug}" height="80"></canvas>`;
+                        html += `<table border="1" style="width:100%;color:black;font-size:11px;">`;
+                        html += `<thead><tr><th style="padding:4px;text-align:left">Facet</th><th style="padding:4px;">Total Score</th></tr></thead><tbody>`;
+                        subEntries.forEach(sd => {
+                            html += `<tr>
+                                <td style="padding:4px;text-align:left">${sd.deskripsi_facet ?? ''}</td>
+                                <td style="padding:4px;text-align:center">${sd.total_score ?? 0}</td>
+                            </tr>`;
+                        });
+                        html += `</tbody></table></div>`;
+                    });
+                }
+
                 html += `<div class="chart-wrap"><canvas id="chart-${kode}-facets" height="180"></canvas></div>`;
             }
 
+            // ── Sekala scores + chart ──────────────────────────────────────────
             if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
                 html += `<div class="row mt-2">`;
                 if (p.skorNilai) {
@@ -562,7 +599,6 @@
                     html += `<div class="col-md-12 mt-2" style="color:black;font-weight:bold;text-align:center">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
                 }
                 html += `</div>`;
-                // Canvas untuk bar chart sekala
                 html += `<div class="chart-wrap"><canvas id="chart-${kode}-sekala" height="120"></canvas></div>`;
             } else if (p.skorNilai) {
                 html += `<div class="mt-3" style="color:black;font-weight:bold;text-align:center">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>`;
@@ -609,7 +645,7 @@
                     });
                 }
 
-                // Bar chart subdomains
+                // Bar chart subdomains (semua domain digabung)
                 const facetCanvas = document.getElementById(`chart-${kode}-facets`);
                 if (facetCanvas) {
                     const facetLabels = [];
@@ -649,6 +685,34 @@
                             }
                         });
                     }
+                }
+
+                // Mini bar chart per domain (khusus part5_1)
+                if (kode === 'part5_1') {
+                    p.facet.forEach(f => {
+                        const subEntries = Object.values(f.subdomain ?? {});
+                        if (!subEntries.length) return;
+                        const domainSlug = f.domain.replace(/\s+/g, '-');
+                        const domCanvas  = document.getElementById(`chart-${kode}-${domainSlug}`);
+                        if (!domCanvas) return;
+                        modalChartInstances[`${kode}-${domainSlug}`] = new Chart(domCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels: subEntries.map(sd => sd.deskripsi_facet ?? ''),
+                                datasets: [{
+                                    label: f.domain,
+                                    data: subEntries.map(sd => sd.total_score ?? 0),
+                                    backgroundColor: 'rgba(54,162,235,0.7)',
+                                    borderWidth: 1,
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: { legend: { display: false } },
+                                scales: { y: { beginAtZero: true } },
+                            }
+                        });
+                    });
                 }
             }
 
