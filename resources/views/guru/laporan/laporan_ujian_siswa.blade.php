@@ -536,21 +536,20 @@
         ['part5_1', 'part5_2', 'part5_3'].forEach(kode => {
             const p = parts[kode];
             if (!p) return;
-            html += `<div class="mt-4" style="page-break-before:always">`;
-            html += `<p style="color:black"><b>${p.ujian?.nama_ujian ?? kode}</b></p>`;
+            // Tidak gunakan page-break-before:always — biarkan html2pdf yang atur
+            html += `<div class="pdf-section" style="margin-top:24px;">`;
+            html += `<p style="color:black;font-weight:bold;font-size:13px;">${p.ujian?.nama_ujian ?? kode}</p>`;
 
             // ── Tabel jawaban kuesioner (20 baris × N chunk kolom) ─────────────
             if (p.siswa && p.siswa.length) {
-                html += `<div class="table-responsive"><table border="1" style="width:100%;color:black;">`;
+                html += `<div style="overflow-x:auto;"><table border="1" style="width:100%;color:black;border-collapse:collapse;">`;
                 for (let i = 0; i < 20; i++) {
-                    html += `<tr>`;
+                    html += `<tr style="page-break-inside:avoid;">`;
                     let qNo = i + 1;
                     p.siswa.forEach(chunk => {
-                        // chunk key bisa non-0 (misal chunk ke-2 punya key 20,21,...) setelah PHP chunk()
-                        // gunakan Object.values() agar selalu 0-indexed
                         const chunkArr = Array.isArray(chunk) ? chunk : Object.values(chunk);
                         const item = chunkArr[i];
-                        html += `<td style="text-align:left;"><p style="margin:6px;font-size:10px;color:black;">${qNo}. ${item?.jawaban ?? '-'}</p></td>`;
+                        html += `<td style="text-align:left;padding:3px 6px;font-size:10px;color:black;">${qNo}. ${item?.jawaban ?? '-'}</td>`;
                         qNo += 20;
                     });
                     html += `</tr>`;
@@ -560,13 +559,13 @@
 
             // ── Facet domain totals + chart ────────────────────────────────────
             if (p.facet && p.facet.some(f => f.totalScore != 0)) {
-                html += `<div class="row mt-3">`;
+                html += `<div style="margin-top:12px;">`;
                 p.facet.forEach(f => {
-                    html += `<div class="col-md-6" style="color:black">${f.domain}: <b>${f.totalScore}</b></div>`;
+                    html += `<span style="color:black;display:inline-block;width:48%;margin-bottom:4px;">${f.domain}: <b>${f.totalScore}</b></span>`;
                 });
                 html += `</div>`;
                 if (SHOW_CHART) {
-                    html += `<div class="chart-wrap"><canvas id="chart-${kode}-domain" height="120"></canvas></div>`;
+                    html += `<div class="chart-wrap pdf-avoid-break"><canvas id="chart-${kode}-domain" height="120"></canvas></div>`;
                 }
 
                 // ── Subdomain detail per domain (khusus part5_1) ────────────
@@ -575,17 +574,18 @@
                         const subEntries = Object.values(f.subdomain ?? {});
                         if (!subEntries.length) return;
                         const domainSlug = f.domain.replace(/\s+/g, '-');
-                        html += `<div class="mt-3" style="page-break-before:always">`;
-                        html += `<p style="color:black"><b>${p.ujian?.nama_ujian ?? kode} — ${f.domain}</b></p>`;
+                        // Hapus page-break-before:always — gunakan padding biasa
+                        html += `<div class="pdf-avoid-break" style="margin-top:16px;">`;
+                        html += `<p style="color:black;font-weight:bold;">${p.ujian?.nama_ujian ?? kode} — ${f.domain}</p>`;
                         if (SHOW_CHART) {
-                            html += `<canvas id="chart-${kode}-${domainSlug}" height="80"></canvas>`;
+                            html += `<div class="chart-wrap pdf-avoid-break"><canvas id="chart-${kode}-${domainSlug}" height="80"></canvas></div>`;
                         }
-                        html += `<table border="1" style="width:100%;color:black;font-size:11px;">`;
-                        html += `<thead><tr><th style="padding:4px;text-align:left">Facet</th><th style="padding:4px;">Total Score</th></tr></thead><tbody>`;
+                        html += `<table border="1" style="width:100%;color:black;font-size:11px;border-collapse:collapse;">`;
+                        html += `<thead><tr style="background:#f0f0f0;"><th style="padding:4px;text-align:left;">Facet</th><th style="padding:4px;text-align:center;">Total Score</th></tr></thead><tbody>`;
                         subEntries.forEach(sd => {
-                            html += `<tr>
-                                <td style="padding:4px;text-align:left">${sd.deskripsi_facet ?? ''}</td>
-                                <td style="padding:4px;text-align:center">${sd.total_score ?? 0}</td>
+                            html += `<tr style="page-break-inside:avoid;">
+                                <td style="padding:4px;text-align:left;">${sd.deskripsi_facet ?? ''}</td>
+                                <td style="padding:4px;text-align:center;">${sd.total_score ?? 0}</td>
                             </tr>`;
                         });
                         html += `</tbody></table></div>`;
@@ -593,32 +593,32 @@
                 }
 
                 if (SHOW_CHART) {
-                    html += `<div class="chart-wrap"><canvas id="chart-${kode}-facets" height="180"></canvas></div>`;
+                    html += `<div class="chart-wrap pdf-avoid-break"><canvas id="chart-${kode}-facets" height="180"></canvas></div>`;
                 }
             }
 
             // ── Sekala scores + chart ──────────────────────────────────────────
             if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
-                html += `<div class="row mt-2">`;
+                html += `<div style="margin-top:8px;">`;
                 if (p.skorNilai) {
                     let total = 0;
                     p.sekala.average_scores.forEach(s => {
-                        html += `<div class="col-md-6" style="color:black">${s.keterangan}: ${s.total_score}</div>`;
+                        html += `<span style="color:black;display:inline-block;width:48%;margin-bottom:4px;">${s.keterangan}: ${s.total_score}</span>`;
                         total += s.total_score;
                     });
-                    html += `<div class="col-md-12 mt-3" style="color:black;font-weight:bold;text-align:center">Skor: ${total}</div>`;
+                    html += `<div style="color:black;font-weight:bold;text-align:center;margin-top:8px;">Skor: ${total}</div>`;
                 } else {
                     p.sekala.average_scores.forEach(s => {
-                        html += `<div class="col-md-6" style="color:black">${s.keterangan}: ${Math.ceil((s.total_score / s.count) * 10) / 10}</div>`;
+                        html += `<span style="color:black;display:inline-block;width:48%;margin-bottom:4px;">${s.keterangan}: ${Math.ceil((s.total_score / s.count) * 10) / 10}</span>`;
                     });
-                    html += `<div class="col-md-12 mt-2" style="color:black;font-weight:bold;text-align:center">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
+                    html += `<div style="color:black;font-weight:bold;text-align:center;margin-top:8px;">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
                 }
                 html += `</div>`;
                 if (SHOW_CHART) {
-                    html += `<div class="chart-wrap"><canvas id="chart-${kode}-sekala" height="120"></canvas></div>`;
+                    html += `<div class="chart-wrap pdf-avoid-break"><canvas id="chart-${kode}-sekala" height="120"></canvas></div>`;
                 }
             } else if (p.skorNilai) {
-                html += `<div class="mt-3" style="color:black;font-weight:bold;text-align:center">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>`;
+                html += `<div style="color:black;font-weight:bold;text-align:center;margin-top:12px;">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>`;
             }
 
             html += `</div>`;
@@ -780,7 +780,7 @@
         const { json, nama, tempatLahir, tanggalLahir, gender } = currentPrintPayload;
         const komentar = document.getElementById('formKomentar').value || 'Tidak ada komentar';
 
-        // Ambil gambar dari chart yang sudah dirender di modal (jika SHOW_CHART aktif)
+        // Ambil gambar dari chart yang sudah dirender di modal
         const chartImages = {};
         if (SHOW_CHART) {
             Object.entries(modalChartInstances).forEach(([key, chart]) => {
@@ -788,32 +788,53 @@
             });
         }
 
+        // Buat wrapper dengan CSS kontrol page-break
         const el = document.createElement('div');
-        el.style.cssText = 'padding:20px;width:760px;background:white;color:black;';
-        el.innerHTML = buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender)
-            + `<div style="margin-top:20px;color:black"><b>Komentar:</b><p>${komentar}</p></div>`;
+        el.style.cssText = 'padding:16px;width:780px;background:white;color:black;font-family:Arial,sans-serif;font-size:12px;';
 
-        // Replace setiap canvas dengan gambar dari modal
-        el.querySelectorAll('canvas[id^="chart-"]').forEach(canvas => {
-            const kodeKey = canvas.id.replace('chart-', '');
-            const imgSrc  = chartImages[kodeKey];
+        // Inject CSS agar tabel & chart tidak terpotong
+        el.innerHTML = `<style>
+            * { box-sizing: border-box; }
+            table { border-collapse: collapse; width: 100%; }
+            tr { page-break-inside: avoid; }
+            td, th { color: black !important; }
+            .pdf-avoid-break { page-break-inside: avoid; }
+            .pdf-section { page-break-inside: auto; }
+            img { page-break-inside: avoid; max-width: 100%; height: auto; }
+        </style>`;
+
+        const content = document.createElement('div');
+        content.innerHTML = buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender)
+            + `<div style="margin-top:16px;color:black;"><b>Komentar:</b><p style="margin-top:4px;">${komentar}</p></div>`;
+        el.appendChild(content);
+
+        // Replace canvas → img (dari chart modal), atau hapus wrapper jika tidak ada
+        content.querySelectorAll('canvas[id^="chart-"]').forEach(canvas => {
+            const key     = canvas.id.replace('chart-', '');
+            const imgSrc  = chartImages[key];
+            // Cari wrapper .chart-wrap terdekat, atau fallback ke parentNode
+            const wrapper = canvas.closest('.chart-wrap') ?? canvas.parentNode;
+
             if (imgSrc) {
                 const img = document.createElement('img');
-                img.src = imgSrc;
-                img.style.cssText = 'max-width:100%;height:auto;display:block;margin:8px 0;';
-                canvas.parentNode.replaceChild(img, canvas);
+                img.src   = imgSrc;
+                img.className = 'pdf-avoid-break';
+                img.style.cssText = 'display:block;margin:6px 0;max-width:100%;height:auto;';
+                // Ganti seluruh wrapper dengan img agar tidak ada ruang kosong sisa canvas
+                wrapper.parentNode.replaceChild(img, wrapper);
             } else {
-                // Sembunyikan canvas kosong agar tidak ada area blank di PDF
-                canvas.style.display = 'none';
+                // Tidak ada image → hapus wrapper sepenuhnya (tidak tinggalkan ruang kosong)
+                wrapper.remove();
             }
         });
 
         await html2pdf().from(el).set({
-            margin:     [10, 10, 10, 10],
-            filename:   `Hasil_Test_${nama}.pdf`,
-            image:      { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF:      { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            margin:      [8, 8, 8, 8],
+            filename:    `Hasil_Test_${nama}.pdf`,
+            image:       { type: 'jpeg', quality: 0.97 },
+            html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false },
+            jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:   { mode: ['css', 'legacy'], avoid: ['.pdf-avoid-break', 'img', 'tr'] },
         }).save();
     }
 
