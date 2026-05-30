@@ -66,7 +66,7 @@ class LaporanApiController extends Controller
             ['kode' => 'part1_2', 'type' => 'visual'],
             ['kode' => 'part1_3', 'type' => 'pg'],
             ['kode' => 'part1_4', 'type' => 'pg'],
-            ['kode' => 'part2',   'type' => 'essay'],
+            ['kode' => 'part2',   'type' => 'pg'],
             ['kode' => 'part3',   'type' => 'essay'],
             ['kode' => 'part4',   'type' => 'essay'],
             ['kode' => 'part5_1', 'type' => 'kuisoner'],
