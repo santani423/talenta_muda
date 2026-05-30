@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\LaporanApiController;
 use App\Http\Controllers\MergeUjianController;
 use App\Http\Controllers\UjianSiswaController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 Route::get('/siswa/ujian/IQCFIT', [UjianSiswaController::class, 'IQCFIT']);
-
 Route::post('/guru/merge_ujian/relasi_merge_ujian', [MergeUjianController::class, 'relasi_merge_ujian']);
+
+// Laporan API
+Route::get('/laporan/siswa', [LaporanApiController::class, 'siswa']);
+Route::get('/laporan/batch', [LaporanApiController::class, 'batch']);
+Route::get('/laporan/siswa/{id}/semua-nilai', [LaporanApiController::class, 'semuaNilai']);
