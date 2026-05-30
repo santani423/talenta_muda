@@ -516,7 +516,7 @@
             background: #f0f4f8; border-left: 3px solid #2c3e50;
         }
         .pdf-chart-container { text-align: center; margin: 8px 0; }
-        .html2pdf__page-break { page-break-before: always; }
+        [style*="page-break-before"] + .pdf-page { margin-top: 0; }
     `;
 
     // ─── Build modal HTML (static content + canvas placeholders) ─────────────
@@ -545,7 +545,7 @@
 
         // ── Halaman 2: Tabel jawaban PG / Visual / Essay (1 tabel 1 halaman) ──
         const pgParts = ['part1_1', 'part1_2', 'part1_3', 'part1_4', 'part2', 'part3', 'part4'];
-        html += `<div class="html2pdf__page-break"></div>
+        html += `<div style="page-break-before:always;break-before:page;"></div>
         <div class="pdf-page">
             <div class="pdf-section-title">Jawaban Ujian</div>
             <table class="pdf-table" border="1"><thead><tr>`;
@@ -587,7 +587,7 @@
 
             // ── Tabel jawaban kuesioner (1 tabel = 1 halaman) ─────────────────
             if (p.siswa && p.siswa.length) {
-                html += `<div class="html2pdf__page-break"></div>
+                html += `<div style="page-break-before:always;break-before:page;"></div>
                 <div class="pdf-page">
                     <div class="pdf-section-title">${judulPart} — Jawaban</div>
                     <table class="pdf-table" border="1"><tbody>`;
@@ -608,7 +608,7 @@
             // ── Facet domain totals + radar chart (1 chart = 1 halaman) ────────
             if (p.facet && p.facet.some(f => f.totalScore != 0)) {
                 // Skor domain (tabel ringkas + chart)
-                html += `<div class="html2pdf__page-break"></div>
+                html += `<div style="page-break-before:always;break-before:page;"></div>
                 <div class="pdf-page">
                     <div class="pdf-section-title">${judulPart} — Skor Domain</div>
                     <div class="pdf-score-grid">`;
@@ -627,7 +627,7 @@
                         const subEntries = Object.values(f.subdomain ?? {});
                         if (!subEntries.length) return;
                         const domainSlug = f.domain.replace(/\s+/g, '-');
-                        html += `<div class="html2pdf__page-break"></div>
+                        html += `<div style="page-break-before:always;break-before:page;"></div>
                         <div class="pdf-page">
                             <div class="pdf-section-title">${judulPart} — ${f.domain}</div>`;
                         if (SHOW_CHART) {
@@ -645,7 +645,7 @@
 
                 // ── All-facets horizontal bar chart (1 chart = 1 halaman) ──────
                 if (SHOW_CHART) {
-                    html += `<div class="html2pdf__page-break"></div>
+                    html += `<div style="page-break-before:always;break-before:page;"></div>
                     <div class="pdf-page">
                         <div class="pdf-section-title">${judulPart} — Semua Facet</div>
                         <div class="pdf-chart-container"><canvas id="chart-${kode}-facets" width="560" height="460"></canvas></div>
@@ -655,7 +655,7 @@
 
             // ── Sekala scores + chart (1 halaman) ─────────────────────────────
             if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
-                html += `<div class="html2pdf__page-break"></div>
+                html += `<div style="page-break-before:always;break-before:page;"></div>
                 <div class="pdf-page">
                     <div class="pdf-section-title">${judulPart} — Skor Sekala</div>
                     <div class="pdf-score-grid">`;
@@ -677,7 +677,7 @@
                 }
                 html += `</div>`;
             } else if (p.skorNilai) {
-                html += `<div class="html2pdf__page-break"></div>
+                html += `<div style="page-break-before:always;break-before:page;"></div>
                 <div class="pdf-page">
                     <div class="pdf-section-title">${judulPart} — Skor</div>
                     <div style="font-weight:bold;text-align:center;font-size:13px;margin-top:20px;">Skor: ${p.kuisonersBenarSalah?.totalNilai ?? 0}</div>
@@ -849,7 +849,7 @@
 
         const content = document.createElement('div');
         content.innerHTML = buildModalHtml(json, nama, tempatLahir, tanggalLahir, gender)
-            + `<div class="html2pdf__page-break"></div>
+            + `<div style="page-break-before:always;break-before:page;"></div>
                <div class="pdf-page">
                  <div class="pdf-section-title">Komentar</div>
                  <p style="font-size:11px;margin-top:6px;">${komentar}</p>
@@ -880,8 +880,8 @@
             image:       { type: 'jpeg', quality: 0.97 },
             html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false },
             jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            // mode 'css' saja — semua break via html2pdf__page-break class
-            pagebreak:   { mode: 'css' },
+            // 'css' memproses page-break-before:always inline, 'legacy' sebagai fallback
+            pagebreak:   { mode: ['css', 'legacy'] },
         }).save();
     }
 
