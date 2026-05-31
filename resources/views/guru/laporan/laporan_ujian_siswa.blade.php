@@ -663,27 +663,28 @@
                     p53TScores[s.kode_sekala] = Math.round((s.average_score ?? 0) * 100);
                 });
 
-                // Table: Skala | Raw Score | T-Score
+                // Table: Skala sebagai header kolom, Raw Score & T-Score sebagai baris
                 html += `<div style="page-break-before:always;break-before:page;"></div>
                 <div class="pdf-page">
                     <div class="pdf-section-title">${judulPart} — Skor Sekala</div>
                     <table class="pdf-table" border="1" style="margin-top:8px;">
                         <thead>
                             <tr>
-                                <th>Skala</th>
-                                <th style="text-align:center;">Raw Score</th>
-                                <th style="text-align:center;">T-Score</th>
+                                <th></th>
+                                ${p.sekala.average_scores.map(s => `<th style="text-align:center;">${s.kode_sekala ?? s.keterangan ?? '-'}</th>`).join('')}
                             </tr>
                         </thead>
-                        <tbody>`;
-                p.sekala.average_scores.forEach(s => {
-                    html += `<tr>
-                        <td>${s.kode_sekala ?? s.keterangan ?? '-'}</td>
-                        <td style="text-align:center;">${s.total_score ?? 0}</td>
-                        <td style="text-align:center;">${Math.round((s.average_score ?? 0) * 100)}</td>
-                    </tr>`;
-                });
-                html += `</tbody></table>`;
+                        <tbody>
+                            <tr>
+                                <td style="font-weight:bold;">Raw Score</td>
+                                ${p.sekala.average_scores.map(s => `<td style="text-align:center;">${s.total_score ?? 0}</td>`).join('')}
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">T-Score</td>
+                                ${p.sekala.average_scores.map(s => `<td style="text-align:center;">${Math.round((s.average_score ?? 0) * 100)}</td>`).join('')}
+                            </tr>
+                        </tbody>
+                    </table>`;
 
                 // Profile chart: vertical scale 105 → 30
                 const colW = 'width:13%;text-align:center;';
