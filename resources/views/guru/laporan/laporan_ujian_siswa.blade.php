@@ -654,7 +654,80 @@
             }
 
             // ── Sekala scores + chart (1 halaman) ─────────────────────────────
-            if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
+            if (kode === 'part5_3' && p.sekala && p.sekala.average_scores && p.sekala.average_scores.length) {
+                // Build T-Score lookup
+                const p53Skala = ['Mt', 'L', 'TRT', 'TRT1', 'TRT2'];
+                const p53TScores = {};
+                p.sekala.average_scores.forEach(s => {
+                    p53TScores[s.kode_sekala] = Math.round((s.average_score ?? 0) * 100);
+                });
+
+                // Table: Skala | Raw Score | T-Score
+                html += `<div style="page-break-before:always;break-before:page;"></div>
+                <div class="pdf-page">
+                    <div class="pdf-section-title">${judulPart} — Skor Sekala</div>
+                    <table class="pdf-table" border="1" style="margin-top:8px;">
+                        <thead>
+                            <tr>
+                                <th>Skala</th>
+                                <th style="text-align:center;">Raw Score</th>
+                                <th style="text-align:center;">T-Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                p.sekala.average_scores.forEach(s => {
+                    html += `<tr>
+                        <td>${s.kode_sekala ?? s.keterangan ?? '-'}</td>
+                        <td style="text-align:center;">${s.total_score ?? 0}</td>
+                        <td style="text-align:center;">${Math.round((s.average_score ?? 0) * 100)}</td>
+                    </tr>`;
+                });
+                html += `</tbody></table>`;
+
+                // Profile chart: vertical scale 105 → 30
+                const colW = 'width:13%;text-align:center;';
+                html += `<div style="margin-top:16px;overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed;">
+                    <thead><tr>
+                        <th style="width:8%;"></th>
+                        ${p53Skala.map(k => `<th style="background:#e8824a;color:#111;padding:4px 2px;border:1px solid #bbb;text-align:center;font-weight:bold;">${k}</th>`).join('')}
+                        <th style="width:8%;"></th>
+                    </tr></thead>
+                    <tbody>`;
+                for (let v = 105; v >= 30; v--) {
+                    const isM5   = v % 5 === 0;
+                    const is65   = v === 65;
+                    const is50   = v === 50;
+                    const rowSt  = (is65 || is50)
+                        ? 'background:#ffff00;border-top:2px dashed #000;'
+                        : 'background:#e8824a;';
+                    const scaleLabel = isM5
+                        ? `<td style="${rowSt}text-align:right;padding-right:4px;font-weight:bold;font-size:10px;">${v}</td>`
+                        : `<td style="${rowSt}text-align:center;color:#555;font-size:9px;">-</td>`;
+                    html += `<tr style="height:12px;">`;
+                    html += scaleLabel;
+                    p53Skala.forEach(k => {
+                        const ts = p53TScores[k];
+                        const cellBg = (is65 || is50) ? 'background:#ffff00;' : 'background:#fff;';
+                        if (ts === v) {
+                            html += `<td style="border-left:1px solid #ddd;border-right:1px solid #ddd;padding:0 2px;${cellBg}">
+                                <div style="background:#e8824a;border-radius:2px;text-align:center;font-weight:bold;font-size:9px;line-height:11px;">${v}</div>
+                            </td>`;
+                        } else {
+                            html += `<td style="border-left:1px solid #ddd;border-right:1px solid #ddd;${cellBg}"></td>`;
+                        }
+                    });
+                    html += scaleLabel;
+                    html += `</tr>`;
+                }
+                html += `<tr>
+                    <td style="text-align:right;padding-right:4px;font-weight:bold;font-size:10px;background:#e8824a;">T-Score</td>
+                    ${p53Skala.map(() => `<td style="background:#fff;border-left:1px solid #ddd;border-right:1px solid #ddd;"></td>`).join('')}
+                    <td style="font-weight:bold;font-size:10px;background:#e8824a;">T-Score</td>
+                </tr>`;
+                html += `</tbody></table></div>`;
+                html += `</div>`;
+            } else if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
                 html += `<div style="page-break-before:always;break-before:page;"></div>
                 <div class="pdf-page">
                     <div class="pdf-section-title">${judulPart} — Skor Sekala</div>
