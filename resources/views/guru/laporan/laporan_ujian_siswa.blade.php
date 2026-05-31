@@ -758,7 +758,7 @@
                 if (SHOW_CHART) {
                     html += `<div class="pdf-chart-container" style="margin-top:16px;">
                         <div style="text-align:center;font-weight:bold;font-size:13px;margin-bottom:6px;">DF Personality</div>
-                        <canvas id="chart-${kode}-sekala" width="960" height="500"></canvas>
+                        <canvas id="chart-${kode}-sekala" width="720" height="380"></canvas>
                     </div>`;
                 }
                 html += `</div>`;
@@ -1094,8 +1094,9 @@
             if (imgSrc) {
                 const img = document.createElement('img');
                 img.src   = imgSrc;
-                // Chart mengisi lebar halaman penuh, tinggi menyesuaikan aspect ratio
-                img.style.cssText = 'display:block;width:100%;height:auto;margin:0 auto;';
+                // Chart part5_2-sekala (radar DF Personality) dibuat lebih kecil agar muat di halaman
+                const imgWidth = (key === 'part5_2-sekala') ? '65%' : '100%';
+                img.style.cssText = `display:block;width:${imgWidth};height:auto;margin:0 auto;`;
                 wrapper.parentNode.replaceChild(img, wrapper);
             } else {
                 wrapper.remove();
