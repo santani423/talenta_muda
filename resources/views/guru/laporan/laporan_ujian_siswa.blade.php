@@ -110,6 +110,7 @@
                                         <th>5.2. Crudelia</th>
                                         <th>Egoism</th>
                                         <th>Machiavellianism</th>
+                                        {{-- kkkkkk --}}
                                         <th>Narcissism</th>
                                         <th>Frustalia</th>
                                         <th>Greed</th>
