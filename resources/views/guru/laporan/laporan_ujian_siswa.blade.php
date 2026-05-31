@@ -727,6 +727,40 @@
                 </tr>`;
                 html += `</tbody></table></div>`;
                 html += `</div>`;
+            } else if (kode === 'part5_2' && p.sekala && p.sekala.average_scores && p.sekala.average_scores.length) {
+                // Tabel header miring + radar chart DF Personality
+                html += `<div style="page-break-before:always;break-before:page;"></div>
+                <div class="pdf-page">
+                    <div class="pdf-section-title">${judulPart} — Skor Sekala</div>
+                    <div style="overflow-x:auto;margin-top:8px;">
+                    <table style="border-collapse:collapse;font-size:10px;min-width:100%;">
+                        <thead>
+                            <tr style="height:130px;vertical-align:bottom;">
+                                ${p.sekala.average_scores.map(s => `
+                                <th style="width:70px;min-width:60px;vertical-align:bottom;padding:0;border:1px solid #aaa;background:#b2dfdb;position:relative;overflow:visible;">
+                                    <div style="transform:rotate(-45deg);transform-origin:bottom left;white-space:nowrap;padding-left:6px;font-size:10px;font-weight:bold;position:absolute;bottom:8px;left:50%;">
+                                        ${s.keterangan ?? s.kode_sekala ?? '-'}
+                                    </div>
+                                </th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                ${p.sekala.average_scores.map(s => `
+                                <td style="border:1px solid #aaa;text-align:center;padding:4px 2px;font-size:11px;">
+                                    ${Math.ceil((parseFloat(s.average_score) || 0) * 10) / 10}
+                                </td>`).join('')}
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>`;
+                if (SHOW_CHART) {
+                    html += `<div class="pdf-chart-container" style="margin-top:16px;">
+                        <div style="text-align:center;font-weight:bold;font-size:13px;margin-bottom:6px;">DF Personality</div>
+                        <canvas id="chart-${kode}-sekala" width="560" height="400"></canvas>
+                    </div>`;
+                }
+                html += `</div>`;
             } else if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.some(s => s.average_score != 0)) {
                 html += `<div style="page-break-before:always;break-before:page;"></div>
                 <div class="pdf-page">
@@ -857,7 +891,7 @@
                 }
             }
 
-            // Bar chart sekala (Dark Triad / MMPI)
+            // Sekala chart (radar untuk part5_2, bar untuk lainnya)
             if (p.sekala && p.sekala.average_scores && p.sekala.average_scores.length) {
                 const sekCanvas = document.getElementById(`chart-${kode}-sekala`);
                 if (sekCanvas) {
@@ -865,23 +899,49 @@
                     const data   = p.sekala.average_scores.map(s =>
                         p.skorNilai ? s.total_score : parseFloat(s.average_score)
                     );
-                    modalChartInstances[`${kode}-sekala`] = new Chart(sekCanvas, {
-                        type: 'bar',
-                        data: {
-                            labels,
-                            datasets: [{
-                                data,
-                                backgroundColor: 'rgba(142,68,173,0.75)',
-                                borderWidth: 0,
-                            }]
-                        },
-                        options: {
-                            responsive: false,
-                            maintainAspectRatio: false,
-                            plugins: { legend: { display: false } },
-                            scales: { y: { beginAtZero: true, grid: { color: '#e8e8e8' } } },
-                        }
-                    });
+                    if (kode === 'part5_2') {
+                        modalChartInstances[`${kode}-sekala`] = new Chart(sekCanvas, {
+                            type: 'radar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'DF Personality',
+                                    data,
+                                    backgroundColor: 'rgba(41,128,185,0.45)',
+                                    borderColor:     'rgba(41,128,185,0.9)',
+                                    pointBackgroundColor: 'rgba(41,128,185,1)',
+                                    borderWidth: 2,
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: true, position: 'bottom' },
+                                    title:  { display: false },
+                                },
+                                scales: { r: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                            }
+                        });
+                    } else {
+                        modalChartInstances[`${kode}-sekala`] = new Chart(sekCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    data,
+                                    backgroundColor: 'rgba(142,68,173,0.75)',
+                                    borderWidth: 0,
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: { y: { beginAtZero: true, grid: { color: '#e8e8e8' } } },
+                            }
+                        });
+                    }
                 }
             }
         });
