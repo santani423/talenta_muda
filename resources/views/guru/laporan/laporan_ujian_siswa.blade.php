@@ -617,7 +617,7 @@
                 });
                 html += `</div>`;
                 if (SHOW_CHART) {
-                    html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-domain" width="560" height="360"></canvas></div>`;
+                    html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-domain" width="960" height="420"></canvas></div>`;
                 }
                 html += `</div>`;
 
@@ -631,7 +631,7 @@
                         <div class="pdf-page">
                             <div class="pdf-section-title">${judulPart} — ${f.domain}</div>`;
                         if (SHOW_CHART) {
-                            html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-${domainSlug}" width="560" height="260"></canvas></div>`;
+                            html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-${domainSlug}" width="960" height="320"></canvas></div>`;
                         }
                         html += `<table class="pdf-table" border="1" style="margin-top:10px;">
                             <thead><tr><th>Facet</th><th style="width:120px;text-align:center;">Total Score</th></tr></thead>
@@ -648,7 +648,7 @@
                     html += `<div style="page-break-before:always;break-before:page;"></div>
                     <div class="pdf-page">
                         <div class="pdf-section-title">${judulPart} — Semua Facet</div>
-                        <div class="pdf-chart-container"><canvas id="chart-${kode}-facets" width="560" height="460"></canvas></div>
+                        <div class="pdf-chart-container"><canvas id="chart-${kode}-facets" width="960" height="500"></canvas></div>
                     </div>`;
                 }
             }
@@ -757,7 +757,7 @@
                 if (SHOW_CHART) {
                     html += `<div class="pdf-chart-container" style="margin-top:16px;">
                         <div style="text-align:center;font-weight:bold;font-size:13px;margin-bottom:6px;">DF Personality</div>
-                        <canvas id="chart-${kode}-sekala" width="560" height="400"></canvas>
+                        <canvas id="chart-${kode}-sekala" width="960" height="500"></canvas>
                     </div>`;
                 }
                 html += `</div>`;
@@ -780,7 +780,7 @@
                     html += `</div><div style="font-weight:bold;text-align:center;margin:8px 0;font-size:13px;">Skor Dark Triad: ${p.sekala.total_average_score}</div>`;
                 }
                 if (SHOW_CHART) {
-                    html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-sekala" width="560" height="280"></canvas></div>`;
+                    html += `<div class="pdf-chart-container"><canvas id="chart-${kode}-sekala" width="960" height="360"></canvas></div>`;
                 }
                 html += `</div>`;
             } else if (p.skorNilai) {
@@ -804,52 +804,133 @@
             const p = parts[kode];
             if (!p) return;
 
-            // Radar chart domain
+            // Domain chart — line (part5_1) / radar (lainnya)
+            const circleLabelPlugin = {
+                id: 'circleLabelPlugin',
+                afterDatasetsDraw(chart) {
+                    const ctx = chart.ctx;
+                    chart.data.datasets.forEach((dataset, i) => {
+                        chart.getDatasetMeta(i).data.forEach((point, idx) => {
+                            const val = dataset.data[idx];
+                            ctx.save();
+                            ctx.fillStyle = '#fff';
+                            ctx.font = 'bold 10px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(val, point.x, point.y);
+                            ctx.restore();
+                        });
+                    });
+                }
+            };
+
             if (p.facet && p.facet.some(f => f.totalScore != 0)) {
                 const domCanvas = document.getElementById(`chart-${kode}-domain`);
                 if (domCanvas) {
                     const labels = p.facet.map(f => f.domain);
                     const data   = p.facet.map(f => f.totalScore);
-                    modalChartInstances[`${kode}-domain`] = new Chart(domCanvas, {
-                        type: 'radar',
-                        data: {
-                            labels,
-                            datasets: [{
-                                label: 'Domain Score',
-                                data,
-                                backgroundColor: 'rgba(44,62,80,0.15)',
-                                borderColor:     'rgba(44,62,80,0.9)',
-                                pointBackgroundColor: 'rgba(44,62,80,1)',
-                                borderWidth: 2,
-                            }]
-                        },
-                        options: {
-                            responsive: false,
-                            maintainAspectRatio: false,
-                            plugins: { legend: { display: false } },
-                            scales: { r: { beginAtZero: true, ticks: { stepSize: 20 } } },
-                        }
-                    });
+
+                    if (kode === 'part5_1') {
+                        modalChartInstances[`${kode}-domain`] = new Chart(domCanvas, {
+                            type: 'line',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    data,
+                                    backgroundColor: 'rgba(41,128,185,1)',
+                                    borderColor:     'rgba(41,128,185,0.85)',
+                                    pointBackgroundColor: 'rgba(41,128,185,1)',
+                                    pointBorderColor:     'rgba(41,128,185,1)',
+                                    pointRadius:      16,
+                                    pointHoverRadius: 16,
+                                    borderWidth: 2,
+                                    fill: false,
+                                    tension: 0,
+                                }]
+                            },
+                            plugins: [circleLabelPlugin],
+                            options: {
+                                responsive: false,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend:  { display: false },
+                                    tooltip: { enabled: false },
+                                },
+                                scales: {
+                                    y: { beginAtZero: true, grid: { color: '#e8e8e8' } },
+                                    x: { grid: { display: false } },
+                                },
+                                layout: { padding: { top: 20, bottom: 20 } },
+                            }
+                        });
+                    } else {
+                        modalChartInstances[`${kode}-domain`] = new Chart(domCanvas, {
+                            type: 'radar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Domain Score',
+                                    data,
+                                    backgroundColor: 'rgba(44,62,80,0.15)',
+                                    borderColor:     'rgba(44,62,80,0.9)',
+                                    pointBackgroundColor: 'rgba(44,62,80,1)',
+                                    borderWidth: 2,
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: { r: { beginAtZero: true, ticks: { stepSize: 20 } } },
+                            }
+                        });
+                    }
                 }
 
-                // Bar chart semua facet (horizontal)
+                // Chart semua facet
                 const facetCanvas = document.getElementById(`chart-${kode}-facets`);
                 if (facetCanvas) {
-                    const facetLabels = [], facetData = [], facetColors = [];
-                    const domColors = ['rgba(231,76,60,0.75)','rgba(230,126,34,0.75)','rgba(241,196,15,0.75)','rgba(39,174,96,0.75)','rgba(41,128,185,0.75)'];
-                    p.facet.forEach((f, di) => {
+                    const facetLabels = [], facetData = [];
+                    p.facet.forEach(f => {
                         Object.values(f.subdomain ?? {}).forEach(sd => {
                             facetLabels.push(sd.deskripsi_facet ?? '');
                             facetData.push(sd.total_score ?? 0);
-                            facetColors.push(domColors[di % domColors.length]);
                         });
                     });
                     if (facetLabels.length) {
-                        modalChartInstances[`${kode}-facets`] = new Chart(facetCanvas, {
+                        const chartCfg = kode === 'part5_1' ? {
+                            type: 'line',
+                            data: {
+                                labels: facetLabels,
+                                datasets: [{
+                                    data: facetData,
+                                    backgroundColor: 'rgba(41,128,185,1)',
+                                    borderColor:     'rgba(41,128,185,0.85)',
+                                    pointBackgroundColor: 'rgba(41,128,185,1)',
+                                    pointBorderColor:     'rgba(41,128,185,1)',
+                                    pointRadius:      14,
+                                    pointHoverRadius: 14,
+                                    borderWidth: 2,
+                                    fill: false,
+                                    tension: 0,
+                                }]
+                            },
+                            plugins: [circleLabelPlugin],
+                            options: {
+                                responsive: false,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                                scales: {
+                                    y: { beginAtZero: true, min: 0, max: 35, grid: { color: '#e8e8e8' } },
+                                    x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 45 } },
+                                },
+                                layout: { padding: { top: 20, bottom: 10 } },
+                            }
+                        } : {
                             type: 'bar',
                             data: {
                                 labels: facetLabels,
-                                datasets: [{ data: facetData, backgroundColor: facetColors, borderWidth: 0 }]
+                                datasets: [{ data: facetData, backgroundColor: 'rgba(41,128,185,0.75)', borderWidth: 0 }]
                             },
                             options: {
                                 responsive: false,
@@ -858,11 +939,12 @@
                                 plugins: { legend: { display: false } },
                                 scales: { x: { beginAtZero: true, grid: { color: '#e8e8e8' } } },
                             }
-                        });
+                        };
+                        modalChartInstances[`${kode}-facets`] = new Chart(facetCanvas, chartCfg);
                     }
                 }
 
-                // Bar chart per domain (part5_1)
+                // Chart per domain (part5_1)
                 if (kode === 'part5_1') {
                     p.facet.forEach(f => {
                         const subEntries = Object.values(f.subdomain ?? {});
@@ -871,20 +953,32 @@
                         const dc = document.getElementById(`chart-${kode}-${domainSlug}`);
                         if (!dc) return;
                         modalChartInstances[`${kode}-${domainSlug}`] = new Chart(dc, {
-                            type: 'bar',
+                            type: 'line',
                             data: {
                                 labels: subEntries.map(sd => sd.deskripsi_facet ?? ''),
                                 datasets: [{
                                     data: subEntries.map(sd => sd.total_score ?? 0),
-                                    backgroundColor: 'rgba(41,128,185,0.75)',
-                                    borderWidth: 0,
+                                    backgroundColor: 'rgba(41,128,185,1)',
+                                    borderColor:     'rgba(41,128,185,0.85)',
+                                    pointBackgroundColor: 'rgba(41,128,185,1)',
+                                    pointBorderColor:     'rgba(41,128,185,1)',
+                                    pointRadius:      16,
+                                    pointHoverRadius: 16,
+                                    borderWidth: 2,
+                                    fill: false,
+                                    tension: 0,
                                 }]
                             },
+                            plugins: [circleLabelPlugin],
                             options: {
                                 responsive: false,
                                 maintainAspectRatio: false,
-                                plugins: { legend: { display: false } },
-                                scales: { y: { beginAtZero: true, grid: { color: '#e8e8e8' } } },
+                                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                                scales: {
+                                    y: { beginAtZero: true, min: 0, max: 35, grid: { color: '#e8e8e8' } },
+                                    x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 45 } },
+                                },
+                                layout: { padding: { top: 20, bottom: 10 } },
                             }
                         });
                     });
@@ -973,7 +1067,7 @@
 
         // Buat wrapper PDF
         const el = document.createElement('div');
-        el.style.cssText = 'padding:20px;width:760px;background:white;';
+        el.style.cssText = 'padding:20px;width:1050px;background:white;';
 
         // Inject CSS global untuk PDF
         const styleEl = document.createElement('style');
@@ -1012,7 +1106,7 @@
             filename:    `Hasil_Test_${nama}.pdf`,
             image:       { type: 'jpeg', quality: 0.97 },
             html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false },
-            jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            jsPDF:       { unit: 'mm', format: 'a4', orientation: 'landscape' },
             // 'css' memproses page-break-before:always inline, 'legacy' sebagai fallback
             pagebreak:   { mode: ['css', 'legacy'] },
         }).save();
