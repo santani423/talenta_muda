@@ -1480,4 +1480,4 @@ php artisan db:seed --class=SkorKalender
 
 *Dokumentasi ini dibuat berdasarkan analisis source code proyek Talenta Muda Laravel. Perbarui dokumen ini setiap kali ada perubahan signifikan pada arsitektur, modul baru, atau perubahan database schema.*
 
-**Tim Developer Talenta Muda** | Kontak: team3.claude@treemas.co.id
+**Tim Developer Talenta Muda** |  
